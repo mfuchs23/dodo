@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Service-Component: OSGI-INF/component-description.xml
+Bundle-ManifestVersion: 2
+Bundle-Name: TiDBiT Eclipse Import Service
+Bundle-SymbolicName: org.dbdoclet.tidbit.importer.eclipse
+Bundle-Version: 5.1.21
+Bundle-Vendor: Michael Fuchs
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.dbdoclet.io,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.importer,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.xiphias,
+ org.osgi.service.component;version="1.0.0"

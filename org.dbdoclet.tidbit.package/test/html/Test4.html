@@ -1,0 +1,349 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en"><html><head>
+<style type="text/css">
+<!--
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="Splash Screen, Java, OOP, Mac OS X, Macintosh, Apple, Werner Randelshofer">
+<meta name="description" content="Download: MultiShow is a multipurpose file viewer for audio, video, images and text. It is written in Java and runs on a wide range of operating systems including Macintosh, Windows, Solaris and Linux.">
+<meta name="robots" content="index,follow"><title>How to do a fast Splash Screen in Java</title>
+
+<meta name="description" content="Creating splash screens in Java is well documented in the current literature. However, the existing solutions are not otimized for speed. This tip presents a splash-screen component that is shown very early in the process of starting a Java application. To achieve this we use Reflection and AWT (instead of Swing) to reduce time needed for class resolving and initialization .">
+<link href="Test4_files/stylesheet.css" rel="stylesheet" type="text/css"></head>
+
+<body text="#000000" bgcolor="#ffffff">
+<table width="100%" border="0"> <tbody><tr> <td valign="top"> <h1><font face="Arial, Helvetica, sans-serif" size="-1"> 
+</font><a href="http://www.randelshofer.ch/online.html"><img src="Test4_files/titleOnline.gif" width="142" height="44" border="0" alt="Download"></a><br> 
+<img src="Test4_files/bulletBright.gif" width="22" height="21" align="middle">Java programming
+tips</h1></td><td valign="top" align="right"> <div align="right"><img src="Test4_files/navOnline.jpg" width="168" height="91" border="0" usemap="#navMap">
+    <map name="navMap"><area shape="rect" coords="116,16,160,35" href="http://www.randelshofer.ch/links.html" target="_top" alt="Links"><area shape="rect" coords="113,41,167,63" href="http://www.randelshofer.ch/about.html" target="_top" alt="About Me"><area shape="rect" coords="92,64,146,85" href="http://www.randelshofer.ch/download.html" target="_top" alt="Download"><area shape="rect" coords="53,67,88,90" href="http://www.randelshofer.ch/online.html" target="_top" alt="Online"><area shape="rect" coords="0,63,50,86" href="http://www.randelshofer.ch/index.html" target="_top" alt="Welcome"></map></div></td></tr> </tbody></table><table width="500" border="0" cellpadding="4" align="center"> 
+<tbody><tr valign="top" align="left"> <td> <h2 align="center"><code></code>How to do a  <em>fast</em> Splash
+      screen in Java</h2>
+    <h3>Summary</h3>
+    <p>A splash screen is an image being shown on the screen while an application
+      is starting. </p>
+    <p class="semiparagraph"></p>
+    <p>Creating splash screens in Java is well documented in the current literature.
+        However, the existing solutions are not optimized for speed. This tip
+      presents a splash-screen  that is shown very early in the process
+      of starting
+        a Java application. To achieve this we use Reflection and AWT (instead
+        of Swing) to reduce time needed for class resolving and initialization
+        .</p>
+    <p> </p>
+    <h3>The problem</h3>
+    <p>Java applications often have very long startup times.
+      A splash screen is a means to provide feedback to the user, that something
+      is happening
+        in our application, and it also is a way to advertise our 
+      product.</p>
+    <p class="semiparagraph">At the first glance implementing a splash screen
+      seems to be very straightforward. The  Swing API provides a rich
+      set of classes to do this. Simply create a JWindow, put a JLabel with
+      an ImageIcon on it, put the current Thread to sleep for 3 seconds and then
+      continue
+      loading the application...</p>
+    <p class="semiparagraph">Unfortunately with such a naïve approach we
+      not only end up increasing the startup time of our application by the
+      3 seconds
+      sleep time, we also happen to 'achieve' that our splash-screen shows up
+      very late in the initialization process of our application.</p>
+    <p class="semiparagraph">When we design a splash-screen we have to consider the following things:</p>
+    <ul>
+      <li class="semiparagraph"><strong>Class resolving. </strong>Before the
+        Java Virtual Machine (JVM) can use  a class, it has to load
+        and initialize all other classes that are referenced by this class.
+        Without
+        special
+        measures taken, the JVM loads and initializes all application classes
+        before
+        it starts to execute our splash screen code. This may take up a considerable
+        amount of time. </li>
+      <li><strong>Size of API's.</strong> Displaying "Hello World" using
+        Swing involves the loading of roughly 800 API classes into the JVM.
+        Doing
+        the same
+        using AWT only takes about 600 API classes. The smaller the number of
+        API classes we use, the shorter the startup time.</li>
+      <li><strong>Multi-Threading.</strong> As soon as our splash-screen is painted
+        onto the screen, we can continue initialising
+        our application. We also have to take into account that image loading
+        in Java is done in separate  worker thread provided by the Java API.
+         We do not want to 'steal time' from this worker thread until the image
+        has been loaded.</li>
+      <li><strong>Clean design.</strong> We  want to keep the splash-screen code
+        separate from the initialisation code of our application. This enables
+        us to test it separately, and to add or remove it to our liking without
+        having to do much code chanegs.</li>
+    </ul>    
+    <h3>The solution</h3>
+    <p>The proposed solution consists of three classes: MyApp, MyAppSplash and
+      SplashWindow.</p>
+    <p class="semiparagraph"><strong>MyApp</strong> is our application class.
+      It contains the long running initialisation code. To achieve a clear design,
+      we keep this
+      class free from our splash-screen code. The only concession that we require
+      is, that its main method <em>must</em> return once the
+      application is up and running. The code of MyApp.java is shown below.</p>
+    <p class="semiparagraph"> </p>    <p><strong><code>import</code></strong><code> javax.swing.*;</code></p>
+    <p> </p>    
+    <p><code><strong>public class</strong> MyApp <strong>extends</strong>        JFrame
+        {</code></p>
+    <p class="codecomment"><code>    /**</code></p>
+    <p class="codecomment"><code>     * Creates a new
+      application frame.</code></p>
+    <p class="codecomment"><code>     */</code></p>    <p><span class="codecomment"> <code></code></span><code><strong>    public</strong> MyApp() {</code></p>
+    <p><code>        setTitle("My App");<br>
+        getContentPane().add(<strong>new</strong> JLabel("Hello
+    World"));<br>
+                setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</code></p>
+    <p><code>        pack();<br>
+    }<br>
+      <br>
+      <span class="codecomment">    /**<br>
+     * This method launches the application without
+          showing<br>
+     * a SplashScreen. This method returns when the
+          initialisation<br>
+     * of the application is done. <br>
+     *<br>
+     * @param args the command line arguments<br>
+     */<br>
+      </span>    <strong>public static void</strong> main(String args[])
+{<br>
+        <strong>new</strong> MyApp().show();<br>
+    }<br>
+  }</code></p>    <p> </p>
+  <p>Please note that we can launch the application without a splash screen
+    by directly invoking the main method of this class. This is useful for testing
+    and debugging.</p>
+  <p class="semiparagraph">Now let's see how to add a splash-screen to this class.</p>
+  <p class="semiparagraph"><strong>MyAppSplash</strong> is a pure bootstrap
+    class. It consists of a main method only, which does three things:</p>
+  <ol>
+    <li>         Open the splash window</li>
+    <li> Invoke the main method of class MyApp using Reflection</li>
+    <li>Close the splash window when the main method of MyApp returns</li>
+    </ol>  
+  <p>Please note that we want to keep this class as small as possible.
+                The size of this class and the number of classes referenced by
+    this class directly influences the startup latency of our splash-screen.</p>
+  <p> </p>
+  <p><code><strong>import</strong> java.awt.Frame;<br>
+      <strong>import</strong> java.awt.Toolkit;<br>
+      <strong>import</strong> java.net.URL;<br>
+      <strong>import</strong> java.io.*;</code></p>
+  <p> </p>
+  <p><code><strong>public class</strong> MyAppSplash  {<br>
+      <strong>    public static void</strong> main(String[] args) {<br>
+      </code><span class="codecomment"><code><strong>        </strong>//
+      Read the image data and display the splash screen</code></span></p>
+  <p><span class="codecomment"><code><strong>        </strong>//
+          -------------------------------------------------<br>
+          </code></span><code><strong>        </strong>Frame
+          splashFrame = <strong>null</strong>;<br>
+        </code><code><strong>    </strong><strong>    </strong>URL
+            imageURL = MyAppSplash.class.getResource("splash.gif");<br>
+        <strong>        if</strong>        (imageURL != <strong>null</strong>) {<br>
+          <strong>    </strong><strong>    </strong><strong>    </strong>splashFrame
+                      = splashFrame.splash(<br>
+          <strong>        </strong><strong>    </strong><strong>    </strong>Toolkit.getDefaultToolkit().createImage(imageURL)<br>
+          <strong>        </strong><strong>    </strong>);<br>
+          <strong>        </strong>} <strong>else</strong>      {</code></p>
+  <p><code>            System.err.println("Splash
+        image not found");</code></p>  <p><code><strong>        </strong>}<br>
+      </code></p>  <p><span class="codecomment"><code><strong>        </strong>//
+        Call the main method of the application using Reflection<br>
+            <strong>        </strong>//
+            --------------------------------------------------------<br>
+            <strong></strong></code></span><code><strong>        try</strong> {<br>
+        <strong>    </strong><strong>    </strong><strong>    </strong>Class.forName("MyApp")<br>
+      <strong>    </strong><strong>    </strong><strong>    </strong>.getMethod</code><code>("main",
+      <strong>new</strong> Class[] {String[].class})</code></p>
+  <p><code><strong>            </strong>.invoke(<strong>null</strong>, <strong>new</strong> Object[] {args});<br>
+        <strong>        </strong>} <strong>catch</strong> (Throwable e) {<br>
+      <strong>    </strong><strong>    </strong><strong>    </strong>e.printStackTrace();</code></p>
+  <p><code><strong>    </strong><strong>    </strong><strong>    </strong>System.err.flush();<br>
+        <strong>    </strong><strong>    </strong><strong>    </strong>System.exit(10);<br>
+        <strong>    </strong><strong>    </strong>}</code></p>  <p><span class="codecomment"><code><strong>        </strong>//
+      Dispose the splash screen<br>
+        <strong>        </strong>//
+        -------------------------<br>
+        </code></span><code><strong>        if</strong> (splashFrame != <strong>null</strong>) splashFrame.dispose();<br>
+        <strong>    </strong>}<br>
+      }</code></p>
+  <p><code></code></p>
+  <p> </p>
+  <p>Method splash in Class <strong>SplashWindow </strong>contains the code needed
+    to display an image on a window at the center of the screen. A <em>preliminary</em> version
+    of this class is shown below.</p>
+  <p class="semiparagraph">Please note the lines of code that are marked blue
+    and the use of the attribute "paintCalled". They are needed
+    to load the image into memory (using a MediaTracker), and to keep method
+    "splash" waiting until method
+    "paint" has been called at least once. Without this code, we can not guarantee
+    that the splash image is drawn properly on the screen.</p>  
+  <p> </p>  <p><code><strong>import</strong> java.awt.*;<br>
+      <strong>import</strong> java.awt.event.*;<br>
+  </code></p>
+  <p><code><strong>public class</strong> SplashWindow <strong>extends</strong> Window {</code></p>
+  <p> </p>
+  <p><code><strong>    private</strong> Image splashImage;</code></p>
+  <p></p>
+  <p></p>
+  <p> </p>
+  <p class="codecomment"><code><strong>    </strong>/**</code></p>  
+  <p class="codecomment"><code> <strong>     </strong>* This attribute is
+      set to true when method<br>
+      <strong>    </strong> * paint(Graphics) has been
+      called at least once since the<br>
+      <strong>    </strong> * construction of this window.</code></p>
+  <p><span class="codecomment"><code><strong>     </strong>*/<br>
+        </code></span><code><strong><font color="#000099">    private
+        boolean</font></strong><font color="#000099"> paintCalled = <strong>false</strong>;<br>
+      </font>      </code></p>  
+  <p class="codecomment"><code> <strong>   </strong> /**<br>
+      <strong>    </strong> * Constructs a splash window and centers it on the<br>
+      <strong>    </strong> * screen.<br>
+      <strong>    </strong> *<br>
+      <strong>    </strong> * @param owner The frame owning the splash window.<br>
+      <strong>    </strong> * @param splashImage The splashImage to be displayed.<br>
+      <strong>    </strong> */</code></p>
+  <p><span class="codecomment"><code></code></span><code><strong>    public</strong> SplashWindow(Frame owner, Image splashImage) {<br>
+          <strong>        super</strong>(owner);<br>
+        <strong>        this</strong>.splashImage = splashImage;</code></p>
+  <p><code><br>
+          <span class="codecomment"><strong>        </strong>//
+            Load the image<br>
+          </span><strong><font color="#000099">    </font></strong><font color="#000099"><strong>    </strong>MediaTracker mt = new MediaTracker(this);<br>
+          <strong>        </strong>mt.addImage(splashImage,0);<br>
+          <strong>        </strong>try {<br>
+          <strong>            </strong>mt.waitForID(0);<br>
+          <strong>        </strong>} catch(InterruptedException ie) {}<br>
+        </font>        </code></p>      <p><span class="codecomment"><code><strong>        </strong>// Center the window on the screen.<br>
+        </code></span><code><strong>        int</strong> imgWidth
+           = splashImage.getWidth(<strong>this</strong>);<strong><br>
+        int</strong> imgHeight = splashImage.getHeight(<strong>this</strong>);  </code></p>
+        <p><code><strong>   </strong><strong>    </strong> setSize(imgWidth, imgHeight);<br>
+            <strong>    </strong><strong>    </strong>Dimension
+        screenDim = </code></p>
+        <p><code><strong>    </strong><strong>    </strong><strong>    </strong>Toolkit.getDefaultToolkit().getScreenSize();<br>
+            <strong>        </strong>setLocation(<br>
+            <strong>    </strong><strong>    </strong><strong>    </strong>(screenDim.width
+              - imgWidth) / 2,<br>
+            <strong>    </strong><strong>    </strong><strong>    </strong>(screenDim.height
+              - imgHeight) / 2<br>
+            <strong>    </strong><strong>    </strong>);<br>
+            <strong>    </strong>}<br>
+        </code></p>
+        <p><code> <span class="codecomment"><strong>    </strong>/**<br>
+          <strong>     </strong>* Updates the display area of the window.<br>
+        <strong>     </strong>*/</span></code></p>
+        <p><span class="codecomment"><code><strong></strong></code></span><code><strong>    public void update</strong>(Graphics g) {<br>
+            <span class="codecomment"> </span><strong>    </strong><strong>    </strong><span class="codecomment">// Note: Since the paint method is going
+            to draw an<br>
+</span><strong>    </strong><strong>    </strong><span class="codecomment">// image that covers the complete area of the component we<br>
+</span><strong>    </strong><strong>    </strong><span class="codecomment">// do not fill the component with its background color<br>
+</span><strong>    </strong><strong>    </strong><span class="codecomment">// here. This avoids flickering.</span></code></p>
+        <p><span class="codecomment"><code></code></span><code><strong>        </strong>g.setColor(getForeground());<br>
+            <strong>    </strong><strong>    </strong>paint(g);<br>
+            <strong>    </strong>}<br>
+            <strong>    </strong><span class="codecomment">/**<br>
+</span><strong>     </strong><span class="codecomment">* Paints the image on the window.<br>
+</span><strong>     </strong><span class="codecomment">*/</span></code></p>
+        <p><span class="codecomment"><code></code></span><code><strong>    public void paint</strong>(Graphics g) {<br>
+            <strong>        </strong>g.drawImage(splashImage, 0, 0, <strong>this</strong>);<br>
+                  </code></p>      
+        <p><span class="codecomment"><code><strong>        </strong>// Notify method splash that the window<br>
+        <strong>        </strong>// has been painted.<br>
+        </code></span><code><strong><font color="#000099">        if</font></strong><font color="#000099"> (! paintCalled) {<br>
+        <strong>            </strong>paintCalled = <strong>true</strong>;<br>
+        <strong>            </strong>synchronized (<strong>this</strong>) { notifyAll(); }<br>
+        <strong>        </strong>}<br>
+        </font><strong>    </strong>}<br>
+        <span class="codecomment"><strong>    </strong>/**<br>
+        <strong>    </strong> * Constructs and displays a SplashWindow.&lt;p&gt;<br>
+        <strong>    </strong> * This method is useful
+        for startup splashs.<br>
+        <strong>    </strong> * Dispose the returned frame to get rid of the splash window.&lt;p&gt;<br>
+        <strong>    </strong> *<br>
+        <strong>    </strong> * @param splashImage The
+        image to be displayed.<br>
+        <strong>    </strong> * @return Returns the
+        frame that owns the SplashWindow.<br>
+        <strong>    </strong> */</span></code></p>
+  <p><code><strong>    public static</strong> Frame splash(Image
+      splashImage) {<br>
+        <strong>        </strong>Frame
+          f = <strong>new</strong> Frame();<br>
+        <strong>        </strong>SplashWindow
+          w = <strong>new</strong> SplashWindow(f, splashImage);<br>
+        <span class="codecomment">          </span></code></p>
+  <p><span class="codecomment"><code><strong>        </strong>//
+            Show the window.<br>
+            <strong></strong></code></span><code><strong>    </strong><strong>    </strong>w.toFront();<br>
+        <strong>    </strong><strong>    </strong>w.show();</code></p>  <p> </p>
+  <p><span class="codecomment"><code><strong>        </strong>// Note: To make sure the user gets a chance to see the<br>
+        <strong>        </strong>// splash window we wait until its paint method has been<br>
+        <strong>        </strong>// called
+        at least once by the AWT event dispatcher thread.<br>
+        </code></span><code><strong><font color="#000099">        if</font></strong><font color="#000099"> (! EventQueue.isDispatchThread()) {<br>
+        <strong>            synchronized</strong> (w) {<br>
+        <strong>                while</strong> (! w.paintCalled) {<br>
+        <strong>                    try</strong> { </font></code></p>
+  <p><font color="#000099"><code><strong>                        </strong>w.wait(); </code></font></p>
+  <p><font color="#000099"><code><strong>                    </strong>} <strong>catch</strong> (InterruptedException e) {}<br>
+        <strong>                </strong>}<br>
+        <strong>            </strong>}<br>
+        <strong>        </strong>}<br>
+        </code></font><code><strong>        return</strong> f;<br>
+        <strong>    </strong>}<br>
+        }</code></p>
+  <p> </p>
+  <p>Wouldn't it be nice if users could close the splash window by clicking on
+    it? Let's  add
+    the following lines of code to the end of the constructor.</p>
+  <p> </p>
+  <p> <code><strong>    public</strong> SplashWindow(Frame owner, Image splashImage) {</code></p>
+  <p><code><strong>    </strong><strong>    </strong>...</code></p>
+  <p><code><br>
+        </code><code> <strong>        </strong>MouseAdapter disposeOnClick = <strong>new</strong> MouseAdapter() {<br>
+        <strong>            public
+        void</strong> mouseClicked(MouseEvent evt) {<br>
+        <span class="codecomment"><strong>                </strong>// Note: To avoid that method splash hangs, we<br>
+        <strong>                </strong>// must set paintCalled to true and call notifyAll.<br>
+        <strong>                </strong>// This is necessary because the mouse click may<br>
+        <strong>                </strong>// occur before the contents of the window<br>
+        <strong>                </strong>// has been painted.<br>
+        <strong></strong></span><strong>                synchronized </strong>(SplashWindow.<strong>this</strong>)
+        {<br>
+        <strong>                    </strong>SplashWindow.<strong>this</strong>.paintCalled = <strong>true</strong>;<br>
+        <strong>                    </strong>SplashWindow.<strong>this</strong>.notifyAll();<br>
+        <strong>    </strong><strong>    </strong><strong>    </strong><strong>    </strong>}<br>
+        <strong>    </strong><strong>    </strong><strong>    </strong><strong>    </strong>dispose();<br>
+        <strong>    </strong><strong>    </strong><strong>    </strong>}<br>
+        <strong>    </strong><strong>    </strong>};<br>
+        <strong>    </strong><strong>    </strong>addMouseListener(disposeOnClick);</code></p>
+  <p><code><strong>    </strong>}</code></p>
+  <p> </p>
+  <h3>Conclusion</h3>
+  <p>By using Reflection and AWT instead of Swing,
+    we can create a multithreaded splash screen that is displayed early in the
+    startup process. A user can click on
+    the
+    splash
+    screen
+    to remove it, or the splash screen will disappear on its own when the application
+    is up and running.</p>  
+  <p> </p>
+  <p>Here are the three source files:</p>
+  <p><a href="http://www.randelshofer.ch/oop/javasplash/MyApp.java">MyApp.java</a></p>
+  <p><a href="http://www.randelshofer.ch/oop/javasplash/MyAppSplash.java">MyAppSplash.java</a></p>
+  <p><a href="http://www.randelshofer.ch/oop/javasplash/SplashWindow.java">SplashWindow.java</a></p>
+  <p> </p>    
+  <h3>Credits</h3>
+  <p>This article is the result of a discussion that took place on Apple's
+        Java for Macintosh discussion group.</p>
+  <p></p></td>
+</tr> </tbody></table><p>  </p>
+</body></html>

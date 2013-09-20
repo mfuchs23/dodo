@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+### Copyright (C) 2001-2012 Michael Fuchs ###
+-->
+<project name="org.dbdoclet.tidbit.package" default="build">
+
+	<taskdef name="packman" classname="org.dbdoclet.ant.PackmanTask" />
+
+	<property file="../workspace.properties" />
+	<property file="module.properties" />
+	<import file="${build.config.dir}/defaultBuild.xml" />
+
+	<!-- ========================================== -->
+	<!-- DOC                                        -->
+	<!-- ========================================== -->
+	<target name="doc">
+		<ant dir="doc" antfile="build.xml" target="all" />
+	</target>
+
+	<target name="build">
+
+		<antcall target="default.compile" />
+
+		<copy tofile="distrib/jars/felix.jar">
+			<fileset dir="lib">
+				<include name="felix_*.jar" />
+			</fileset>
+		</copy>
+
+		<!-- Installation der OSGi Bundles -->
+		<copy todir="distrib/bundle">
+			<fileset dir="lib">
+				<include name="com.elharo.*.jar" />
+				<include name="org.antlr.*.jar" />
+				<include name="org.apache.*.jar" />
+				<include name="org.dbdoclet.*.jar" />
+				<include name="javax.help_*.jar" />
+				<exclude name="org.apache.batik*.jar" />
+			</fileset>
+		</copy>
+
+		<!-- Installation of DocBook XSL stylesheets -->
+		<unzip src="lib/docbook-xsl_${docbook.xsl.version}.zip" dest="distrib/docbook">
+			<filtermapper>
+				<replacestring from="docbook-xsl-${docbook.xsl.version}/" to="xsl/" />
+			</filtermapper>
+		</unzip>
+
+		<!-- Installation of DocBook grammars -->
+		<unzip src="lib/docbook-grammar_${docbook.grammar.version}.zip" dest="distrib/docbook" />
+
+		<!-- Installation of fop -->
+		<unzip src="lib/fop_${fop.version}.zip" dest="distrib">
+			<filtermapper>
+				<replacestring from="fop-svn-trunk/" to="fop/" />
+			</filtermapper>
+		</unzip>
+
+		<!-- Create arun.jar -->
+		<jar jarfile="distrib/jars/arun.jar" basedir="${build.main.classes.dir}" manifest="${build.main.classes.dir}/META-INF/manifest.arun" />
+
+		<!-- Copy required jar files to distrib/jars -->
+		<copy todir="distrib/jars">
+			<fileset dir="lib">
+				<include name="org.dbdoclet.tidbit.common_*.jar" />
+				<include name="org.dbdoclet.commons_*.jar" />
+				<include name="org.dbdoclet.getopts_*.jar" />
+				<include name="org.dbdoclet.antol_*.jar" />
+				<include name="org.dbdoclet.jive_*.jar" />
+				<include name="org.apache.commons.logging_*.jar" />
+				<include name="org.apache.log4j_*.jar" />
+				<include name="dbdoclet_*.jar" />
+				<include name="ant_*.jar" />
+				<include name="ant-launcher_*.jar" />
+				<include name="jhall_*.jar" />
+				<include name="resolver_*.jar" />
+				<include name="saxon_*.jar" />
+				<include name="xslthl_*.jar" />
+			</fileset>
+			<fileset dir="distrib/fop/lib">
+				<include name="xercesImpl-*.jar" />
+				<include name="serializer-*.jar" />
+				<include name="xalan-*.jar" />
+			</fileset>
+			<mapper type="regexp" from="^(.*)[_-][0-9\.]+\.jar" to="\1.jar" />
+		</copy>
+
+		<copy todir="distrib/jars">
+			<fileset dir="distrib/docbook/xsl/extensions">
+				<include name="saxon65.jar" />
+				<include name="xalan27.jar" />
+			</fileset>
+		</copy>
+
+		<jar jarfile="distrib/jars/jhrun.jar" basedir="${build.main.classes.dir}" manifest="${build.main.classes.dir}/META-INF/manifest.jhrun" />
+		<jar jarfile="distrib/jars/dbdtidbit.jar" basedir="${build.main.classes.dir}" manifest="${build.main.classes.dir}/META-INF/manifest.dbdtidbit" />
+
+		<copy todir="distrib">
+			<fileset dir="root" />
+		</copy>
+
+		<replaceregexp file="distrib/bin/tidbit" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${module.version}.jar" byline="true" />
+
+	</target>
+
+	<target name="install" depends="build">
+		<antcall target="doc" />
+		<copy todir="/usr/share/tidbit">
+			<fileset dir="distrib">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<chmod perm="775">
+			<fileset dir="/usr/share/tidbit/bin">
+				<include name="*" />
+			</fileset>
+		</chmod>
+	</target>
+
+	<!-- ========================================== -->
+	<!-- DIST                                       -->
+	<!-- ========================================== -->
+	<target name="dist">
+
+		<echo>Starte Auslieferung...</echo>
+		<buildnumber />
+
+		<copy file="spec/dbdoclet.xml" tofile="spec/packman.xml" overwrite="yes">
+			<filterset>
+				<filter token="BUILDNUMBER" value="${build.number}" />
+				<filter token="VERSION" value="${module.version}" />
+			</filterset>
+		</copy>
+
+		<echo>Creating Windows Package...</echo>
+		<replaceregexp byline="true" file="spec/dbdoclet.nsi" match="org.dbdoclet.herold_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${project.version}.jar" />
+		<packman verbose="true" spec="spec/packman.xml" destdir="${packman.dir}/main" type="nsis" />
+
+		<zip basedir="${packman.dir}/main" destfile="${packman.dir}/main/herold-${project.version.style.win}.zip">
+			<include name="herold*.exe" />
+		</zip>
+
+		<echo>Creating RPM Package...</echo>
+		<packman verbose="true" spec="spec/packman.xml" destdir="${packman.dir}/main" type="rpm" />
+
+		<echo>Creating Debian Package...</echo>
+		<packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="deb" />
+
+		<echo>Creating tar/gzip Package...</echo>
+		<packman spec="spec/packman.xml" destdir="${packman.dir}/main" type="tgz" />
+
+		<echo file="${packman.dir}/main/version.properties">
+	      version=${project.version}
+	      version.win=${project.version.style.win}
+	      release=${build.number}
+	    </echo>
+
+	</target>
+
+</project>

@@ -1,0 +1,55 @@
+p {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+h2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+}
+.semiparagraph {
+	margin-top: 6px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+ul {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin-top: 6px;
+}
+code {
+	font-family: Monaco, "Courier New", Courier, mono;
+	font-size: 11px;
+}
+tt {
+	font-family: "Courier New", Courier, mono;
+	font-size: 11px;
+}
+li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.codecomment {
+	font-family: Monaco, "Courier New", Courier, mono;
+	font-size: 11px;
+	color: #666666;
+}

@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Application Plug-in
+Bundle-SymbolicName: org.dbdoclet.tidbit.application
+Bundle-Version: 1.0.0
+Bundle-Vendor: Michael Fuchs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.dbdoclet.tidbit.application,
+ org.dbdoclet.tidbit.application.action,
+ org.dbdoclet.tidbit.dialog,
+ org.dbdoclet.tidbit.perspective,
+ org.dbdoclet.tidbit.perspective.panel,
+ org.dbdoclet.tidbit.perspective.panel.docbook
+Import-Package: javax.help,
+ org.apache.commons.logging,
+ org.dbdoclet,
+ org.dbdoclet.io,
+ org.dbdoclet.jive,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.dialog.action,
+ org.dbdoclet.jive.fo,
+ org.dbdoclet.jive.model,
+ org.dbdoclet.jive.monitor,
+ org.dbdoclet.jive.text,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.log,
+ org.dbdoclet.option,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.common.panel,
+ org.dbdoclet.tidbit.importer,
+ org.dbdoclet.tidbit.medium,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.tidbit.project.driver,
+ org.dbdoclet.trafo,
+ org.dbdoclet.unit

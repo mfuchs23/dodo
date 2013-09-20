@@ -1,0 +1,7 @@
+<?xml version='1.0'?>
+<project name="sample" default="build">
+  <target name="build">
+    <mkdir dir="build"/>
+    <javac destdir="build" srcdir="java"/>
+  </target>
+</project>

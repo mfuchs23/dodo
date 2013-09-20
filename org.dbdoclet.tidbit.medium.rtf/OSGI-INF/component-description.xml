@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="rtfComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.rtf.RtfComponent" />
+	<property name="category" value="docbook-rtf" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

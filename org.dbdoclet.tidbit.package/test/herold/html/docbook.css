@@ -1,0 +1,35 @@
+* {
+  font-family: Arial,Helvetica;
+}
+
+/* Überschriften */
+h1,h2 {
+  background: lightblue;
+  color: white;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  margin: 0.5em 0.5em 0.5em 0.5em;
+  width: 50%;
+  border: 1pt solid darkgrey;
+}
+
+h1 {
+  font-size: 1.4em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+/* Listen */
+ul {
+  list-style-type: square;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd + dt {
+  margin-top: 1em;     
+}
+

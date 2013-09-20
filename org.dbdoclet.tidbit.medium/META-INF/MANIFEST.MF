@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Medium Plug-in
+Bundle-SymbolicName: org.dbdoclet.tidbit.medium
+Bundle-Version: 1.0.0
+Bundle-Vendor: Michael Fuchs
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: javax.swing,
+ org.apache.commons.logging,
+ org.dbdoclet,
+ org.dbdoclet.antol,
+ org.dbdoclet.antol.ant,
+ org.dbdoclet.io,
+ org.dbdoclet.jive,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.model,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.progress,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.tidbit.project.driver,
+ org.dbdoclet.html.parser,
+ org.dbdoclet.tag.html,
+ org.dbdoclet.html.tokenizer,
+ org.dbdoclet.xiphias
+Export-Package: org.dbdoclet.tidbit.medium
+Require-Bundle: org.dbdoclet.commons

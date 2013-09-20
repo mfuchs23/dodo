@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project default="dbdoclet.pdf" name="Sample">
+    <!-- ========================================================== -->
+    <!-- Generated from dbdoclet.TiDbit                             -->
+    <!-- Generated at 05.12.2003 15:58:17                           -->
+    <!-- http://www.dbdoclet.org                                    -->
+    <!-- ========================================================== -->
+    <property name="dbdoclet.home" value="/usr/share/dbdoclet"/>
+    <property name="dbdoclet.project.path" value="/home/mfuchs/products/ode/dbdoclet/doclet/test/sample"/>
+    <property name="dbdoclet.overview.file" value=""/>
+    <property name="dbdoclet.jvmarg.bootclasspath" value="/usr/share/dbdoclet/tidbit/lib/xercesImpl.jar:/usr/share/dbdoclet/tidbit/lib/xalan.jar:/usr/share/dbdoclet/tidbit/lib/xml-apis.jar"/>
+    <!-- PATH dbdoclet.sourcepath                                   -->
+    <path id="dbdoclet.sourcepath">
+        <pathelement path="/home/mfuchs/products/ode/dbdoclet/doclet/test/sample/java"/>
+    </path>
+    <!-- PATH dbdoclet.classpath                                    -->
+    <path id="dbdoclet.classpath">
+        <pathelement path="/home/mfuchs/products/ode/dbdoclet/jars/log4j.jar"/>
+    </path>
+    <!-- PATH dbdoclet.fop.classpath                                -->
+    <path id="dbdoclet.fop.classpath">
+        <pathelement path="/usr/share/dbdoclet/tidbit/lib/avalon.jar"/>
+        <pathelement path="/usr/share/dbdoclet/tidbit/lib/batik.jar"/>
+        <pathelement path="/usr/share/dbdoclet/tidbit/lib/fop.jar"/>
+    </path>
+    <!-- PATH dbdoclet.xincluder.classpath                          -->
+    <path id="dbdoclet.xincluder.classpath">
+        <pathelement path="/usr/share/dbdoclet/tidbit/lib/resolver.jar"/>
+        <pathelement path="/usr/share/dbdoclet/tidbit/lib/xincluder.jar"/>
+    </path>
+    <target name="dbdoclet.clean">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.clean                                      -->
+        <!-- ========================================================== -->
+        <delete>
+            <fileset dir="${dbdoclet.project.path}/docbook">
+                <include name="Reference*.*"/>
+            </fileset>
+            <fileset dir="${dbdoclet.project.path}/standard"/>
+        </delete>
+    </target>
+    <target name="dbdoclet.standard">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.standard                                   -->
+        <!-- ========================================================== -->
+        <mkdir dir="${dbdoclet.project.path}/standard"/>
+        <!-- TASK javadoc                                               -->
+        <javadoc destdir="${dbdoclet.project.path}/standard"
+            failonerror="yes" maxmemory="512m">
+            <sourcepath refid="dbdoclet.sourcepath"/>
+            <classpath refid="dbdoclet.classpath"/>
+            <package name="org.dbdoclet.*"/>
+        </javadoc>
+    </target>
+    <target name="dbdoclet.docbook">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.docbook                                    -->
+        <!-- ========================================================== -->
+        <!-- TASK javadoc                                               -->
+        <javadoc destdir="${dbdoclet.project.path}/docbook"
+            failonerror="yes" maxmemory="512m">
+            <sourcepath refid="dbdoclet.sourcepath"/>
+            <classpath refid="dbdoclet.classpath"/>
+            <package name="org.dbdoclet.*"/>
+            <doclet name="org.dbdoclet.doclet.docbook.DocBookDoclet" path="${dbdoclet.home}/doclet/lib/dbdoclet.jar">
+                <param name="-properties" value="${dbdoclet.project.path}/docbook/dbdoclet.properties"/>
+            </doclet>
+        </javadoc>
+        <move file="${dbdoclet.project.path}/docbook/Reference.xml" tofile="${dbdoclet.project.path}/docbook/Reference-001.xml"/>
+        <echo message="Running XIncluder..."/>
+        <!-- TASK java                                                  -->
+        <java classname="com.elharo.xml.xinclude.SAXXIncluder"
+            failonerror="yes" fork="yes" maxmemory="512m" output="${dbdoclet.project.path}/docbook/Reference.xml">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference-001.xml"/>
+            <classpath refid="dbdoclet.xincluder.classpath"/>
+        </java>
+    </target>
+    <target name="dbdoclet.xslt.fo">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.xslt.fo                                    -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.xalan.xslt.Process"
+            failonerror="yes" fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <arg value="-IN"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.xml"/>
+            <arg value="-XSL"/>
+            <arg value="${dbdoclet.project.path}/docbook/xsl/fo.xsl"/>
+            <arg value="-OUT"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.fo"/>
+        </java>
+    </target>
+    <target name="dbdoclet.xslt.javahelp">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.xslt.javahelp                              -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.xalan.xslt.Process"
+            failonerror="yes" fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <arg value="-IN"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.xml"/>
+            <arg value="-XSL"/>
+            <arg value="${dbdoclet.project.path}/docbook/xsl/javahelp.xsl"/>
+            <arg value="-OUT"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.javahelp"/>
+        </java>
+    </target>
+    <target name="dbdoclet.fop.pdf">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.fop.pdf                                    -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.fop.apps.Fop" failonerror="yes"
+            fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <classpath refid="dbdoclet.fop.classpath"/>
+            <arg value="-fo"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.fo"/>
+            <arg value="-pdf"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.pdf"/>
+        </java>
+    </target>
+    <target name="dbdoclet.fop.ps">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.fop.ps                                     -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.fop.apps.Fop" failonerror="yes"
+            fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <classpath refid="dbdoclet.fop.classpath"/>
+            <arg value="-fo"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.fo"/>
+            <arg value="-ps"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.ps"/>
+        </java>
+    </target>
+    <target name="dbdoclet.fop.txt">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.fop.txt                                    -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.fop.apps.Fop" failonerror="yes"
+            fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <classpath refid="dbdoclet.fop.classpath"/>
+            <arg value="-fo"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.fo"/>
+            <arg value="-txt"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.txt"/>
+        </java>
+    </target>
+    <target name="dbdoclet.fop.mif">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.fop.mif                                    -->
+        <!-- ========================================================== -->
+        <!-- TASK java                                                  -->
+        <java classname="org.apache.fop.apps.Fop" failonerror="yes"
+            fork="yes" maxmemory="512m">
+            <jvmarg value="-Xbootclasspath/p:${dbdoclet.jvmarg.bootclasspath}"/>
+            <classpath refid="dbdoclet.fop.classpath"/>
+            <arg value="-fo"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.fo"/>
+            <arg value="-mif"/>
+            <arg value="${dbdoclet.project.path}/docbook/Reference.mif"/>
+        </java>
+    </target>
+    <target name="dbdoclet.pdf">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.pdf                                        -->
+        <!-- ========================================================== -->
+        <antcall target="dbdoclet.docbook"/>
+        <antcall target="dbdoclet.xslt.fo"/>
+        <antcall target="dbdoclet.fop.pdf"/>
+    </target>
+    <target name="dbdoclet.ps">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.ps                                         -->
+        <!-- ========================================================== -->
+        <antcall target="dbdoclet.docbook"/>
+        <antcall target="dbdoclet.xslt.fo"/>
+        <antcall target="dbdoclet.fop.ps"/>
+    </target>
+    <target name="dbdoclet.mif">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.mif                                        -->
+        <!-- ========================================================== -->
+        <antcall target="dbdoclet.docbook"/>
+        <antcall target="dbdoclet.xslt.fo"/>
+        <antcall target="dbdoclet.fop.mif"/>
+    </target>
+    <target name="dbdoclet.txt">
+        <!-- ========================================================== -->
+        <!-- TARGET dbdoclet.txt                                        -->
+        <!-- ========================================================== -->
+        <antcall target="dbdoclet.docbook"/>
+        <antcall target="dbdoclet.xslt.fo"/>
+        <antcall target="dbdoclet.fop.txt"/>
+    </target>
+</project>

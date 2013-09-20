@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="eclipseImportComponent" immediate="true">
+  <implementation class="org.dbdoclet.tidbit.importer.eclipse.EclipseImportComponent"/>
+  <service>
+    <provide interface="org.dbdoclet.tidbit.importer.ImportService"/>
+  </service>
+</component>

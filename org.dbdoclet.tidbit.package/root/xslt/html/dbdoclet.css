@@ -1,0 +1,100 @@
+body  
+{ 
+  margin: 2em 10% 2em 10%;
+  padding: 1em;
+  background-color: white;
+}
+
+div.informaltable table,
+div.table table { 
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  font-size: 80%;
+}
+
+div.navheader
+{ 
+  margin-bottom: 3em;
+  }
+
+div.navfooter
+{ 
+  margin-top: 3em;
+  }
+
+div.navheader table tr td a,
+div.navfooter table tr td a
+{ 
+  font-weight: bold;
+  text-decoration: none;
+  }
+
+div.navheader table tr td a:hover,
+div.navfooter table tr td a:hover
+{ 
+  text-decoration: underline;
+  }
+
+h5, h6 
+{ 
+  font-size: 100%;
+  }
+
+html
+{ 
+  font-family: Cambria, "DejaVu Serif", serif; 
+  font-size: 14pt;
+  color: black;
+  background-color: white;
+  }
+
+img 
+{
+  border: 0 none;
+  }	
+
+li > p 
+{
+    text-indent: 0;
+    }
+
+p
+{ 
+  line-height: 141%;
+  margin: 0 0 0 0;
+  text-align: left;
+}
+
+p + p 
+{ 
+  text-indent: 1.5em;
+  }
+
+pre
+{ 
+  margin-left: 3%;
+  margin-right: 3%;
+  padding: 1em;
+  border: 1px solid #333;
+  color: black;
+  background-color: #eee;
+  font-family: "Courier New", monospaced;
+  font-size: 0.7em;
+  }
+
+td, th 
+{  
+  padding: 0.5em;
+  }
+
+th > p, td > p {
+  text-indent: 0;
+}
+
+thead
+{ 
+  background: #ccc;
+  }

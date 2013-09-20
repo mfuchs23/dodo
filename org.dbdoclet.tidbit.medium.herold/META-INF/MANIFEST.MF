@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Service-Component: OSGI-INF/component-description.xml
+Bundle-ManifestVersion: 2
+Bundle-Name: Herold MediumService
+Bundle-SymbolicName: org.dbdoclet.tidbit.medium.herold
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.antlr.runtime;version="3.4.0",
+ org.dbdoclet.antol,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.model,
+ org.dbdoclet.progress,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit,
+ org.dbdoclet.tidbit.application,
+ org.dbdoclet.tidbit.application.action,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.medium,
+ org.dbdoclet.tidbit.perspective,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.trafo,
+ org.dbdoclet.trafo.html.docbook,
+ org.dbdoclet.trafo.script,
+ org.osgi.service.component;version="1.0.0"
+Export-Package: org.dbdoclet.tidbit.medium.herold

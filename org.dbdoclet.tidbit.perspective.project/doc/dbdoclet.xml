@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project default='dbdoclet.pdf' name='org.dbdoclet.tidbit.perspective.project'>
+  <!-- ========================================================== -->
+  <!-- Generated from dbdoclet.TiDbit                             -->
+  <!-- Generated at 20.07.2009 17:18:05                           -->
+  <!-- http://www.dbdoclet.org                                    -->
+  <!-- ========================================================== -->
+  <property file='${basedir}/dbdoclet.properties'/>
+  <property file='${basedir}/params.properties'/>
+  <property name='dbdoclet.home' value='/usr/share/dbdoclet/'/>
+  <property name='dbdoclet.destination.path' value='${basedir}/build'/>
+  <property name='dbdoclet.project.path' value='${basedir}'/>
+  <property name='dbdoclet.overview.file' value=''/>
+  <property name='dbdoclet.docbook.file' value='/home/michael/Werkbank/dbdtidbit/org.dbdoclet.tidbit.perspective.project/doc/build/docbook/Reference.xml'/>
+  <property name='dbdoclet.docbook.file.base' value='/home/michael/Werkbank/dbdtidbit/org.dbdoclet.tidbit.perspective.project/doc/build/docbook/Reference'/>
+  <property name='dbdoclet.docbook.file.dir' value='/home/michael/Werkbank/dbdtidbit/org.dbdoclet.tidbit.perspective.project/doc/build/docbook'/>
+  <property name='dbdoclet.herold.input.file' value=''/>
+  <property name='dbdoclet.herold.output.file' value=''/>
+  <property name='dbdoclet.bootclasspath' value='${dbdoclet.home}jars/xml-apis.jar:${dbdoclet.home}jars/xercesImpl.jar:${dbdoclet.home}jars/serializer.jar:${dbdoclet.home}jars/xalan.jar'/>
+  <property name='fop.home' value='${dbdoclet.home}fop'/>
+  <!-- PATH dbdoclet.classpath                                    -->
+  <path id='dbdoclet.classpath'/>
+  <!-- PATH dbdoclet.fop.classpath                                -->
+  <path id='dbdoclet.fop.classpath'>
+    <pathelement path='${dbdoclet.home}jars/fop-hyph.jar'/>
+    <fileset dir='${fop.home}/lib'>
+      <include name='*.jar'/>
+    </fileset>
+    <fileset dir='${fop.home}/build'>
+      <include name='fop*.jar'/>
+    </fileset>
+  </path>
+  <!-- PATH dbdoclet.xinclude.classpath                           -->
+  <path id='dbdoclet.xinclude.classpath'>
+    <pathelement path='${dbdoclet.home}conf'/>
+    <pathelement path='${dbdoclet.home}jars/docbook-xsl-xalan27.jar'/>
+    <pathelement path='${dbdoclet.home}jars/resolver.jar'/>
+    <pathelement path='${dbdoclet.home}jars/xincluder.jar'/>
+  </path>
+  <!-- PATH dbdoclet.herold.classpath                             -->
+  <path id='dbdoclet.herold.classpath'>
+    <pathelement path='${dbdoclet.home}jars/jdk${java.specification.version}/dbdoclet.jar'/>
+  </path>
+  <!-- PATH dbdoclet.saxon.classpath                              -->
+  <path id='dbdoclet.saxon.classpath'>
+    <pathelement path='${dbdoclet.home}conf/'/>
+    <pathelement path='${dbdoclet.home}jars/resolver.jar'/>
+    <pathelement path='${dbdoclet.home}docbook/xsl/extensions/saxon65.jar'/>
+    <pathelement path='${dbdoclet.home}jars/xercesImpl.jar'/>
+    <pathelement path='${dbdoclet.home}jars/saxon-6.5.5.jar'/>
+  </path>
+  <target name='dbdoclet.prepare'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.prepare                                    -->
+    <!-- ========================================================== -->
+  </target>
+  <target name='dbdoclet.xslt'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xslt                                       -->
+    <!-- ========================================================== -->
+    <!-- TASK java                                                  -->
+    <java classname='com.icl.saxon.StyleSheet' dir='${dbdoclet.docbook.file.dir}/' failonerror='yes' fork='yes' maxmemory='1024m'>
+      <jvmarg value='-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl'/>
+      <jvmarg value='-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl'/>
+      <arg value='-r'/>
+      <arg value='org.apache.xml.resolver.tools.CatalogResolver'/>
+      <arg value='-x'/>
+      <arg value='org.apache.xml.resolver.tools.ResolvingXMLReader'/>
+      <arg value='-y'/>
+      <arg value='org.apache.xml.resolver.tools.ResolvingXMLReader'/>
+      <arg value='-o'/>
+      <arg value='${out}'/>
+      <arg value='${in}'/>
+      <arg value='${stylesheet}'/>
+      <arg value='use.extensions=1'/>
+      <classpath refid='dbdoclet.saxon.classpath'/>
+    </java>
+  </target>
+  <target name='dbdoclet.xinclude'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xinclude                                   -->
+    <!-- ========================================================== -->
+    <echo message='Running XIncluder (${in})...'/>
+    <mkdir dir='${dbdoclet.destination.path}/${dbdoclet.media}'/>
+    <!-- TASK java                                                  -->
+    <java classname='com.elharo.xml.xinclude.SAXXIncluder' failonerror='yes' fork='yes' maxmemory='1024m' output='${out}'>
+      <jvmarg value='-Xbootclasspath/p:${dbdoclet.bootclasspath}'/>
+      <arg value='-r'/>
+      <arg value='org.apache.xml.resolver.tools.CatalogResolver'/>
+      <arg value='${in}'/>
+      <classpath refid='dbdoclet.xinclude.classpath'/>
+    </java>
+  </target>
+  <target name='dbdoclet.fop.pdf'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.fop.pdf                                    -->
+    <!-- ========================================================== -->
+    <!-- TASK java                                                  -->
+    <java classname='org.apache.fop.cli.Main' failonerror='yes' fork='true' maxmemory='1024m'>
+      <arg value='-fo'/>
+      <arg value='${in}'/>
+      <arg value='-pdf'/>
+      <arg value='${out}'/>
+      <jvmarg value='-Xbootclasspath/p:${dbdoclet.bootclasspath}'/>
+      <classpath refid='dbdoclet.fop.classpath'/>
+    </java>
+  </target>
+  <target name='dbdoclet.xslt.html'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xslt.html                                  -->
+    <!-- ========================================================== -->
+    <echo message='DocBook Transformation(html)...'/>
+    <mkdir dir='${dbdoclet.destination.path}/html'/>
+    <!--DocBook 5 Strip Namespaces                                  -->
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.home}/docbook/xsl/common/stripns.xsl'/>
+      <param name='in' value='${in}'/>
+      <param name='out' value='${in}.db5'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.project.path}/xsl/html.xsl'/>
+      <param name='in' value='${in}.db5'/>
+      <param name='out' value='${out}'/>
+    </antcall>
+  </target>
+  <target name='dbdoclet.docbook.html'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.docbook.html                               -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='html'/>
+    <antcall target='dbdoclet.xinclude'>
+      <param name='in' value='${dbdoclet.docbook.file}'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.xi'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt.html'>
+      <param name='in' value='${dbdoclet.docbook.file.base}.xi'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.html.log'/>
+    </antcall>
+  </target>
+  <target depends='dbdoclet.prepare' name='dbdoclet.docbook'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.docbook                                    -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='docbook'/>
+    <delete dir='${dbdoclet.destination.path}/${dbdoclet.media}'/>
+    <!-- TASK javadoc                                               -->
+    <javadoc access='public' charset='UTF-8' docencoding='UTF-8' encoding='UTF-8' failonerror='yes' maxmemory='1024m' source='1.5'>
+      <packageset dir='../java'/>
+      <classpath refid='dbdoclet.classpath'/>
+      <doclet name='org.dbdoclet.doclet.docbook.DocBookDoclet' path='${dbdoclet.home}/jars/jdk${java.specification.version}/dbdoclet.jar'>
+        <param name='-imgfmt' value='png'/>
+        <param name='-docfilespath' value='${basedir}/../java'/>
+        <param name='-d' value='${dbdoclet.destination.path}/${dbdoclet.media}'/>
+        <param name='-properties' value='${basedir}/dbdoclet.properties'/>
+      </doclet>
+    </javadoc>
+  </target>
+  <target name='dbdoclet.standard'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.standard                                   -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='standard'/>
+    <!-- TASK javadoc                                               -->
+    <javadoc access='public' charset='UTF-8' destdir='${dbdoclet.destination.path}/${dbdoclet.media}' docencoding='UTF-8' encoding='UTF-8' failonerror='yes' maxmemory='1024m' source='1.5'>
+      <packageset dir='../java'/>
+      <classpath refid='dbdoclet.classpath'/>
+    </javadoc>
+    <zip basedir='${dbdoclet.destination.path}/${dbdoclet.media}' destfile='${dbdoclet.destination.path}/javadoc.zip'/>
+  </target>
+  <target depends='dbdoclet.prepare' name='dbdoclet.herold'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.herold                                     -->
+    <!-- ========================================================== -->
+    <!-- TASK java                                                  -->
+    <java classname='org.dbdoclet.herold.Herold' failonerror='yes' fork='yes' maxmemory='512m'>
+      <classpath refid='dbdoclet.herold.classpath'/>
+      <arg value='--in=${dbdoclet.herold.input.file}'/>
+      <arg value='--out=${dbdoclet.herold.output.file}'/>
+    </java>
+  </target>
+  <target name='dbdoclet.xslt.eclipse'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xslt.eclipse                               -->
+    <!-- ========================================================== -->
+    <echo message='DocBook Transformation(eclipse)...'/>
+    <mkdir dir='${dbdoclet.destination.path}/eclipse'/>
+    <!--DocBook 5 Strip Namespaces                                  -->
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.home}/docbook/xsl/common/stripns.xsl'/>
+      <param name='in' value='${in}'/>
+      <param name='out' value='${in}.db5'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.project.path}/xsl/eclipse.xsl'/>
+      <param name='in' value='${in}.db5'/>
+      <param name='out' value='${out}'/>
+    </antcall>
+  </target>
+  <target name='dbdoclet.docbook.eclipse'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.docbook.eclipse                            -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='eclipse'/>
+    <antcall target='dbdoclet.xinclude'>
+      <param name='in' value='${dbdoclet.docbook.file}'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.xi'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt.eclipse'>
+      <param name='in' value='${dbdoclet.docbook.file.base}.xi'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.eclipse'/>
+    </antcall>
+    <zip basedir='${dbdoclet.docbook.file.dir}/eclipse' destfile='${dbdoclet.docbook.file.dir}/${eclipse.plugin.id}_${eclipse.plugin.version}.jar'/>
+  </target>
+  <target name='dbdoclet.xslt.pdf'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xslt.pdf                                   -->
+    <!-- ========================================================== -->
+    <echo message='DocBook Transformation(pdf)...'/>
+    <mkdir dir='${dbdoclet.destination.path}/pdf'/>
+    <!--DocBook 5 Strip Namespaces                                  -->
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.home}/docbook/xsl/common/stripns.xsl'/>
+      <param name='in' value='${in}'/>
+      <param name='out' value='${in}.db5'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.project.path}/xsl/pdf.xsl'/>
+      <param name='in' value='${in}.db5'/>
+      <param name='out' value='${out}'/>
+    </antcall>
+  </target>
+  <target name='dbdoclet.docbook.pdf'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.docbook.pdf                                -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='pdf'/>
+    <echo message='DocBook File: ${dbdoclet.docbook.file}'/>
+    <antcall target='dbdoclet.xinclude'>
+      <param name='in' value='${dbdoclet.docbook.file}'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.xi'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt.pdf'>
+      <param name='in' value='${dbdoclet.docbook.file.base}.xi'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.fo'/>
+    </antcall>
+    <antcall target='dbdoclet.fop.pdf'>
+      <param name='in' value='${dbdoclet.docbook.file.base}.fo'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.pdf'/>
+    </antcall>
+  </target>
+  <target name='dbdoclet.xslt.javahelp'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.xslt.javahelp                              -->
+    <!-- ========================================================== -->
+    <echo message='DocBook Transformation(javahelp)...'/>
+    <mkdir dir='${dbdoclet.destination.path}/javahelp'/>
+    <!--DocBook 5 Strip Namespaces                                  -->
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.home}/docbook/xsl/common/stripns.xsl'/>
+      <param name='in' value='${in}'/>
+      <param name='out' value='${in}.db5'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt'>
+      <param name='stylesheet' value='${dbdoclet.project.path}/xsl/javahelp.xsl'/>
+      <param name='in' value='${in}.db5'/>
+      <param name='out' value='${out}'/>
+    </antcall>
+  </target>
+  <target name='dbdoclet.docbook.javahelp'>
+    <!-- ========================================================== -->
+    <!-- TARGET dbdoclet.docbook.javahelp                           -->
+    <!-- ========================================================== -->
+    <property name='dbdoclet.media' value='javahelp'/>
+    <copy file='${dbdoclet.home}/xslt/javahelp/javahelp.xsl' filtering='true' todir='${dbdoclet.project.path}/xsl'>
+      <filterset>
+        <filter token='DBDOCLET_HOME' value='${dbdoclet.home}'/>
+      </filterset>
+    </copy>
+    <antcall target='dbdoclet.xinclude'>
+      <param name='in' value='${dbdoclet.docbook.file}'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.xi'/>
+    </antcall>
+    <antcall target='dbdoclet.xslt.javahelp'>
+      <param name='in' value='${dbdoclet.docbook.file.base}.xi'/>
+      <param name='out' value='${dbdoclet.docbook.file.base}.javahelp'/>
+    </antcall>
+    <delete dir='${dbdoclet.docbook.file.dir}/javahelp/JavaHelpSearch'/>
+    <!-- PATH dbdoclet.javahelp.classpath                           -->
+    <path id='dbdoclet.javahelp.classpath'>
+      <pathelement path='${dbdoclet.home}jars/jhall.jar'/>
+    </path>
+    <!-- TASK java                                                  -->
+    <java classname='com.sun.java.help.search.Indexer' failonerror='yes' fork='yes' maxmemory='1024m'>
+      <jvmarg value='-Xbootclasspath/p:${dbdoclet.bootclasspath}'/>
+      <arg value='-verbose'/>
+      <arg value='-db'/>
+      <arg value='${dbdoclet.docbook.file.dir}/javahelp/JavaHelpSearch'/>
+      <arg value='${dbdoclet.docbook.file.dir}/javahelp'/>
+      <classpath refid='dbdoclet.javahelp.classpath'/>
+    </java>
+  </target>
+</project>
+

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="standardComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.standard.StandardComponent" />
+	<property name="category" value="doclet" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

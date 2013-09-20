@@ -1,0 +1,61 @@
+BODY {
+	margin: 1em;
+	font-family: serif;
+	background: white no-repeat;
+	color: black;
+
+}
+
+
+H1, H2, H3, H4 { margin-top: 1em; margin-bottom: 1em }
+H5, H6 { margin-top: 1em }
+H1 { text-align: center }
+H1, H2, H4, H6 { font-weight: bold }
+
+B, STRONG { font-weight: bolder }  /* relative to the parent */
+I, CITE, EM, VAR, ADDRESS, BLOCKQUOTE { font-style: italic }
+PRE, TT, CODE, KBD, SAMP { font-family: monospace }
+
+PRE { white-space: pre }
+
+ADDRESS { margin-left: 3em }
+BLOCKQUOTE { margin-left: 3em; margin-right: 3em }
+
+A:link { color: blue }          /* unvisited link */
+A:visited { color: red }        /* visited links */
+A:active { color: lime }        /* active links */
+
+dt {color: rgb(0,0,255);
+background: rgb(192,192,192); 
+margin: 2ex;
+padding-top: 0.5ex;
+padding-bottom: 0.75ex;
+padding-left: 1ex;
+text-align: left;
+white-space: no-wrap;
+width: 60%
+}
+
+
+.question { color: rgb(0,0,0);
+background: rgb(192,192,192); 
+border-style: solid; 
+border-color: rgb(255,0,0);
+padding-top: 0.5ex;
+padding-bottom: 0.75ex;
+padding-left: 1ex;
+text-align: center;
+white-space: no-wrap;
+width: 60%
+} 
+
+.warning {
+border-style:solid;
+border-color:red;
+padding:0.5ex;
+text-align:center;
+
+
+}
+
+/*width: 60%*/

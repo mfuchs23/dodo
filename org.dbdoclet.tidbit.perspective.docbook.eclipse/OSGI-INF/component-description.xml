@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="docbookEclipsePerspective">
+	<implementation
+		class="org.dbdoclet.tidbit.perspective.docbook.eclipse.DocBookEclipsePerspective" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.perspective.Perspective" />
+	</service>
+</component>

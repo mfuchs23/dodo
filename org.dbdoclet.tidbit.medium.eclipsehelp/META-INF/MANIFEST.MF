@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Service-Component: OSGI-INF/component-description.xml
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipsehelp Plug-in
+Bundle-SymbolicName: org.dbdoclet.tidbit.medium.eclipsehelp
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.dbdoclet.antol,
+ org.dbdoclet.jive,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.model,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.medium,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.tidbit.project.driver,
+ org.osgi.framework;version="1.4.0",
+ org.osgi.service.component;version="1.0.0"
+Require-Bundle: org.dbdoclet.commons

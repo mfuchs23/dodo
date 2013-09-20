@@ -1,0 +1,5 @@
+Main-Class: org.dbdoclet.runner.TidbitHost
+Class-Path: ../conf/ felix.jar
+  org.dbdoclet.commons.jar 
+  org.dbdoclet.jive.jar
+  org.dbdoclet.tidbit.common.jar

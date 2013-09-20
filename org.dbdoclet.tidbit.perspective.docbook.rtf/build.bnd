@@ -1,0 +1,10 @@
+version=6.1.0
+Bundle-Name=org.dbdoclet.tidbit.perspective.docbook.rtf
+Bundle-SymbolicName=org.dbdoclet.tidbit.perspective.docbook.rtf
+Bundle-Version=${version}
+Export-Package: org.dbdoclet.tidbit.perspective.docbook.rtf.* ;version=${version}
+Service-Component: OSGI-INF/component-description.xml
+Include-Resource: \
+  OSGI-INF/component-description.xml=OSGI-INF/component-description.xml, \
+  images=src/main/resources/images
+  

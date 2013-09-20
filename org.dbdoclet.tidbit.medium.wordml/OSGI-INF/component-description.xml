@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="wordComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.wordml.WordmlComponent" />
+	<property name="category" value="docbook-wordml" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

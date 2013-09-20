@@ -1,0 +1,5 @@
+version=6.1.0
+Bundle-Name=org.dbdoclet.tidbit.importer
+Bundle-SymbolicName=org.dbdoclet.tidbit.importer
+Bundle-Version=${version}
+Export-Package: org.dbdoclet.tidbit.importer.* ;version=${version}

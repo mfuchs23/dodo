@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<project name="dbdoclet.doc" default="build">
+
+  <property file="../build.properties"/>
+
+  <!-- ========================================== -->
+  <!-- PREPARE                                    -->
+  <!-- ========================================== -->
+  <target name="prepare">
+  </target>
+
+  <!-- ========================================== -->
+  <!-- CLEAN                                      -->
+  <!-- ========================================== -->
+
+  <target name="clean">
+  	<delete dir="../dsitrib/doc/tutorial"/>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- BUILD                                      -->
+  <!-- ========================================== -->
+  <target name="build" depends="prepare">
+    <copy todir="tutorial/html" file="tutorial/Tutorial.css"/>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- INSTALL                                    -->
+  <!-- ========================================== -->
+  <target name="install">
+
+  	<mkdir dir="../distrib/doc/tutorial"/>
+  	
+  	<copy todir="../distrib/doc/tutorial">
+  		<fileset dir="tutorial">
+  			<include name="html/**"/>
+  			<include name="Tutorial.pdf"/>
+  	  </fileset>
+  	</copy> 
+  		
+  </target>
+
+  <target name="all">  
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="install"/>
+  </target>
+
+</project>

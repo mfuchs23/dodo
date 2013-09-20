@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="docbookComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.docbook.DocBookComponent" />
+	<property name="category" value="doclet"/>
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

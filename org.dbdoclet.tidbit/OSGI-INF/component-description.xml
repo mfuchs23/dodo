@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="tidbitComponent">
+	<implementation class="org.dbdoclet.tidbit.TidbitComponent" />
+	<reference name="importService" interface="org.dbdoclet.tidbit.importer.ImportService"
+		cardinality="0..n" policy="dynamic" bind="addImportService" unbind="removeImportService" />
+	<reference name="mediumService" interface="org.dbdoclet.tidbit.medium.MediumService"
+		cardinality="0..n" policy="dynamic" bind="addMediumService" unbind="removeMediumService" />
+	<reference name="trafoService" interface="org.dbdoclet.trafo.TrafoService"
+		cardinality="0..n" policy="dynamic" bind="addTrafoService" unbind="removeTrafoService" />
+	<reference name="perspective" interface="org.dbdoclet.tidbit.perspective.Perspective"
+		cardinality="0..n" policy="dynamic" bind="addPerspective" unbind="removePerspective" />
+</component>

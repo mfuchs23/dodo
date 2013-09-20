@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="docbookRtfPerspective">
+	<implementation
+		class="org.dbdoclet.tidbit.perspective.docbook.rtf.DocBookRtfPerspective" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.perspective.Perspective" />
+	</service>
+</component>

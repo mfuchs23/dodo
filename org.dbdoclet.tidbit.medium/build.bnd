@@ -1,0 +1,5 @@
+version=6.1.0
+Bundle-Name=org.dbdoclet.tidbit.medium
+Bundle-SymbolicName=org.dbdoclet.tidbit.medium
+Bundle-Version=${version}
+Export-Package: org.dbdoclet.tidbit.medium.* ;version=${version}

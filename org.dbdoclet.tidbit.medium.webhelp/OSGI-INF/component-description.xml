@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="webhelpComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.webhelp.WebhelpComponent" />
+	<property name="category" value="docbook-webhelp" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

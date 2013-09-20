@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="epubComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.epub.EpubComponent" />
+	<property name="category" value="docbook-epub" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

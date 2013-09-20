@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="docbookHtmlPerspective">
+	<implementation
+		class="org.dbdoclet.tidbit.perspective.docbook.html.DocBookHtmlPerspective" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.perspective.Perspective" />
+	</service>
+</component>

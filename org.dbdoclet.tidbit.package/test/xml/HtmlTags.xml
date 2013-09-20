@@ -1,0 +1,203 @@
+<!--
+ ### Copyright (C) 2001-2003 Michael Fuchs ###
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2, or (at your option)
+ any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the
+ Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA 02111-1307, USA.
+ 	
+ Author: Michael Fuchs
+ E-Mail: mfuchs@unico-consulting.com
+ 
+ RCS INFORMATION
+ Id.........: $Id: HtmlTags.xml,v 1.1.1.1 2004/12/21 13:59:27 mfuchs Exp $
+ Author.....: $Author: mfuchs $
+ Date.......: $Date: 2004/12/21 13:59:27 $
+ Revision...: $Revision: 1.1.1.1 $
+ State......: $State: Exp $
+-->
+
+<elements>
+  <element>a</element>
+  <element>abbr</element>
+  <element>acronym</element>
+  <element>address</element>
+  <element>applet</element>
+  <element>area</element>
+  <element>b</element>
+  <element>base</element>
+  <element>basefont</element>
+  <element>bdo</element>
+  <element>big</element>
+  <element>blockquote</element>
+  <element>body</element>
+  <element>br</element>
+  <element>button</element>
+  <element>caption</element>
+  <element>center</element>
+  <element>cite</element>
+  <element>code</element>
+  <element>col</element>
+  <element>colgroup</element>
+  <element>dd</element>
+  <element>del</element>
+  <element>dfn</element>
+  <element>dir</element>
+  <element>div</element>
+  <element>dl</element>
+  <element>dt</element>
+  <element>em</element>
+  <element>fieldset</element>
+  <element>font</element>
+  <element>form</element>
+  <element>frame</element>
+  <element>frameset</element>
+  <element>h1</element>
+  <element>h2</element>
+  <element>h3</element>
+  <element>h4</element>
+  <element>h5</element>
+  <element>h6</element>
+  <element>head</element>
+  <element>hr</element>
+  <element>html</element>
+  <element>i</element>
+  <element>iframe</element>
+  <element>img</element>
+  <element>input</element>
+  <element>ins</element>
+  <element>isindex</element>
+  <element>kbd</element>
+  <element>label</element>
+  <element>legend</element>
+  <element>li</element>
+  <element>link</element>
+  <element>map</element>
+  <element>menu</element>
+  <element>meta</element>
+  <element>noframes</element>
+  <element>noscript</element>
+  <element>object</element>
+  <element>ol</element>
+  <element>optgroup</element>
+  <element>option</element>
+  <element>p</element>
+  <element>param</element>
+  <element>pre</element>
+  <element>q</element>
+  <element>s</element>
+  <element>samp</element>
+  <element>script</element>
+  <element>select</element>
+  <element>small</element>
+  <element>span</element>
+  <element>strike</element>
+  <element>strong</element>
+  <element>style</element>
+  <element>sub</element>
+  <element>sup</element>
+  <element>table</element>
+  <element>tbody</element>
+  <element>td</element>
+  <element>textarea</element>
+  <element>tfoot</element>
+  <element>th</element>
+  <element>thead</element>
+  <element>title</element>
+  <element>tr</element>
+  <element>tt</element>
+  <element>u</element>
+  <element>ul</element>
+  <element>var</element>
+</elements>
+<!--
+$Log: HtmlTags.xml,v $
+Revision 1.1.1.1  2004/12/21 13:59:27  mfuchs
+Reimport
+
+Revision 1.1.1.1  2004/02/17 22:48:38  mfuchs
+dbdoclet
+
+Revision 1.1.1.1  2004/01/05 14:56:13  cvs
+dbdoclet
+
+Revision 1.3  2003/08/01 17:01:50  cvs
+Scratch production.
+
+Revision 1.2  2003/08/01 16:22:07  cvs
+Scratch production.
+
+Revision 1.1.1.1  2003/08/01 13:17:57  cvs
+DocBook Doclet
+
+Revision 1.3  2003/08/01 10:32:05  mfuchs
+Fixes for release 0.46
+
+Revision 1.2  2003/07/31 18:06:04  mfuchs
+Release 0.46
+
+Revision 1.1.1.1  2003/07/31 17:05:39  mfuchs
+DocBook Doclet since 0.46
+
+Revision 1.11  2003/06/27 08:47:01  mfuchs
+Fixes and improvemts for 0.45
+
+Revision 1.10  2003/06/27 08:39:12  mfuchs
+Fixes and improvemts for 0.45
+
+Revision 1.9  2003/06/25 19:56:12  mfuchs
+Fixes for 0.44.
+
+Revision 1.8  2003/06/25 19:31:54  mfuchs
+Fixes for 0.44.
+
+Revision 1.7  2003/06/25 04:28:24  mfuchs
+Fixes and improvements.
+
+Revision 1.6  2003/06/05 18:54:22  mfuchs
+Release 0.43
+
+Revision 1.4  2003/05/30 22:00:04  mfuchs
+Upgraded archive.
+
+Revision 1.3  2003/05/30 21:49:54  mfuchs
+*** empty log message ***
+
+Revision 1.2  2003/05/30 11:22:53  mfuchs
+Reorganisation of documentation.
+
+Revision 1.1.1.1  2003/05/30 11:09:40  mfuchs
+dbdoclet
+
+Revision 1.6  2003/05/30 10:07:49  mfuchs
+Bugfixes and improvements.
+
+Revision 1.5  2003/05/13 20:36:12  mfuchs
+Release 0.42
+
+Revision 1.4  2003/05/13 19:51:41  mfuchs
+Refactoring and introduction of styles
+
+Revision 1.3  2003/04/18 12:22:41  mfuchs
+Changes for release 0.41.
+
+Revision 1.2  2003/03/25 21:35:10  mfuchs
+State changed.
+
+Revision 1.1.1.1  2003/03/18 07:41:37  mfuchs
+DocBook Doclet 0.40
+
+Revision 1.1.1.1  2003/03/17 20:50:17  cvs
+dbdoclet
+
+-->

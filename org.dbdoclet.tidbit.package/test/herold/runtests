@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export SGML_CATALOG_FILES="../../../../ode/docbook/catalog.xml"
+
+function throw {
+
+    if [ "$1" != "" ]; then
+        echo "[FATAL] $1"
+    fi
+
+    exit 1
+}
+
+find data -name "*.html" | sort | herold --title="JDK 1.4.1 Basic Features" --sysid /usr/share/dbdoclet/docbook/dtd/4.3/docbookx.dtd -o Test.xml || fatal "herold failed!"
+
+ xmllint --catalogs --postvalid --noout Test.xml || throw "xmllint fehlgeschlagen"
+

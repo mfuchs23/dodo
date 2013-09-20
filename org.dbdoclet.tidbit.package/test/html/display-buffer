@@ -1,0 +1,1561 @@
+<html><head><!-- This HTML file has been created by texi2html 1.50 from elisp.texi on 22 July 1996 --><title>GNU Emacs Lisp Reference Manual - Processes</title></head><body>
+Go to the <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_1.html">first</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_33.html">previous</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_35.html">next</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_43.html">last</a> section, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html">table of contents</a>.
+<p></p><hr><p>
+
+
+</p><h1><a name="SEC502" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC502">Processes</a></h1>
+<p>
+<a name="IDX2122"></a>
+<a name="IDX2123"></a>
+<a name="IDX2124"></a>
+<a name="IDX2125"></a>
+
+</p>
+<p>
+  In the terminology of operating systems, a <strong>process</strong> is a space in
+which a program can execute.  Emacs runs in a process.  Emacs Lisp
+programs can invoke other programs in processes of their own.  These are
+called <strong>subprocesses</strong> or <strong>child processes</strong> of the Emacs process,
+which is their <strong>parent process</strong>.
+
+</p>
+<p>
+  A subprocess of Emacs may be <strong>synchronous</strong> or <strong>asynchronous</strong>,
+depending on how it is created.  When you create a synchronous
+subprocess, the Lisp program waits for the subprocess to terminate
+before continuing execution.  When you create an asynchronous
+subprocess, it can run in parallel with the Lisp program.  This kind of
+subprocess is represented within Emacs by a Lisp object which is also
+called a "process".  Lisp programs can use this object to communicate
+with the subprocess or to control it.  For example, you can send
+signals, obtain status information, receive output from the process, or
+send input to it.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>processp</b> <i>object</i>
+</dt><dd><a name="IDX2126"></a>
+This function returns <code>t</code> if <var>object</var> is a process,
+<code>nil</code> otherwise.
+</dd></dl>
+
+<p></p>
+
+
+
+<h2><a name="SEC503" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC503">Functions that Create Subprocesses</a></h2>
+
+<p>
+  There are three functions that create a new subprocess in which to run
+a program.  One of them, <code>start-process</code>, creates an asynchronous
+process and returns a process object (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC506">Creating an Asynchronous Process</a>).
+The other two, <code>call-process</code> and <code>call-process-region</code>,
+create a synchronous process and do not return a process object
+(see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC504">Creating a Synchronous Process</a>).
+
+</p>
+<p>
+  Synchronous and asynchronous processes are explained in following
+sections.  Since the three functions are all called in a similar
+fashion, their common arguments are described here.
+
+</p>
+<p>
+<a name="IDX2127"></a>
+<a name="IDX2128"></a>
+<a name="IDX2129"></a>
+  In all cases, the function's <var>program</var> argument specifies the
+program to be run.  An error is signaled if the file is not found or
+cannot be executed.  If the file name is relative, the variable
+<code>exec-path</code> contains a list of directories to search.  Emacs
+initializes <code>exec-path</code> when it starts up, based on the value of
+the environment variable <code>PATH</code>.  The standard file name
+constructs, <samp>`~'</samp>, <samp>`.'</samp>, and <samp>`..'</samp>, are interpreted as usual
+in <code>exec-path</code>, but environment variable substitutions
+(<samp>`$HOME'</samp>, etc.) are not recognized; use
+<code>substitute-in-file-name</code> to perform them (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_23.html#SEC337">Functions that Expand Filenames</a>).
+
+</p>
+<p>
+  Each of the subprocess-creating functions has a <var>buffer-or-name</var>
+argument which specifies where the standard output from the program will
+go.  If <var>buffer-or-name</var> is <code>nil</code>, that says to discard the
+output unless a filter function handles it.  (See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC513">Process Filter Functions</a>,
+and section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_17.html#SEC222">Reading and Printing Lisp Objects</a>.)  Normally, you should avoid having multiple
+processes send output to the same buffer because their output would be
+intermixed randomly.
+
+</p>
+<p>
+<a name="IDX2130"></a>
+  All three of the subprocess-creating functions have a <code>&amp;rest</code>
+argument, <var>args</var>.  The <var>args</var> must all be strings, and they are
+supplied to <var>program</var> as separate command line arguments.  Wildcard
+characters and other shell constructs are not allowed in these strings,
+since they are passed directly to the specified program.  
+
+</p>
+<p>
+  <strong>Please note:</strong> The argument <var>program</var> contains only the
+name of the program; it may not contain any command-line arguments.  You
+must use <var>args</var> to provide those.
+
+</p>
+<p>
+  The subprocess gets its current directory from the value of
+<code>default-directory</code> (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_23.html#SEC337">Functions that Expand Filenames</a>).
+
+</p>
+<p>
+<a name="IDX2131"></a>
+  The subprocess inherits its environment from Emacs; but you can
+specify overrides for it with <code>process-environment</code>.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_35.html#SEC527">Operating System Environment</a>.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Variable:</u> <b>exec-directory</b>
+</dt><dd><a name="IDX2132"></a>
+<a name="IDX2133"></a>
+The value of this variable is the name of a directory (a string) that
+contains programs that come with GNU Emacs, that are intended for Emacs
+to invoke.  The program <code>wakeup</code> is an example of such a program;
+the <code>display-time</code> command uses it to get a reminder once per
+minute.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>User Option:</u> <b>exec-path</b>
+</dt><dd><a name="IDX2134"></a>
+The value of this variable is a list of directories to search for
+programs to run in subprocesses.  Each element is either the name of a
+directory (i.e., a string), or <code>nil</code>, which stands for the default
+directory (which is the value of <code>default-directory</code>).
+<a name="IDX2135"></a>
+
+<p></p>
+<p>
+The value of <code>exec-path</code> is used by <code>call-process</code> and
+<code>start-process</code> when the <var>program</var> argument is not an absolute
+file name.
+</p></dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC504" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC504">Creating a Synchronous Process</a></h2>
+<p>
+<a name="IDX2136"></a>
+
+</p>
+<p>
+  After a <strong>synchronous process</strong> is created, Emacs waits for the
+process to terminate before continuing.  Starting Dired is an example of
+this: it runs <code>ls</code> in a synchronous process, then modifies the
+output slightly.  Because the process is synchronous, the entire
+directory listing arrives in the buffer before Emacs tries to do
+anything with it.
+
+</p>
+<p>
+  While Emacs waits for the synchronous subprocess to terminate, the
+user can quit by typing <kbd>C-g</kbd>.  The first <kbd>C-g</kbd> tries to kill
+the subprocess with a <code>SIGINT</code> signal; but it waits until the
+subprocess actually terminates before quitting.  If during that time the
+user types another <kbd>C-g</kbd>, that kills the subprocess instantly with
+<code>SIGKILL</code> and quits immediately.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_19.html#SEC273">Quitting</a>.
+
+</p>
+<p>
+  The synchronous subprocess functions returned <code>nil</code> in version
+18.  In version 19, they return an indication of how the process
+terminated.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>call-process</b> <i>program &amp;optional infile destination display &amp;rest args</i>
+</dt><dd><a name="IDX2137"></a>
+This function calls <var>program</var> in a separate process and waits for
+it to finish.
+
+<p></p>
+<p>
+The standard input for the process comes from file <var>infile</var> if
+<var>infile</var> is not <code>nil</code> and from <tt>`/dev/null'</tt> otherwise.
+The argument <var>destination</var> says where to put the process output.
+Here are the possibilities:
+
+</p>
+<dl compact="compact">
+
+<dt>a buffer
+</dt><dd>
+Insert the output in that buffer, before point.  This includes both the
+standard output stream and the standard error stream of the process.
+
+</dd><dt>a string
+</dt><dd>
+Find or create a buffer with that name, then insert
+the output in that buffer, before point.
+
+</dd><dt><code>t</code>
+</dt><dd>
+Insert the output in the current buffer, before point.
+
+</dd><dt><code>nil</code>
+</dt><dd>
+Discard the output.
+
+</dd><dt>0
+</dt><dd>
+Discard the output, and return immediately without waiting
+for the subprocess to finish.
+
+In this case, the process is not truly synchronous, since it can run in
+parallel with Emacs; but you can think of it as synchronous in that
+Emacs is essentially finished with the subprocess as soon as this
+function returns.
+
+</dd><dt>(<var>real-destination</var> <var>error-destination</var>)
+</dt><dd>
+Keep the standard output stream separate from the standard error stream;
+deal with the ordinary output as specified by <var>real-destination</var>,
+and dispose of the error output according to <var>error-destination</var>.
+The value <code>nil</code> means discard it, <code>t</code> means mix it with the
+ordinary output, and a string specifies a file name to redirect error
+output into.
+
+You can't directly specify a buffer to put the error output in; that is
+too difficult to implement.  But you can achieve this result by sending
+the error output to a temporary file and then inserting the file into a
+buffer.
+</dd></dl>
+
+<p>
+If <var>display</var> is non-<code>nil</code>, then <code>call-process</code> redisplays
+the buffer as output is inserted.  Otherwise the function does no
+redisplay, and the results become visible on the screen only when Emacs
+redisplays that buffer in the normal course of events.
+
+</p>
+<p>
+The remaining arguments, <var>args</var>, are strings that specify command
+line arguments for the program.
+
+</p>
+<p>
+The value returned by <code>call-process</code> (unless you told it not to
+wait) indicates the reason for process termination.  A number gives the
+exit status of the subprocess; 0 means success, and any other value
+means failure.  If the process terminated with a signal,
+<code>call-process</code> returns a string describing the signal.
+
+</p>
+<p>
+In the examples below, the buffer <samp>`foo'</samp> is current.
+
+</p>
+
+<pre>(call-process "pwd" nil t)
+     =&gt; nil
+
+---------- Buffer: foo ----------
+/usr/user/lewis/manual
+---------- Buffer: foo ----------
+
+(call-process "grep" nil "bar" nil "lewis" "/etc/passwd")
+     =&gt; nil
+
+---------- Buffer: bar ----------
+lewis:5LTsHm66CSWKg:398:21:Bil Lewis:/user/lewis:/bin/csh
+
+---------- Buffer: bar ----------
+</pre>
+
+<p>
+The <code>insert-directory</code> function contains a good example of the use
+of <code>call-process</code>:
+
+</p>
+
+<pre>(call-process insert-directory-program nil t nil switches
+              (if full-directory-p
+                  (concat (file-name-as-directory file) ".")
+                file))
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>call-process-region</b> <i>start end program &amp;optional delete destination display &amp;rest args</i>
+</dt><dd><a name="IDX2138"></a>
+This function sends the text between <var>start</var> to <var>end</var> as
+standard input to a process running <var>program</var>.  It deletes the text
+sent if <var>delete</var> is non-<code>nil</code>; this is useful when <var>buffer</var>
+is <code>t</code>, to insert the output in the current buffer.
+
+<p></p>
+<p>
+The arguments <var>destination</var> and <var>display</var> control what to do
+with the output from the subprocess, and whether to update the display
+as it comes in.  For details, see the description of
+<code>call-process</code>, above.  If <var>destination</var> is the integer 0,
+<code>call-process-region</code> discards the output and returns <code>nil</code>
+immediately, without waiting for the subprocess to finish.
+
+</p>
+<p>
+The remaining arguments, <var>args</var>, are strings that specify command
+line arguments for the program.
+
+</p>
+<p>
+The return value of <code>call-process-region</code> is just like that of
+<code>call-process</code>: <code>nil</code> if you told it to return without
+waiting; otherwise, a number or string which indicates how the
+subprocess terminated.
+
+</p>
+<p>
+In the following example, we use <code>call-process-region</code> to run the
+<code>cat</code> utility, with standard input being the first five characters
+in buffer <samp>`foo'</samp> (the word <samp>`input'</samp>).  <code>cat</code> copies its
+standard input into its standard output.  Since the argument
+<var>destination</var> is <code>t</code>, this output is inserted in the current
+buffer.
+
+</p>
+
+<pre>---------- Buffer: foo ----------
+input-!-
+---------- Buffer: foo ----------
+
+(call-process-region 1 6 "cat" nil t)
+     =&gt; nil
+
+---------- Buffer: foo ----------
+inputinput-!-
+---------- Buffer: foo ----------
+</pre>
+
+<p>
+  The <code>shell-command-on-region</code> command uses
+<code>call-process-region</code> like this:
+
+</p>
+
+<pre>(call-process-region 
+ start end         
+ shell-file-name      ; Name of program.
+ nil                  ; Do not delete region.
+ buffer               ; Send output to <code>buffer</code>.
+ nil                  ; No redisplay during output.
+ "-c" command)        ; Arguments for the shell.
+</pre>
+
+</dd></dl>
+
+
+
+<h2><a name="SEC505" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC505">MS-DOS Subprocesses</a></h2>
+
+<p>
+  On MS-DOS, you must indicate whether the data going to and from
+a synchronous subprocess are text or binary.  Text data requires
+translation between the end-of-line convention used within Emacs
+(a single newline character) and the convention used outside Emacs
+(the two-character sequence, CRLF).
+
+</p>
+<p>
+  The variable <code>binary-process-input</code> applies to input sent to the
+subprocess, and <code>binary-process-output</code> applies to output received
+from it.  A non-<code>nil</code> value means the data is non-text; <code>nil</code>
+means the data is text, and calls for conversion.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Variable:</u> <b>binary-process-input</b>
+</dt><dd><a name="IDX2139"></a>
+If this variable is <code>nil</code>, convert newlines to CRLF sequences in
+the input to a synchronous subprocess.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Variable:</u> <b>binary-process-output</b>
+</dt><dd><a name="IDX2140"></a>
+If this variable is <code>nil</code>, convert CRLF sequences to newlines in
+the output from a synchronous subprocess.
+</dd></dl>
+
+<p></p>
+<p>
+  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_23.html#SEC344">Files and MS-DOS</a>, for related information.
+
+</p>
+
+
+<h2><a name="SEC506" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC506">Creating an Asynchronous Process</a></h2>
+<p>
+<a name="IDX2141"></a>
+
+</p>
+<p>
+  After an <strong>asynchronous process</strong> is created, Emacs and the Lisp
+program both continue running immediately.  The process may thereafter
+run in parallel with Emacs, and the two may communicate with each other
+using the functions described in following sections.  Here we describe
+how to create an asynchronous process with <code>start-process</code>.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>start-process</b> <i>name buffer-or-name program &amp;rest args</i>
+</dt><dd><a name="IDX2142"></a>
+This function creates a new asynchronous subprocess and starts the
+program <var>program</var> running in it.  It returns a process object that
+stands for the new subprocess in Lisp.  The argument <var>name</var>
+specifies the name for the process object; if a process with this name
+already exists, then <var>name</var> is modified (by adding <samp>`&lt;1&gt;'</samp>, etc.)
+to be unique.  The buffer <var>buffer-or-name</var> is the buffer to
+associate with the process.
+
+<p></p>
+<p>
+The remaining arguments, <var>args</var>, are strings that specify command
+line arguments for the program.
+
+</p>
+<p>
+In the example below, the first process is started and runs (rather,
+sleeps) for 100 seconds.  Meanwhile, the second process is started, and
+given the name <samp>`my-process&lt;1&gt;'</samp> for the sake of uniqueness.  It
+inserts the directory listing at the end of the buffer <samp>`foo'</samp>,
+before the first process finishes.  Then it finishes, and a message to
+that effect is inserted in the buffer.  Much later, the first process
+finishes, and another message is inserted in the buffer for it.
+
+</p>
+
+<pre>(start-process "my-process" "foo" "sleep" "100")
+     =&gt; #&lt;process my-process&gt;
+
+(start-process "my-process" "foo" "ls" "-l" "/user/lewis/bin")
+     =&gt; #&lt;process my-process&lt;1&gt;&gt;
+
+---------- Buffer: foo ----------
+total 2
+lrwxrwxrwx  1 lewis     14 Jul 22 10:12 gnuemacs --&gt; /emacs
+-rwxrwxrwx  1 lewis     19 Jul 30 21:02 lemon
+
+Process my-process&lt;1&gt; finished
+
+Process my-process finished
+---------- Buffer: foo ----------
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>start-process-shell-command</b> <i>name buffer-or-name command &amp;rest command-args</i>
+</dt><dd><a name="IDX2143"></a>
+This function is like <code>start-process</code> except that it uses a shell
+to execute the specified command.  The argument <var>command</var> is a shell
+command name, and <var>command-args</var> are the arguments for the shell
+command.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Variable:</u> <b>process-connection-type</b>
+</dt><dd><a name="IDX2144"></a>
+<a name="IDX2145"></a>
+<a name="IDX2146"></a>
+This variable controls the type of device used to communicate with
+asynchronous subprocesses.  If it is non-<code>nil</code>, then PTYs are
+used, when available.  Otherwise, pipes are used.
+
+<p></p>
+<p>
+PTYs are usually preferable for processes visible to the user, as
+in Shell mode, because they allow job control (<kbd>C-c</kbd>, <kbd>C-z</kbd>,
+etc.) to work between the process and its children whereas pipes do not.
+For subprocesses used for internal purposes by programs, it is often
+better to use a pipe, because they are more efficient.  In addition, the
+total number of PTYs is limited on many systems and it is good not
+to waste them.
+
+</p>
+<p>
+The value <code>process-connection-type</code> is used when
+<code>start-process</code> is called.  So you can specify how to communicate
+with one subprocess by binding the variable around the call to
+<code>start-process</code>.
+
+</p>
+
+<pre>(let ((process-connection-type nil))  ; Use a pipe.
+  (start-process ...))
+</pre>
+
+<p>
+To determine whether a given subprocess actually got a pipe or a
+PTY, use the function <code>process-tty-name</code> (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC508">Process Information</a>).
+</p></dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC507" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC507">Deleting Processes</a></h2>
+<p>
+<a name="IDX2147"></a>
+
+</p>
+<p>
+  <strong>Deleting a process</strong> disconnects Emacs immediately from the
+subprocess, and removes it from the list of active processes.  It sends
+a signal to the subprocess to make the subprocess terminate, but this is
+not guaranteed to happen immediately.  The process object itself
+continues to exist as long as other Lisp objects point to it.
+
+</p>
+<p>
+  You can delete a process explicitly at any time.  Processes are
+deleted automatically after they terminate, but not necessarily right
+away.  If you delete a terminated process explicitly before it is
+deleted automatically, no harm results.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Variable:</u> <b>delete-exited-processes</b>
+</dt><dd><a name="IDX2148"></a>
+This variable controls automatic deletion of processes that have
+terminated (due to calling <code>exit</code> or to a signal).  If it is
+<code>nil</code>, then they continue to exist until the user runs
+<code>list-processes</code>.  Otherwise, they are deleted immediately after
+they exit.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>delete-process</b> <i>name</i>
+</dt><dd><a name="IDX2149"></a>
+This function deletes the process associated with <var>name</var>, killing it
+with a <code>SIGHUP</code> signal.  The argument <var>name</var> may be a process,
+the name of a process, a buffer, or the name of a buffer.
+
+<p></p>
+
+<pre>(delete-process "*shell*")
+     =&gt; nil
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-kill-without-query</b> <i>process</i>
+</dt><dd><a name="IDX2150"></a>
+This function declares that Emacs need not query the user if
+<var>process</var> is still running when Emacs is exited.  The process will
+be deleted silently.  The value is <code>t</code>.
+
+<p></p>
+
+<pre>(process-kill-without-query (get-process "shell"))
+     =&gt; t
+</pre>
+
+</dd></dl>
+
+
+
+<h2><a name="SEC508" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC508">Process Information</a></h2>
+
+<p>
+  Several functions return information about processes.
+<code>list-processes</code> is provided for interactive use.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Command:</u> <b>list-processes</b>
+</dt><dd><a name="IDX2151"></a>
+This command displays a listing of all living processes.  In addition,
+it finally deletes any process whose status was <samp>`Exited'</samp> or
+<samp>`Signaled'</samp>.  It returns <code>nil</code>.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-list</b>
+</dt><dd><a name="IDX2152"></a>
+This function returns a list of all processes that have not been deleted.
+
+<p></p>
+
+<pre>(process-list)
+     =&gt; (#&lt;process display-time&gt; #&lt;process shell&gt;)
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>get-process</b> <i>name</i>
+</dt><dd><a name="IDX2153"></a>
+This function returns the process named <var>name</var>, or <code>nil</code> if
+there is none.  An error is signaled if <var>name</var> is not a string.
+
+<p></p>
+
+<pre>(get-process "shell")
+     =&gt; #&lt;process shell&gt;
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-command</b> <i>process</i>
+</dt><dd><a name="IDX2154"></a>
+This function returns the command that was executed to start
+<var>process</var>.  This is a list of strings, the first string being the
+program executed and the rest of the strings being the arguments that
+were given to the program.
+
+<p></p>
+
+<pre>(process-command (get-process "shell"))
+     =&gt; ("/bin/csh" "-i")
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-id</b> <i>process</i>
+</dt><dd><a name="IDX2155"></a>
+This function returns the PID of <var>process</var>.  This is an
+integer that distinguishes the process <var>process</var> from all other
+processes running on the same computer at the current time.  The
+PID of a process is chosen by the operating system kernel when the
+process is started and remains constant as long as the process exists.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-name</b> <i>process</i>
+</dt><dd><a name="IDX2156"></a>
+This function returns the name of <var>process</var>.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-status</b> <i>process-name</i>
+</dt><dd><a name="IDX2157"></a>
+This function returns the status of <var>process-name</var> as a symbol.
+The argument <var>process-name</var> must be a process, a buffer, a
+process name (string) or a buffer name (string).
+
+<p></p>
+<p>
+The possible values for an actual subprocess are:
+
+</p>
+<dl compact="compact">
+
+<dt><code>run</code>
+</dt><dd>
+for a process that is running.
+</dd><dt><code>stop</code>
+</dt><dd>
+for a process that is stopped but continuable.
+</dd><dt><code>exit</code>
+</dt><dd>
+for a process that has exited.
+</dd><dt><code>signal</code>
+</dt><dd>
+for a process that has received a fatal signal.
+</dd><dt><code>open</code>
+</dt><dd>
+for a network connection that is open.
+</dd><dt><code>closed</code>
+</dt><dd>
+for a network connection that is closed.  Once a connection
+is closed, you cannot reopen it, though you might be able to open
+a new connection to the same place.
+</dd><dt><code>nil</code>
+</dt><dd>
+if <var>process-name</var> is not the name of an existing process.
+</dd></dl>
+
+
+<pre>(process-status "shell")
+     =&gt; run
+(process-status (get-buffer "*shell*"))
+     =&gt; run
+x
+     =&gt; #&lt;process xx&lt;1&gt;&gt;
+(process-status x)
+     =&gt; exit
+</pre>
+
+<p>
+For a network connection, <code>process-status</code> returns one of the symbols
+<code>open</code> or <code>closed</code>.  The latter means that the other side
+closed the connection, or Emacs did <code>delete-process</code>.
+
+</p>
+<p>
+In earlier Emacs versions (prior to version 19), the status of a network
+connection was <code>run</code> if open, and <code>exit</code> if closed.
+</p></dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-exit-status</b> <i>process</i>
+</dt><dd><a name="IDX2158"></a>
+This function returns the exit status of <var>process</var> or the signal
+number that killed it.  (Use the result of <code>process-status</code> to
+determine which of those it is.)  If <var>process</var> has not yet
+terminated, the value is 0.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-tty-name</b> <i>process</i>
+</dt><dd><a name="IDX2159"></a>
+This function returns the terminal name that <var>process</var> is using for
+its communication with Emacs--or <code>nil</code> if it is using pipes
+instead of a terminal (see <code>process-connection-type</code> in
+section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC506">Creating an Asynchronous Process</a>).
+</dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC509" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC509">Sending Input to Processes</a></h2>
+<p>
+<a name="IDX2160"></a>
+
+</p>
+<p>
+  Asynchronous subprocesses receive input when it is sent to them by
+Emacs, which is done with the functions in this section.  You must
+specify the process to send input to, and the input data to send.  The
+data appears on the "standard input" of the subprocess.
+
+</p>
+<p>
+  Some operating systems have limited space for buffered input in a
+PTY.  On these systems, Emacs sends an EOF periodically amidst
+the other characters, to force them through.  For most programs,
+these EOFs do no harm.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-send-string</b> <i>process-name string</i>
+</dt><dd><a name="IDX2161"></a>
+This function sends <var>process-name</var> the contents of <var>string</var> as
+standard input.  The argument <var>process-name</var> must be a process or
+the name of a process.  If it is <code>nil</code>, the current buffer's
+process is used.
+
+<p></p>
+<p>
+  The function returns <code>nil</code>.
+
+</p>
+
+<pre>(process-send-string "shell&lt;1&gt;" "ls\n")
+     =&gt; nil
+
+---------- Buffer: *shell* ----------
+...
+introduction.texi               syntax-tables.texi~
+introduction.texi~              text.texi
+introduction.txt                text.texi~
+...
+---------- Buffer: *shell* ----------
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Command:</u> <b>process-send-region</b> <i>process-name start end</i>
+</dt><dd><a name="IDX2162"></a>
+This function sends the text in the region defined by <var>start</var> and
+<var>end</var> as standard input to <var>process-name</var>, which is a process or
+a process name.  (If it is <code>nil</code>, the current buffer's process is
+used.)
+
+<p></p>
+<p>
+An error is signaled unless both <var>start</var> and <var>end</var> are
+integers or markers that indicate positions in the current buffer.  (It
+is unimportant which number is larger.)
+</p></dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-send-eof</b> <i>&amp;optional process-name</i>
+</dt><dd><a name="IDX2163"></a>
+  This function makes <var>process-name</var> see an end-of-file in its
+input.  The EOF comes after any text already sent to it.
+
+<p></p>
+<p>
+  If <var>process-name</var> is not supplied, or if it is <code>nil</code>, then
+this function sends the EOF to the current buffer's process.  An
+error is signaled if the current buffer has no process.
+
+</p>
+<p>
+  The function returns <var>process-name</var>.
+
+</p>
+
+<pre>(process-send-eof "shell")
+     =&gt; "shell"
+</pre>
+
+</dd></dl>
+
+
+
+<h2><a name="SEC510" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC510">Sending Signals to Processes</a></h2>
+<p>
+<a name="IDX2164"></a>
+<a name="IDX2165"></a>
+<a name="IDX2166"></a>
+
+</p>
+<p>
+  <strong>Sending a signal</strong> to a subprocess is a way of interrupting its
+activities.  There are several different signals, each with its own
+meaning.  The set of signals and their names is defined by the operating
+system.  For example, the signal <code>SIGINT</code> means that the user has
+typed <kbd>C-c</kbd>, or that some analogous thing has happened.
+
+</p>
+<p>
+  Each signal has a standard effect on the subprocess.  Most signals
+kill the subprocess, but some stop or resume execution instead.  Most
+signals can optionally be handled by programs; if the program handles
+the signal, then we can say nothing in general about its effects.
+
+</p>
+<p>
+  You can send signals explicitly by calling the functions in this
+section.  Emacs also sends signals automatically at certain times:
+killing a buffer sends a <code>SIGHUP</code> signal to all its associated
+processes; killing Emacs sends a <code>SIGHUP</code> signal to all remaining
+processes.  (<code>SIGHUP</code> is a signal that usually indicates that the
+user hung up the phone.)
+
+</p>
+<p>
+  Each of the signal-sending functions takes two optional arguments:
+<var>process-name</var> and <var>current-group</var>.
+
+</p>
+<p>
+  The argument <var>process-name</var> must be either a process, the name of
+one, or <code>nil</code>.  If it is <code>nil</code>, the process defaults to the
+process associated with the current buffer.  An error is signaled if
+<var>process-name</var> does not identify a process.
+
+</p>
+<p>
+  The argument <var>current-group</var> is a flag that makes a difference
+when you are running a job-control shell as an Emacs subprocess.  If it
+is non-<code>nil</code>, then the signal is sent to the current process-group
+of the terminal that Emacs uses to communicate with the subprocess.  If
+the process is a job-control shell, this means the shell's current
+subjob.  If it is <code>nil</code>, the signal is sent to the process group of
+the immediate subprocess of Emacs.  If the subprocess is a job-control
+shell, this is the shell itself.
+
+</p>
+<p>
+  The flag <var>current-group</var> has no effect when a pipe is used to
+communicate with the subprocess, because the operating system does not
+support the distinction in the case of pipes.  For the same reason,
+job-control shells won't work when a pipe is used.  See
+<code>process-connection-type</code> in section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC506">Creating an Asynchronous Process</a>.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>interrupt-process</b> <i>&amp;optional process-name current-group</i>
+</dt><dd><a name="IDX2167"></a>
+This function interrupts the process <var>process-name</var> by sending the
+signal <code>SIGINT</code>.  Outside of Emacs, typing the "interrupt
+character" (normally <kbd>C-c</kbd> on some systems, and <code>DEL</code> on
+others) sends this signal.  When the argument <var>current-group</var> is
+non-<code>nil</code>, you can think of this function as "typing <kbd>C-c</kbd>"
+on the terminal by which Emacs talks to the subprocess.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>kill-process</b> <i>&amp;optional process-name current-group</i>
+</dt><dd><a name="IDX2168"></a>
+This function kills the process <var>process-name</var> by sending the
+signal <code>SIGKILL</code>.  This signal kills the subprocess immediately,
+and cannot be handled by the subprocess.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>quit-process</b> <i>&amp;optional process-name current-group</i>
+</dt><dd><a name="IDX2169"></a>
+This function sends the signal <code>SIGQUIT</code> to the process
+<var>process-name</var>.  This signal is the one sent by the "quit
+character" (usually <kbd>C-b</kbd> or <kbd>C-\</kbd>) when you are not inside
+Emacs.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>stop-process</b> <i>&amp;optional process-name current-group</i>
+</dt><dd><a name="IDX2170"></a>
+This function stops the process <var>process-name</var> by sending the
+signal <code>SIGTSTP</code>.  Use <code>continue-process</code> to resume its
+execution.
+
+<p></p>
+<p>
+On systems with job control, the "stop character" (usually <kbd>C-z</kbd>)
+sends this signal (outside of Emacs).  When <var>current-group</var> is
+non-<code>nil</code>, you can think of this function as "typing <kbd>C-z</kbd>"
+on the terminal Emacs uses to communicate with the subprocess.
+</p></dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>continue-process</b> <i>&amp;optional process-name current-group</i>
+</dt><dd><a name="IDX2171"></a>
+This function resumes execution of the process <var>process</var> by sending
+it the signal <code>SIGCONT</code>.  This presumes that <var>process-name</var> was
+stopped previously.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>signal-process</b> <i>pid signal</i>
+</dt><dd><a name="IDX2172"></a>
+This function sends a signal to process <var>pid</var>, which need not be
+a child of Emacs.  The argument <var>signal</var> specifies which signal
+to send; it should be an integer.
+</dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC511" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC511">Receiving Output from Processes</a></h2>
+<p>
+<a name="IDX2173"></a>
+<a name="IDX2174"></a>
+
+</p>
+<p>
+  There are two ways to receive the output that a subprocess writes to
+its standard output stream.  The output can be inserted in a buffer,
+which is called the associated buffer of the process, or a function
+called the <strong>filter function</strong> can be called to act on the output.  If
+the process has no buffer and no filter function, its output is
+discarded.
+
+</p>
+
+
+
+<h3><a name="SEC512" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC512">Process Buffers</a></h3>
+
+<p>
+  A process can (and usually does) have an <strong>associated buffer</strong>,
+which is an ordinary Emacs buffer that is used for two purposes: storing
+the output from the process, and deciding when to kill the process.  You
+can also use the buffer to identify a process to operate on, since in
+normal practice only one process is associated with any given buffer.
+Many applications of processes also use the buffer for editing input to
+be sent to the process, but this is not built into Emacs Lisp.
+
+</p>
+<p>
+  Unless the process has a filter function (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC513">Process Filter Functions</a>),
+its output is inserted in the associated buffer.  The position to insert
+the output is determined by the <code>process-mark</code>, which is then
+updated to point to the end of the text just inserted.  Usually, but not
+always, the <code>process-mark</code> is at the end of the buffer.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-buffer</b> <i>process</i>
+</dt><dd><a name="IDX2175"></a>
+This function returns the associated buffer of the process
+<var>process</var>.
+
+<p></p>
+
+<pre>(process-buffer (get-process "shell"))
+     =&gt; #&lt;buffer *shell*&gt;
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-mark</b> <i>process</i>
+</dt><dd><a name="IDX2176"></a>
+This function returns the process marker for <var>process</var>, which is the
+marker that says where to insert output from the process.
+
+<p></p>
+<p>
+If <var>process</var> does not have a buffer, <code>process-mark</code> returns a
+marker that points nowhere.
+
+</p>
+<p>
+Insertion of process output in a buffer uses this marker to decide where
+to insert, and updates it to point after the inserted text.  That is why
+successive batches of output are inserted consecutively.
+
+</p>
+<p>
+Filter functions normally should use this marker in the same fashion
+as is done by direct insertion of output in the buffer.  A good
+example of a filter function that uses <code>process-mark</code> is found at
+the end of the following section.
+
+</p>
+<p>
+When the user is expected to enter input in the process buffer for
+transmission to the process, the process marker is useful for
+distinguishing the new input from previous output.
+</p></dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>set-process-buffer</b> <i>process buffer</i>
+</dt><dd><a name="IDX2177"></a>
+This function sets the buffer associated with <var>process</var> to
+<var>buffer</var>.  If <var>buffer</var> is <code>nil</code>, the process becomes
+associated with no buffer.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>get-buffer-process</b> <i>buffer-or-name</i>
+</dt><dd><a name="IDX2178"></a>
+This function returns the process associated with <var>buffer-or-name</var>.
+If there are several processes associated with it, then one is chosen.
+(Presently, the one chosen is the one most recently created.)  It is
+usually a bad idea to have more than one process associated with the
+same buffer.
+
+<p></p>
+
+<pre>(get-buffer-process "*shell*")
+     =&gt; #&lt;process shell&gt;
+</pre>
+
+<p>
+Killing the process's buffer deletes the process, which kills the
+subprocess with a <code>SIGHUP</code> signal (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC510">Sending Signals to Processes</a>).
+</p></dd></dl>
+
+<p></p>
+
+
+<h3><a name="SEC513" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC513">Process Filter Functions</a></h3>
+<p>
+<a name="IDX2179"></a>
+<a name="IDX2180"></a>
+
+</p>
+<p>
+  A process <strong>filter function</strong> is a function that receives the
+standard output from the associated process.  If a process has a filter,
+then <em>all</em> output from that process is passed to the filter.  The
+process buffer is used directly for output from the process only when
+there is no filter.
+
+</p>
+<p>
+  A filter function must accept two arguments: the associated process and
+a string, which is the output.  The function is then free to do whatever it
+chooses with the output.
+
+</p>
+<p>
+  A filter function runs only while Emacs is waiting (e.g., for terminal
+input, or for time to elapse, or for process output).  This avoids the
+timing errors that could result from running filters at random places in
+the middle of other Lisp programs.  You may explicitly cause Emacs to
+wait, so that filter functions will run, by calling <code>sit-for</code> or
+<code>sleep-for</code> (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_19.html#SEC272">Waiting for Elapsed Time or Input</a>), or <code>accept-process-output</code>
+(see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC514">Accepting Output from Processes</a>).  Emacs is also waiting when the command loop
+is reading input.
+
+</p>
+<p>
+  Quitting is normally inhibited within a filter function--otherwise,
+the effect of typing <kbd>C-g</kbd> at command level or to quit a user
+command would be unpredictable.  If you want to permit quitting inside a
+filter function, bind <code>inhibit-quit</code> to <code>nil</code>.
+See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_19.html#SEC273">Quitting</a>.
+
+</p>
+<p>
+  If an error happens during execution of a filter function, it is
+caught automatically, so that it doesn't stop the execution of whatever
+program was running when the filter function was started.  However, if
+<code>debug-on-error</code> is non-<code>nil</code>, the error-catching is turned
+off.  This makes it possible to use the Lisp debugger to debug the
+filter function.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_16.html#SEC184">The Lisp Debugger</a>.
+
+</p>
+<p>
+  Many filter functions sometimes or always insert the text in the
+process's buffer, mimicking the actions of Emacs when there is no
+filter.  Such filter functions need to use <code>set-buffer</code> in order to
+be sure to insert in that buffer.  To avoid setting the current buffer
+semipermanently, these filter functions must use <code>unwind-protect</code>
+to make sure to restore the previous current buffer.  They should also
+update the process marker, and in some cases update the value of point.
+Here is how to do these things:
+
+</p>
+
+<pre>(defun ordinary-insertion-filter (proc string)
+  (let ((old-buffer (current-buffer)))
+    (unwind-protect
+        (let (moving)
+          (set-buffer (process-buffer proc))
+          (setq moving (= (point) (process-mark proc)))
+          (save-excursion
+            ;; Insert the text, moving the process-marker.
+            (goto-char (process-mark proc))
+            (insert string)
+            (set-marker (process-mark proc) (point)))
+          (if moving (goto-char (process-mark proc))))
+      (set-buffer old-buffer))))
+</pre>
+
+<p>
+The reason to use an explicit <code>unwind-protect</code> rather than letting
+<code>save-excursion</code> restore the current buffer is so as to preserve
+the change in point made by <code>goto-char</code>.
+
+</p>
+<p>
+  To make the filter force the process buffer to be visible whenever new
+text arrives, insert the following line just before the
+<code>unwind-protect</code>:
+
+</p>
+
+<pre>(display-buffer (process-buffer proc))
+</pre>
+
+<p>
+  To force point to move to the end of the new output no matter where
+it was previously, eliminate the variable <code>moving</code> and call
+<code>goto-char</code> unconditionally.
+
+</p>
+<p>
+  In earlier Emacs versions, every filter function that did regexp
+searching or matching had to explicitly save and restore the match data.
+Now Emacs does this automatically; filter functions never need to do it
+explicitly.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_31.html#SEC478">The Match Data</a>.
+
+</p>
+<p>
+  A filter function that writes the output into the buffer of the
+process should check whether the buffer is still alive.  If it tries to
+insert into a dead buffer, it will get an error.  If the buffer is dead,
+<code>(buffer-name (process-buffer <var>process</var>))</code> returns <code>nil</code>.
+
+</p>
+<p>
+  The output to the function may come in chunks of any size.  A program
+that produces the same output twice in a row may send it as one batch
+of 200 characters one time, and five batches of 40 characters the next.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>set-process-filter</b> <i>process filter</i>
+</dt><dd><a name="IDX2181"></a>
+This function gives <var>process</var> the filter function <var>filter</var>.  If
+<var>filter</var> is <code>nil</code>, it gives the process no filter.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-filter</b> <i>process</i>
+</dt><dd><a name="IDX2182"></a>
+This function returns the filter function of <var>process</var>, or <code>nil</code>
+if it has none.
+</dd></dl>
+
+<p></p>
+<p>
+  Here is an example of use of a filter function:
+
+</p>
+
+<pre>(defun keep-output (process output)
+   (setq kept (cons output kept)))
+     =&gt; keep-output
+(setq kept nil)
+     =&gt; nil
+(set-process-filter (get-process "shell") 'keep-output)
+     =&gt; keep-output
+(process-send-string "shell" "ls ~/other\n")
+     =&gt; nil
+kept
+     =&gt; ("lewis@slug[8] % "
+"FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
+address.txt             backup.psf              kolstad.psf
+backup.bib~             david.mss               resume-Dec-86.mss~
+backup.err              david.psf               resume-Dec.psf
+backup.mss              dland                   syllabus.mss
+"
+"#backups.mss#          backup.mss~             kolstad.mss
+")
+</pre>
+
+
+
+<h3><a name="SEC514" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC514">Accepting Output from Processes</a></h3>
+
+<p>
+  Output from asynchronous subprocesses normally arrives only while
+Emacs is waiting for some sort of external event, such as elapsed time
+or terminal input.  Occasionally it is useful in a Lisp program to
+explicitly permit output to arrive at a specific point, or even to wait
+until output arrives from a process.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>accept-process-output</b> <i>&amp;optional process seconds millisec</i>
+</dt><dd><a name="IDX2183"></a>
+This function allows Emacs to read pending output from processes.  The
+output is inserted in the associated buffers or given to their filter
+functions.  If <var>process</var> is non-<code>nil</code> then this function does
+not return until some output has been received from <var>process</var>.
+
+<p></p>
+<p>
+The arguments <var>seconds</var> and <var>millisec</var> let you specify timeout
+periods.  The former specifies a period measured in seconds and the
+latter specifies one measured in milliseconds.  The two time periods
+thus specified are added together, and <code>accept-process-output</code>
+returns after that much time whether or not there has been any
+subprocess output.
+
+</p>
+<p>
+The argument <var>seconds</var> need not be an integer.  If it is a floating
+point number, this function waits for a fractional number of seconds.
+Some systems support only a whole number of seconds; on these systems,
+<var>seconds</var> is rounded down.  If the system doesn't support waiting
+fractions of a second, you get an error if you specify nonzero
+<var>millisec</var>.
+
+</p>
+<p>
+Not all operating systems support waiting periods other than multiples
+of a second; on those that do not, you get an error if you specify
+nonzero <var>millisec</var>.
+
+</p>
+<p>
+The function <code>accept-process-output</code> returns non-<code>nil</code> if it
+did get some output, or <code>nil</code> if the timeout expired before output
+arrived.
+</p></dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC515" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC515">Sentinels: Detecting Process Status Changes</a></h2>
+<p>
+<a name="IDX2184"></a>
+<a name="IDX2185"></a>
+
+</p>
+<p>
+  A <strong>process sentinel</strong> is a function that is called whenever the
+associated process changes status for any reason, including signals
+(whether sent by Emacs or caused by the process's own actions) that
+terminate, stop, or continue the process.  The process sentinel is also
+called if the process exits.  The sentinel receives two arguments: the
+process for which the event occurred, and a string describing the type
+of event.
+
+</p>
+<p>
+  The string describing the event looks like one of the following:
+
+</p>
+
+<ul>
+<li>
+
+<code>"finished\n"</code>.
+
+</li><li>
+
+<code>"exited abnormally with code <var>exitcode</var>\n"</code>.
+
+</li><li>
+
+<code>"<var>name-of-signal</var>\n"</code>.
+
+</li><li>
+
+<code>"<var>name-of-signal</var> (core dumped)\n"</code>.
+</li></ul>
+
+<p>
+  A sentinel runs only while Emacs is waiting (e.g., for terminal input,
+or for time to elapse, or for process output).  This avoids the timing
+errors that could result from running them at random places in the
+middle of other Lisp programs.  A program can wait, so that sentinels
+will run, by calling <code>sit-for</code> or <code>sleep-for</code>
+(see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_19.html#SEC272">Waiting for Elapsed Time or Input</a>), or <code>accept-process-output</code> (see section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC514">Accepting Output from Processes</a>).  Emacs is also waiting when the command loop is reading input.
+
+</p>
+<p>
+  Quitting is normally inhibited within a sentinel--otherwise, the
+effect of typing <kbd>C-g</kbd> at command level or to quit a user command
+would be unpredictable.  If you want to permit quitting inside a
+sentinel, bind <code>inhibit-quit</code> to <code>nil</code>.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_19.html#SEC273">Quitting</a>.
+
+</p>
+<p>
+  A sentinel that writes the output into the buffer of the process
+should check whether the buffer is still alive.  If it tries to insert
+into a dead buffer, it will get an error.  If the buffer is dead,
+<code>(buffer-name (process-buffer <var>process</var>))</code> returns <code>nil</code>.
+
+</p>
+<p>
+  If an error happens during execution of a sentinel, it is caught
+automatically, so that it doesn't stop the execution of whatever
+programs was running when the sentinel was started.  However, if
+<code>debug-on-error</code> is non-<code>nil</code>, the error-catching is turned
+off.  This makes it possible to use the Lisp debugger to debug the
+sentinel.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_16.html#SEC184">The Lisp Debugger</a>.
+
+</p>
+<p>
+  In earlier Emacs versions, every sentinel that did regexp searching or
+matching had to explicitly save and restore the match data.  Now Emacs
+does this automatically; sentinels never need to do it explicitly.
+See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_31.html#SEC478">The Match Data</a>.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>set-process-sentinel</b> <i>process sentinel</i>
+</dt><dd><a name="IDX2186"></a>
+This function associates <var>sentinel</var> with <var>process</var>.  If
+<var>sentinel</var> is <code>nil</code>, then the process will have no sentinel.
+The default behavior when there is no sentinel is to insert a message in
+the process's buffer when the process status changes.
+
+<p></p>
+
+<pre>(defun msg-me (process event)
+   (princ
+     (format "Process: %s had the event `%s'" process event)))
+(set-process-sentinel (get-process "shell") 'msg-me)
+     =&gt; msg-me
+(kill-process (get-process "shell"))
+     -| Process: #&lt;process shell&gt; had the event `killed'
+     =&gt; #&lt;process shell&gt;
+</pre>
+
+</dd></dl>
+
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>process-sentinel</b> <i>process</i>
+</dt><dd><a name="IDX2187"></a>
+This function returns the sentinel of <var>process</var>, or <code>nil</code> if it
+has none.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>waiting-for-user-input-p</b>
+</dt><dd><a name="IDX2188"></a>
+While a sentinel or filter function is running, this function returns
+non-<code>nil</code> if Emacs was waiting for keyboard input from the user at
+the time the sentinel or filter function was called, <code>nil</code> if it
+was not.
+</dd></dl>
+
+<p></p>
+
+
+<h2><a name="SEC516" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC516">Transaction Queues</a></h2>
+<p>
+<a name="IDX2189"></a>
+
+</p>
+<p>
+You can use a <strong>transaction queue</strong> for more convenient communication
+with subprocesses using transactions.  First use <code>tq-create</code> to
+create a transaction queue communicating with a specified process.  Then
+you can call <code>tq-enqueue</code> to send a transaction.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>tq-create</b> <i>process</i>
+</dt><dd><a name="IDX2190"></a>
+This function creates and returns a transaction queue communicating with
+<var>process</var>.  The argument <var>process</var> should be a subprocess
+capable of sending and receiving streams of bytes.  It may be a child
+process, or it may be a TCP connection to a server, possibly on another
+machine.
+</dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>tq-enqueue</b> <i>queue question regexp closure fn</i>
+</dt><dd><a name="IDX2191"></a>
+This function sends a transaction to queue <var>queue</var>.  Specifying the
+queue has the effect of specifying the subprocess to talk to.
+
+<p></p>
+<p>
+The argument <var>question</var> is the outgoing message that starts the
+transaction.  The argument <var>fn</var> is the function to call when the
+corresponding answer comes back; it is called with two arguments:
+<var>closure</var>, and the answer received.
+
+</p>
+<p>
+The argument <var>regexp</var> is a regular expression that should match the
+entire answer, but nothing less; that's how <code>tq-enqueue</code> determines
+where the answer ends.
+
+</p>
+<p>
+The return value of <code>tq-enqueue</code> itself is not meaningful.
+</p></dd></dl>
+
+<p></p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>tq-close</b> <i>queue</i>
+</dt><dd><a name="IDX2192"></a>
+Shut down transaction queue <var>queue</var>, waiting for all pending transactions
+to complete, and then terminate the connection or child process.
+</dd></dl>
+
+<p></p>
+<p>
+Transaction queues are implemented by means of a filter function.
+See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC513">Process Filter Functions</a>.
+
+</p>
+
+
+<h2><a name="SEC517" href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html#TOC517">Network Connections</a></h2>
+<p>
+<a name="IDX2193"></a>
+<a name="IDX2194"></a>
+
+</p>
+<p>
+  Emacs Lisp programs can open TCP network connections to other processes on
+the same machine or other machines.  A network connection is handled by Lisp
+much like a subprocess, and is represented by a process object.
+However, the process you are communicating with is not a child of the
+Emacs process, so you can't kill it or send it signals.  All you can do
+is send and receive data.  <code>delete-process</code> closes the connection,
+but does not kill the process at the other end; that process must decide
+what to do about closure of the connection.
+
+</p>
+<p>
+  You can distinguish process objects representing network connections
+from those representing subprocesses with the <code>process-status</code>
+function.  It always returns either <code>open</code> or <code>closed</code> for a
+network connection, and it never returns either of those values for a
+real subprocess.  See section <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_34.html#SEC508">Process Information</a>.
+
+</p>
+<p>
+</p><dl>
+<dt><u>Function:</u> <b>open-network-stream</b> <i>name buffer-or-name host service</i>
+</dt><dd><a name="IDX2195"></a>
+This function opens a TCP connection for a service to a host.  It
+returns a process object to represent the connection.
+
+<p></p>
+<p>
+The <var>name</var> argument specifies the name for the process object.  It
+is modified as necessary to make it unique.
+
+</p>
+<p>
+The <var>buffer-or-name</var> argument is the buffer to associate with the
+connection.  Output from the connection is inserted in the buffer,
+unless you specify a filter function to handle the output.  If
+<var>buffer-or-name</var> is <code>nil</code>, it means that the connection is not
+associated with any buffer.
+
+</p>
+<p>
+The arguments <var>host</var> and <var>service</var> specify where to connect to;
+<var>host</var> is the host name (a string), and <var>service</var> is the name of
+a defined network service (a string) or a port number (an integer).
+</p></dd></dl>
+<p></p><hr><p>
+Go to the <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_1.html">first</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_33.html">previous</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_35.html">next</a>, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_43.html">last</a> section, <a href="http://www.chemie.fu-berlin.de/chemnet/use/info/elisp/elisp_toc.html">table of contents</a>.
+
+</p></body></html>

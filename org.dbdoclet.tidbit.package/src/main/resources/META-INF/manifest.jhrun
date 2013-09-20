@@ -1,0 +1,6 @@
+Main-Class: org.dbdoclet.runner.JavaHelpRunner
+Class-Path: org.dbdoclet.getopts.jar
+  org.apache.commons.logging.jar
+  org.apache.log4j.jar
+  org.dbdoclet.commons.jar
+  jhall.jar 

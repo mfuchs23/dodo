@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+  <info organisation="org.dbdoclet" module="org.dbdoclet.tidbit.package"
+	status="integration" revision="${module.version}">
+  </info>
+  <publications>
+  	<artifact name="arun" />
+  	<artifact name="jhrun" />
+  </publications>
+  <dependencies>
+    <dependency org="org.apache" name="org.apache.felix"
+		rev="latest.integration" />
+    <dependency org="org.apache" name="org.apache.felix.log"
+		rev="latest.integration" />
+    <dependency org="org.apache" name="org.apache.felix.configadmin"
+		rev="latest.integration" />
+    <dependency org="org.apache" name="org.apache.felix.gogo.shell"
+		rev="latest.integration" />
+    <dependency org="org.apache" name="org.apache.felix.gogo.command"
+		rev="latest.integration" />
+    <dependency org="org.docbook" name="docbook-xsl"
+		rev="latest.integration" />
+    <dependency org="org.docbook" name="docbook-grammar"
+		rev="latest.integration" />
+    <dependency org="org.apache" name="org.apache.fop"
+		rev="20120217" />
+    <dependency org="org.apache" name="org.apache.xml.resolver"
+		rev="latest.integration" />
+    <dependency org="com.icl" name="com.icl.saxon"
+		rev="latest.integration" />
+    <dependency org="javax.help" name="javax.help"
+		rev="latest.integration" conf="default -> lib"/>
+    <dependency org="net.sf" name="net.sf.xslthl"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.doclet.docbook"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.application"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.common"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.importer"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.importer.eclipse"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.docbook"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.eclipsehelp"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.epub"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.herold"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.html"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.htmlhelp"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.javahelp"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.manpage"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.pdf"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.rtf"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.standard"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.webhelp"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.wordml"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.dbdoclet"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.eclipse" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.epub" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.fo" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.html" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.htmlhelp" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.javahelp" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.manpage" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.pdf" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.rtf" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.webhelp" rev="latest.integration" />
+    <dependency org="org.dbdoclet"
+		name="org.dbdoclet.tidbit.perspective.docbook.wordml" rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.herold"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.project"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo"
+		rev="latest.integration" />
+    <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.docbook"
+		rev="latest.integration" />
+  </dependencies>
+</ivy-module>

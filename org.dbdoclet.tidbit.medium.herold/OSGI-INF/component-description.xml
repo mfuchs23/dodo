@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="heroldComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.herold.HeroldComponent" />
+	<property name="category" value="herold"/>
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

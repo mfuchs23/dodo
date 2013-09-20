@@ -1,0 +1,2209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book version="5.0" xml:lang="en" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xl="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:m="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>dbdoclet Tutorial</title>
+
+    <author>
+      <personname><firstname>Michael</firstname>
+      <surname>Fuchs</surname></personname>
+
+      <email>michael.fuchs@dbdoclet.org</email>
+
+      <uri>http://www.dbdoclet.org</uri>
+    </author>
+
+    <copyright>
+      <year>2002-2013</year>
+
+      <holder>Michael Fuchs</holder>
+    </copyright>
+
+    <abstract>
+      <para>dbdoclet can be used as javadoc doclet, which creates DocBook XML
+      from your Java source files and the embedded javadoc comments. It is
+      also capable to transform DocBook XML files into various output formats
+      via a graphical user interface.</para>
+    </abstract>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/Dodo.png"/>
+      </imageobject>
+    </mediaobject>
+
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+
+        <date>01.01.2002</date>
+
+        <authorinitials>mf</authorinitials>
+
+        <revremark>Initial version</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>2.0</revnumber>
+
+        <date>09.03.2010</date>
+
+        <authorinitials>mf</authorinitials>
+
+        <revdescription>
+          <para>Update</para>
+        </revdescription>
+      </revision>
+    </revhistory>
+  </info>
+
+  <preface xml:id="disclaimer">
+    <title>dbdoclet Freeware License Agreement</title>
+
+    <sect1>
+      <title>ACKNOWLEDGMENT</title>
+
+      <para>BY USING THIS FREEWARE VERSION OF 'dbdoclet' YOU ACKNOWLEDGE THAT
+      YOU HAVE READ THIS LIMITED WARRANTY, UNDERSTAND IT, AND AGREE TO BE
+      BOUND BY ITS' TERMS AND CONDITIONS. YOU ALSO AGREE THAT THE LIMITED
+      WARRANTY IS THE COMPLETE AND EXCLUSIVE STATEMENT OF AGREEMENT BETWEEN
+      THE PARTIES AND SUPERSEDE ALL PROPOSALS OR PRIOR AGREEMENTS, ORAL OR
+      WRITTEN, AND ANY OTHER COMMUNICATIONS BETWEEN THE PARTIES RELATING TO
+      THE SUBJECT MATTER OF THE LIMITED WARRANTY.</para>
+    </sect1>
+
+    <sect1>
+      <title>Copyright</title>
+
+      <para>Copyright for dbdoclet by Michael Fuchs, Germany. All rights
+      reserved. You must treat the Software like any other copyrighted
+      material.</para>
+    </sect1>
+
+    <sect1>
+      <title>License</title>
+
+      <para>This dbdoclet Freeware License Agreement (the "Agreement") is a
+      legal agreement between you ("Licensee"), the end-user, and Michael
+      Fuchs for the use of the dbdoclet software product ("Software").
+      Carefully read the following terms and conditions before using this
+      Software. Unless you have a different license agreement signed by
+      Michael Fuchs your use of this Software indicates your acceptance of
+      this license agreement and warranty. For information on distributing the
+      freeware version of this Software see the section titled Distribution.
+      By using this Software or storing this program or parts of it on a
+      computer hard drive (or other media), you are agreeing to be bound by
+      the terms of this Agreement. If you do not agree to the terms of this
+      Agreement, delete the Software from all storage media. You may not alter
+      this Software in any way. You may not decompile, reverse engineer,
+      disassemble or otherwise reduce this Software to a human perceivable
+      form. You may not modify, rent or resell for profit this Software, or
+      create derivative works based upon this Software.</para>
+    </sect1>
+
+    <sect1>
+      <title>Governing Law</title>
+
+      <para>This agreement shall be governed by the laws of Germany.</para>
+    </sect1>
+
+    <sect1>
+      <title>LIMITED WARRANTY AND DISCLAIMER OF WARRANTY</title>
+
+      <para>Michael Fuchs EXPRESSLY DISCLAIMS ANY WARRANTY FOR THE SOFTWARE.
+      THIS SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD "AS IS" AND WITHOUT
+      WARRANTIES AS TO PERFORMANCE OF MERCHANTABILITY OR ANY OTHER WARRANTIES
+      WHETHER EXPRESSED OR IMPLIED, OR NONINFRINGEMENT. THIS SOFTWARE IS NOT
+      FAULT TOLERANT AND SHOULD NOT BE USED IN ANY ENVIRONMENT WHICH REQUIRES
+      THIS. NO LIABILITY FOR DAMAGES. In no event shall Michael Fuchs be
+      liable to you for any consequential, incidental or indirect damages
+      whatsoever (including, without limitation, damages for loss of business
+      profits, business interruption, loss of business information, or any
+      other pecuniary loss) arising out of the use of or inability to use this
+      SOFTWARE EVEN IF Michael Fuchs HAS BEEN ADVISED OF THE POSSIBILITY OF
+      SUCH DAMAGES. The entire risk arising out of use or performance of the
+      SOFTWARE remains with you. Because of the various hardware and software
+      environments into which dbdoclet may be put, NO WARRANTY OF FITNESS FOR
+      A PARTICULAR PURPOSE IS OFFERED. The liability OF Michael Fuchs for
+      actual damages from any cause whatsoever, and regardless of the form of
+      action (whether in contract, tort (including negligence), product
+      liability or otherwise) WILL BE LIMITED TO ZERO, NOTHING. If any portion
+      of this Agreement is deemed unenforceable by a Court of competent
+      jurisdiction, it shall not affect the forcibility of the other portions
+      of this Agreement.</para>
+    </sect1>
+
+    <sect1>
+      <title>Distribution</title>
+
+      <para>Provided that you verify that you are handling the original
+      freeware version you are hereby licensed to make as many copies of the
+      Freeware version of this Software and documentation as you wish for your
+      personal non profit use. Distributing by any means, charging, or
+      requesting donations for any such copies and distributing the Software
+      and/or documentation with other products (commercial or otherwise)
+      without prior written permission is prohibited, however made.</para>
+    </sect1>
+  </preface>
+
+  <part>
+    <title>DocBook Doclet</title>
+
+    <chapter xml:id="introduction">
+      <title>Introduction</title>
+
+      <para><emphasis role="strong">Copyright (C) 2001-2013 by Michael Fuchs
+      <link
+      xl:href="mailto:michael.fuchs@dbdoclet.org">michael.fuchs@dbdoclet.org</link></emphasis></para>
+
+      <para>dbdoclet is a set of tools for generating DocBook XML from javadoc
+      comments or HTML files and to transform DocBook XML into other formats
+      like PDF, HTML, EPUB, ...</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>Tool</entry>
+
+              <entry>Description</entry>
+            </row>
+
+            <row>
+              <entry>herold.jar</entry>
+
+              <entry>HTML to DocBook converter.</entry>
+            </row>
+
+            <row>
+              <entry>dbdoclet.jar</entry>
+
+              <entry>Javadoc doclet for generating DocBook XML from your
+              javadoc comments.</entry>
+            </row>
+
+            <row>
+              <entry>tidbit.jar</entry>
+
+              <entry>GUI for executing herold, dbdoclet and the DocBook XSL
+              stylesheets.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <sect1>
+        <title>Requirements</title>
+
+        <para><important>
+            <para>Before you install dbdoclet on your computer, make sure that
+            the javadoc tool is in your path and can be found by dbdoclet.
+            Open a console and try to run the following command:
+            <computeroutput>javadoc -J-version.</computeroutput> If the
+            javadoc can not be found, any attempt to create a documentation
+            will fail!</para>
+          </important>To run dbdoclet you need a JDK 6 or higher. You can
+        download the JDK from <link
+        xl:href="http://java.sun.com">http://java.sun.com</link>.</para>
+      </sect1>
+    </chapter>
+
+    <chapter xml:id="installation">
+      <title>Installation</title>
+
+      <formalpara>
+        <title>Linux</title>
+
+        <para>To install dbdoclet via the rpm package, use the following
+        command: <computeroutput>rpm -Uhv
+        dbdoclet-&lt;VERSION&gt;.rpm</computeroutput>. To install dbdoclet on
+        a Debian based system, use: <computeroutput>dpkg -i
+        dbdoclet_&lt;VERSION&gt;_all.deb</computeroutput>. After the
+        installation finished, you can start the dbdoclet GUI with the command
+        <computeroutput>dbdtidbit</computeroutput>.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>TAR Archive</title>
+
+        <para>In order to install dbdoclet, you have to unpack the tar archive
+        to a location of your choice (e.g
+        <filename>/usr/share</filename>).</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Windows</title>
+
+        <para>To install dbdoclet on a Windows computer you can use the
+        installation program <filename>dbdoclet-[VERSION].exe</filename>.
+        Double click on it and the installation process will start.</para>
+      </formalpara>
+    </chapter>
+
+    <chapter>
+      <title>Projects</title>
+
+      <para>A dbdoclet project typically consists of many files and
+      subdirectories, just like a development project. Therefore a project
+      needs a project directory. A new project should start in a fresh and
+      empty new directory to avoid the overwriting of existing files.</para>
+
+      <caution>
+        <para>If you start your project in an existing directory, make sure
+        that there is no existing file or subdirectory which clashes with the
+        dbdoclet project files and directories. It is recommended to make a
+        backup of that directory first.</para>
+      </caution>
+
+      <para/>
+    </chapter>
+
+    <chapter>
+      <title>DocBook Transformation</title>
+
+      <para>For every output format exists a XSLT file in the xsl directory of
+      the active project. For example for the epub format there is a file
+      <filename>&lt;PROJECTDIR&gt;/xsl/epub.xsl</filename>. These files are
+      customization layers for the DocBook-XSL stylesheets and can also be
+      used outside of dbdoclet. The project file of a dbdoclet on the other
+      hand is a fully functionable ant build file, which can also be used from
+      the command line. Therefore you can use dbdoclet as an "editor" for your
+      DocBook-XSL driver files and the corresponding ant build file. An output
+      can be generated from the command line by using a target like
+      dbdoclet.docbook.&lt;FORMAT&gt;, e.g. <command>ant -f dbdoclet.xml
+      dbdoclet.docbook.pdf</command>.</para>
+    </chapter>
+
+    <chapter>
+      <title>PDF</title>
+
+      <para>To generate PDF switch to to the Trafo via the sidebar and click
+      on the PDF button. A perspective will be opened, showing you the
+      parameters for the customization of PDF output. To start the PDF
+      generation, use the PDF button from the toolbar.</para>
+
+      <sect1>
+        <title>Encryption</title>
+
+        <para>If you want to generate a PDF with security features select the
+        tab Encryption in the PDF perspective.</para>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Javadoc Doclet</title>
+
+    <chapter xml:id="javadoc_intro">
+      <title>Introduction</title>
+
+      <para>dbdoclet comes with a javadoc doclet, which creates DocBook XML
+      from your javadoc comments. It also creates UML class diagrams, which
+      reflect the inheritance path of a single class. The jar archive of the
+      javadoc doclet is located in
+      <filename>[dbdoclet_home]/jars/dbdoclet.jar</filename>.</para>
+
+      <sect1>
+        <title>Requirements</title>
+
+        <para><important>
+            <para>Before you install dbdoclet on your computer, make sure that
+            the javadoc tool is in your path and can be found by dbdoclet.
+            Open a console and try to run the following command:
+            <computeroutput>javadoc -J-version.</computeroutput> If the
+            javadoc can not be found, any attempt to create a documentation
+            will fail!</para>
+          </important>To run dbdoclet you need a JDK 5 or higher. You can
+        download the JDK from <link
+        xl:href="http://java.sun.com">http://java.sun.com</link>.</para>
+      </sect1>
+    </chapter>
+
+    <chapter xml:id="command-line-usage">
+      <title>Command line usage</title>
+
+      <para>The javadoc doclet of dbdoclet works like any other doclet. Please
+      consult http://java.sun.com/j2se/javadoc/ for further information on
+      Javadoc and the Javadoc API. It can be invoked with default options by
+      supplying the path to the doclet archive and the doclet invocation class
+      (which is
+      "<classname>org.dbdoclet.doclet.docbook.DocBookDoclet</classname>").
+      dbdoclet provides some doclet specific options. They are described in
+      chapter <xref linkend="configuration"/>.</para>
+    </chapter>
+
+    <chapter xml:id="transformation">
+      <title>Transformation</title>
+
+      <sect1>
+        <title>The overview file</title>
+
+        <para>The overview file is used in conjunction with the javadoc tool.
+        It is a HTML file, which is converted to DocBook and inserted before
+        the reference section.</para>
+
+        <para>If the overview file contains a h1 tag as the first tag after
+        the body tag, the doclet assumes every h1 tag to be a new chapter and
+        creates the document structure upon the information found in the file.
+        So it is possible for an author to structure the content of the
+        document before the reference section on his own. You can create as
+        many chapters, sections and subsections as you want before the
+        generated reference part.</para>
+
+        <para>If the first tag after the body tag is not a h1 tag, the doclet
+        creates a chapter "Overview". Any header tags will appear as
+        subsections of this chapter.</para>
+      </sect1>
+
+      <sect1>
+        <title>Javadoc Tags</title>
+
+        <para>The supported javadoc tags are:</para>
+
+        <table>
+          <title>Javadoc Tags</title>
+
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Javadoc Tag</entry>
+
+                <entry>Remark</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>@author</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table. Multiple tags are represented as an inline
+                simplelist.</entry>
+              </row>
+
+              <row>
+                <entry>{@code}</entry>
+
+                <entry>Inline</entry>
+              </row>
+
+              <row>
+                <entry>@deprecated</entry>
+
+                <entry>Appears as a note.</entry>
+              </row>
+
+              <row>
+                <entry>@exception</entry>
+
+                <entry>Appears as entry in the "Exceptions" table.</entry>
+              </row>
+
+              <row>
+                <entry>{@link}</entry>
+
+                <entry>Inline.</entry>
+              </row>
+
+              <row>
+                <entry>{@linkplain}</entry>
+
+                <entry>Inline</entry>
+              </row>
+
+              <row>
+                <entry>{@literal}</entry>
+
+                <entry>Inline</entry>
+              </row>
+
+              <row>
+                <entry>@param</entry>
+
+                <entry>Appears as entry in the "Parameters" table.</entry>
+              </row>
+
+              <row>
+                <entry>@return</entry>
+
+                <entry>Appears as entry in the" table.</entry>
+              </row>
+
+              <row>
+                <entry>@see</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table. Multiple tags are represented as an inline
+                simplelist.</entry>
+              </row>
+
+              <row>
+                <entry>@serial</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table. Multiple tags are represented as an inline
+                simplelist.</entry>
+              </row>
+
+              <row>
+                <entry>@serialData</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table. Multiple tags are represented as an inline
+                simplelist.</entry>
+              </row>
+
+              <row>
+                <entry>@serialField</entry>
+
+                <entry>Appears as entry in the "Serial Fields" table.</entry>
+              </row>
+
+              <row>
+                <entry>@since</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table.</entry>
+              </row>
+
+              <row>
+                <entry>@throws</entry>
+
+                <entry>Appears as entry in the "Exceptions" table.</entry>
+              </row>
+
+              <row>
+                <entry>{@value}</entry>
+
+                <entry>Inline</entry>
+              </row>
+
+              <row>
+                <entry>@version</entry>
+
+                <entry>Appears as entry in the "Additional Informations"
+                table. Multiple tags are represented as an inline
+                simplelist.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </sect1>
+
+      <sect1>
+        <title>Mapping of HTML Tags</title>
+
+        <para>This section describes how dbdoclet and herold are mapping HTML
+        tags to DocBook XML.</para>
+
+        <variablelist>
+          <?dbfo list-presentation="blocks"?>
+
+          <title>Mapping List HTML -&gt; DocBook XML</title>
+
+          <varlistentry>
+            <term>Transformation of HTML Tag <tag>a</tag></term>
+
+            <listitem>
+              <orderedlist>
+                <listitem>
+                  <para>If the attribute <emphasis>name</emphasis> is set, an
+                  <emphasis role="bold">anchor</emphasis> element is created.
+                  The attribute <emphasis>name</emphasis> becomes the
+                  attribute <emphasis role="bold">id</emphasis> in DocBook.
+                  The value of the <emphasis role="bold">id</emphasis>
+                  attribute starts with the prefix "dbdoclet.id.". The
+                  original value is transformed in a way that it meets the
+                  requirements of a DocBook <emphasis
+                  role="bold">id</emphasis>. It must start with a letter and
+                  any non word characters are replaced by the underscore.
+                  Because the id's must be unique, an optional number can
+                  follow the index name to ensure uniqueness.</para>
+
+                  <example>
+                    <title>Example of mapping a to anchor</title>
+
+                    <para>The HTML code</para>
+
+                    <programlisting>&lt;a name="introduction"
+/&gt;</programlisting>
+
+                    <para>will be converted to DocBook XML</para>
+
+                    <programlisting>&lt;anchor
+id="dbdoclet.id.introduction" /&gt;</programlisting>
+                  </example>
+                </listitem>
+
+                <listitem>
+                  <para>If the attribute <emphasis>href</emphasis> starts with
+                  a "#" character, a <emphasis role="bold">link</emphasis> is
+                  created that points to the referenced spot in the content.
+                  If no spot with the appropiate name can be found a dummy
+                  spot is created at the beginning of the document.</para>
+
+                  <example>
+                    <title>Example of mapping a to link</title>
+
+                    <para>The HTML code</para>
+
+                    <programlisting>&lt;a href="#introduction"&gt;the
+introduction&lt;/a&gt;</programlisting>
+
+                    <para>will be converted to DocBook XML</para>
+
+                    <programlisting>&lt;link
+linkend="dbdoclet.id.introduction"/&gt;</programlisting>
+                  </example>
+                </listitem>
+
+                <listitem>
+                  <para>If the value of the attribute
+                  <emphasis>href</emphasis> doesn't start with "#" an
+                  <emphasis role="bold">link</emphasis> is created.</para>
+
+                  <example>
+                    <title>Example of mapping a to link</title>
+
+                    <para>The HTML code</para>
+
+                    <programlisting>&lt;a
+hef="http://www.dbdoclet.org"&gt;The dbdoclet
+homepage&lt;/a&gt;</programlisting>
+
+                    <para>will be converted to DocBook XML</para>
+
+                    <programlisting>&lt;link
+xl:href="http://www.dbdoclet.org"&gt;DBDoclet
+Home&lt;/link&gt;</programlisting>
+                  </example>
+                </listitem>
+
+                <listitem>
+                  <para>A special case is the apprearance of an
+                  <emphasis>img</emphasis> inside an <emphasis>a</emphasis>,
+                  because in DocBook the nesting is the other way
+                  round.</para>
+
+                  <example>
+                    <title>Example of mapping a -&gt; img to mediaobject -&gt;
+                    link</title>
+
+                    <para>The HTML code</para>
+
+                    <programlisting>&lt;a
+href="http://www.dbdoclet.org"&gt; &lt;img src="image.gif"
+alt="Image"&gt; &lt;/a&gt;</programlisting>
+
+                    <para>will be converted to DocBook XML</para>
+
+                    <programlisting>&lt;informalfigure&gt;
+&lt;mediaobject&gt; &lt;imageobject&gt; &lt;imagedata
+fileref="./image.gif" format="GIF"/&gt; &lt;/imageobject&gt;
+&lt;/mediaobject&gt; &lt;link
+xl:href="http://www.dbdoclet.org"&gt;&lt;/link&gt;
+&lt;/informalfigure&gt; </programlisting>
+                  </example>
+                </listitem>
+              </orderedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>abbr</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>abbr</emphasis> becomes the tag
+              <emphasis role="bold">abbrev</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping abbr to abbrev</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;abbr&gt;Mr.&lt;/abbr&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;abbrev&gt;Mr.&lt;/abbrev&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>acronym</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>acronym</emphasis> becomes the tag
+              <emphasis role="bold">acronym</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping acronym to acronym</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;acronym&gt;SGML&lt;/acronym&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;acronym&gt;SGML&lt;/acronym&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>address</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>address</emphasis> becomes the tag
+              <emphasis role="bold">address</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping address to address</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;address&gt;Hofbräuhaus,
+München&lt;/address&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;address&gt;Hofbräuhaus,
+München&lt;/address&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>applet</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>applet</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>area</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>area</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>b</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>b</emphasis> becomes <emphasis
+              role="bold">emphasis</emphasis> with the attribute <emphasis
+              role="bold">role</emphasis> set to bold.</para>
+
+              <example>
+                <title>Example of mapping b to emphasis</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;b&gt;Hippopotamomus&lt;/b&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;emphasis
+role="bold"&gt;Hippopotamomus&lt;/emphasis&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>base</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>base</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>basefont</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>basefont</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>bdo</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>bdo</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>big</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>big</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>blockquote</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>blockquote</emphasis> becomes the tag
+              <emphasis role="bold">blockquote</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping blockquote to blockquote</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;blockquote&gt; Once upon a midnight
+dreary, while I pondered weak and weary, Over many a quaint and
+curious volume of forgotten lore, While I nodded, nearly napping,
+suddenly there came a tapping, As of some one gently rapping, rapping
+at my chamber door.  `'Tis some visitor,' I muttered, `tapping at my
+chamber door - Only this, and nothing more.'
+&lt;/blockquote&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;blockquote&gt; &lt;para&gt;Once upon
+a midnight dreary, while I pondered weak and weary, Over many a quaint
+and curious volume of forgotten lore, While I nodded, nearly napping,
+suddenly there came a tapping, As of some one gently rapping, rapping
+at my chamber door.  `'Tis some visitor,' I muttered, `tapping at my
+chamber door - Only this, and nothing more.'&lt;para&gt;
+&lt;/blockquote&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>body</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>body</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>br</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>br</emphasis> becomes a new <emphasis
+              role="bold">para</emphasis>, if the current element is also a
+              <emphasis role="bold">para</emphasis>. Otherwise a simple
+              newline is inserted into the output.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>button</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>button</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>caption</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>caption</emphasis> becomes the tag
+              <emphasis role="bold">title</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping caption to title</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;caption&gt;Caption&lt;/caption&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;title&gt;Caption&lt;/title&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>center</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>center</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>cite</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>cite</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>code</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>code</emphasis> becomes one of the tags
+              <emphasis role="bold">literal</emphasis> or <emphasis
+              role="bold">programlisting</emphasis>in DocBook, depending on
+              the model of the parent DocBook element. If it is of kind
+              "Content Model" the tag <emphasis>programlisting</emphasis> is
+              used, otherwise <emphasis>literal</emphasis> is used.</para>
+
+              <example>
+                <title>Example of mapping code to literal</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;code&gt;public class
+Brain&lt;/code&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;literal&gt;public class
+Brain&lt;/literal&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>col</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>col</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>colgroup</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>colgroup</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>dd</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>dd</emphasis> becomes <emphasis
+              role="bold">listem - para</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping dd to listitem</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;dd&gt;description&lt;/dd&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;listitem&gt;&lt;para&gt;description&lt;/para&gt;&lt;/listitem&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>del</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>del</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>dfn</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>dfn</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>dir</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>dir</emphasis> becomes <emphasis
+              role="bold">itemizedlist</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>div</tag></term>
+
+            <listitem>
+              <para>The tag div can be used for creating formal examples. If a
+              div tag contains the attribute id with a value that starts with
+              "example" (caseinsensitive) an example tag is created in the
+              resulting DocBook code. Furthermore, if the attribute title is
+              present, a formal example with a title is created, otherwise an
+              informal one. The following paragraph shows an example.</para>
+
+              <example>
+                <title>Example for the DocBook tag example</title>
+
+                <screen> &lt;div id="example_class_service"
+title="Example for the class service"&gt; &lt;pre&gt; public class
+Service { private String name; . . . } &lt;/pre&gt; &lt;/div&gt;
+
+</screen>
+              </example>
+
+              <para>The tag div can also be used for creating the DocBook tags
+              Caution, Important, Note, Tip and Warning. If a div tag contains
+              the attribute id with a value that starts with one of the name
+              of these tags (caseinsensitive) an appropriate tag is created in
+              the resulting DocBook code. Furthermore, if the attribute title
+              is present, a formal tag with a title is created, otherwise an
+              informal one. The following paragraph shows an example.</para>
+
+              <example>
+                <title>Example for the DocBook tag tip</title>
+
+                <screen> &lt;div id="tip_class_service" title="Use
+DocBook Doclet"&gt; &lt;p&gt;Use the DocBook Doclet for generating
+reference handbooks out of your javadoc comments.&lt;/p&gt;
+&lt;/div&gt;
+
+</screen>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>dl</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>dl</emphasis> becomes <emphasis
+              role="bold">variablelist</emphasis> in DocBook.</para>
+
+              <para>If the list is a nested list, the surrounding <emphasis
+              role="bold">listitem</emphasis> tag is created
+              automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>dt</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>dt</emphasis> becomes <emphasis
+              role="bold">varlistentry - term</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping dt to varlistentry</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;dt&gt;Term&lt;/dt&gt;&lt;dd&gt;Description&lt;/dd&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;varlistentry&gt;
+&lt;term&gt;Term&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;description&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>em</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>em</emphasis> becomes <emphasis
+              role="bold">emphasis</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>fieldset</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>fieldset</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>font</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>font</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>form</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>form</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>frameset</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>frameset</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tags <tag>h1-6</tag></term>
+
+            <listitem>
+              <para>The header tags of HTML are transformed to <emphasis
+              role="bold">sect1-5</emphasis> and <emphasis
+              role="bold">bridgehead</emphasis> DocBook tags. The concrete
+              mapping depends on the context in the created DocBook tree.
+              dbdoclet keeps the nesting of section in the correct order, even
+              if the nesting in the HTML source is somewhat strange.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>head</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>head</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>hr</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>hr</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>html</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>html</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>i</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>i</emphasis> becomes <emphasis
+              role="bold">emphasis</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>iframe</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>iframe</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tags <tag>img</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>img</emphasis> becomes <emphasis
+              role="bold">InlineMediaObject</emphasis>, if the DocBook parent
+              element is one of Emphasis, Entry, Screen, Term or Link.
+              Otherwise it becomes <emphasis
+              role="bold">MediaObject</emphasis>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>input</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>input</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>ins</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>ins</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>isindex</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>isindex</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>kbd</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>kbd</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>label</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>label</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>legend</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>legend</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>li</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>li</emphasis> becomes <emphasis
+              role="bold">listem - para</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping li to listitem</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;li&gt;description&lt;/li&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;listitem&gt;&lt;para&gt;description&lt;/para&gt;&lt;/listitem&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>link</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>link</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>map</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>map</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>menu</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>menu</emphasis> becomes <emphasis
+              role="bold">itemizedlist</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>meta</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>meta</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>noframes</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>noframes</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>noscript</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>noscript</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>object</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>object</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>ol</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>ol</emphasis> becomes <emphasis
+              role="bold">orderedlist</emphasis> in DocBook.</para>
+
+              <para>If the list is a nested list, the surrounding <emphasis
+              role="bold">listitem</emphasis> tag is created
+              automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>optgroup</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>optgroup</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>option</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>option</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>p</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>p</emphasis> becomes <emphasis
+              role="bold">para</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>param</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>param</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>pre</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>pre</emphasis> becomes <emphasis
+              role="bold">literal</emphasis> if the DocBook parent is
+              <emphasis role="bold">entry</emphasis>, <emphasis
+              role="bold">programlisting</emphasis> if the DocBook parent is
+              <emphasis role="bold">Example</emphasis> or <emphasis
+              role="bold">InformalExample</emphasis>. In all other cases
+              <emphasis>pre</emphasis> becomes <emphasis
+              role="bold">screen</emphasis>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>q</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>q</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>s</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>s</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>samp</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>samp</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>script</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>script</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>select</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>select</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>small</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>small</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>span</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>span</emphasis> can be used to insert
+              index entries in the html code. Use the follwoing syntax to
+              create an indexterm entry:</para>
+
+              <screen>&lt;span
+title="indexterm:primary=Animals:secondary=Tiger"&gt;Tiger&lt;/span&gt;</screen>
+
+              <para>The preceding code will result in the following DocBook
+              XML:</para>
+
+              <screen>&lt;indexterm&gt;
+&lt;primary&gt;Animals&lt;/primary&gt;
+&lt;secondary&gt;Tiger&lt;/secondary&gt; &lt;/indexterm&gt; </screen>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>strike</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>strike</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>strong</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>strong</emphasis> becomes <emphasis
+              role="bold">emphasis</emphasis> with the attribute <emphasis
+              role="bold">role</emphasis> set to bold.</para>
+
+              <example>
+                <title>Example of mapping strong to emphasis</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;strong&gt;Hippopotamomus&lt;/strong&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;emphasis
+role="bold"&gt;Hippopotamomus&lt;/emphasis&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>style</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>style</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>sub</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>sub</emphasis> becomes <emphasis
+              role="bold">subscript</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>sup</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>sup</emphasis> becomes <emphasis
+              role="bold">superscript</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>table</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>table</emphasis> becomes <emphasis
+              role="bold">entrytbl</emphasis>, <emphasis
+              role="bold">table</emphasis> or <emphasis
+              role="bold">informaltable</emphasis> in DocBook.</para>
+
+              <orderedlist>
+                <listitem>
+                  <para>If the current DocBook parent is <emphasis
+                  role="bold">row</emphasis> or <emphasis
+                  role="bold">entry</emphasis> the a nested <emphasis
+                  role="bold">entrytbl</emphasis> is created.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If the HTML tag <emphasis>table</emphasis> has a child
+                  element <emphasis>caption</emphasis> a DocBook <emphasis
+                  role="bold">table</emphasis> created. Otherwise an <emphasis
+                  role="bold">informaltable</emphasis> is created.</para>
+                </listitem>
+              </orderedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>tbody</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>tbody</emphasis> becomes <emphasis
+              role="bold">tbody</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>td</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>td</emphasis> becomes <emphasis
+              role="bold">entry - para</emphasis> in DocBook.</para>
+
+              <example>
+                <title>Example of mapping td to entry</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;td&gt;description&lt;/td&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;entry&gt;&lt;para&gt;description&lt;/para&gt;&lt;/entry&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>textarea</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>textarea</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>tfoot</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>tfoot</emphasis> becomes <emphasis
+              role="bold">tfoot</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>th</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>th</emphasis> becomes <emphasis
+              role="bold">entry - para - emphasis</emphasis> in
+              DocBook.</para>
+
+              <example>
+                <title>Example of mapping th to entry</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;th&gt;table column
+header&lt;/th&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;entry&gt;&lt;para&gt;&lt;emphasis
+role="bold"&gt;table column header&lt;/emphasis&gt;&lt;/para&gt;
+&lt;/entry&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>thead</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>thead</emphasis> becomes <emphasis
+              role="bold">thead</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>title</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>title</emphasis> is ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>tr</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>tr</emphasis> becomes <emphasis
+              role="bold">row</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>tt</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>tt</emphasis> becomes <emphasis
+              role="bold">literal</emphasis> in DocBook.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>u</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>u</emphasis> becomes <emphasis
+              role="bold">emphasis</emphasis> with the attribute <emphasis
+              role="bold">role</emphasis> set to underline.</para>
+
+              <example>
+                <title>Example of mapping u to emphasis</title>
+
+                <para>The HTML code</para>
+
+                <programlisting>&lt;u&gt;Hippopotamomus&lt;/u&gt;</programlisting>
+
+                <para>will be converted to DocBook XML</para>
+
+                <programlisting>&lt;emphasis
+role="underline"&gt;Hippopotamomus&lt;/emphasis&gt;</programlisting>
+              </example>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>ul</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>ul</emphasis> becomes <emphasis
+              role="bold">itemizedlist</emphasis> in DocBook.</para>
+
+              <para>If the list is a nested list, the surrounding <emphasis
+              role="bold">listitem</emphasis> tag is created
+              automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Transformation of the HTML tag <tag>var</tag></term>
+
+            <listitem>
+              <para>The tag <emphasis>var</emphasis> becomes <emphasis
+              role="bold">programlisting</emphasis> if the tag is inside a
+              <emphasis role="bold">blockquote</emphasis>, otherwise it
+              becomes a <emphasis role="bold">literal</emphasis> tag.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect1>
+
+      <sect1>
+        <title>Internationalization</title>
+
+        <para>If you comment your source code in another language than
+        english, you probably want to have the rest of your document in your
+        selected language, too. First of all, the attribute
+        <literal>xml:lang</literal> of the root tag, e.g.
+        <literal>book</literal>, must be set. But there are also several text
+        parts which are generated by dbdoclet itself. To specify the language
+        and the country define the properties
+        <literal>locale.language</literal> and
+        <literal>locale.country</literal>.</para>
+
+        <para>To select the proper encoding of your files use the options
+        -docnecoding and -encoding.</para>
+      </sect1>
+    </chapter>
+
+    <chapter xml:id="configuration">
+      <title>Configuration</title>
+
+      <para>dbdoclet provides a set of command-line options and a
+      configuration file. The command-line options overide the settings in the
+      properties file. The command-line options are using the same names as
+      the standard doclet to avoid major changes in existing scripts.</para>
+
+      <para>On Unix/Linux you can use the script dbdoclet as shortcut to start
+      javadoc with the correct <option>-doclet</option> and
+      <option>-docletpath</option> options.</para>
+
+      <sect1>
+        <title>Javadoc Options</title>
+
+        <para>The following list contains the javadoc options, which have a
+        special behaviour in dbdoclet or a corresponding property name. For
+        all other options consult the Javadoc documentation.</para>
+
+        <variablelist>
+          <?dbfo list-presentation="blocks"?>
+
+          <varlistentry>
+            <term><command>dbdoclet -overview
+            <replaceable>path/filename</replaceable></command></term>
+
+            <listitem>
+              <para>Specifies the overview file. The contents of this file is
+              used as the first chapter in the resulting document. Any h1 tag
+              found in the overview file opens a new chapter. The title of the
+              first chapter can be specified with the option <option> <link
+              linkend="configuration.option.doctitle">-doctitle</link>
+              </option>, the default value is Overview.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -locale
+            <replaceable>language_country_variant</replaceable></command></term>
+
+            <listitem>
+              <para>Specifying a locale causes dbdoclet to use localized
+              resources for all generated strings.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -encoding
+            <replaceable>name</replaceable></command> Property:
+            <varname>encoding.source</varname></term>
+
+            <listitem>
+              <para>Specifies the encoding of the source files, such as
+              ISO-8859-1.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect1>
+
+      <sect1>
+        <title>Options provided by the standard doclet</title>
+
+        <para>dbdoclet tries to use the same names as the standard doclet
+        where possible. This is done to avoid major changes in existing
+        scripts.</para>
+
+        <variablelist>
+          <?dbfo list-presentation="blocks"?>
+
+          <varlistentry xml:id="configuration.option.d">
+            <term><command>dbdoclet -d
+            <replaceable>directory</replaceable></command> Property:
+            <varname>doclet.destination.directory</varname></term>
+
+            <listitem>
+              <para>Specifies the destination directory where dbdoclet saves
+              the generated DocBook file and the images.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.use">
+            <term><command>dbdoclet -use</command></term>
+
+            <listitem>
+              <para>Not yet implemented.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.version">
+            <term><command>dbdoclet -version</command> Property:
+            <varname>doclet.version</varname></term>
+
+            <listitem>
+              <para>Include the @version tag in the generated DocBook
+              code.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.author">
+            <term><command>dbdoclet -author</command> Property:
+            <varname>doclet.author</varname></term>
+
+            <listitem>
+              <para>Include the @author tag in the generated DocBook
+              code.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.windowtitle">
+            <term><command>dbdoclet -windowtitle
+            <replaceable>title</replaceable></command> Property:
+            <varname>docbook.book.title</varname></term>
+
+            <listitem>
+              <para>Specifies the title of the book.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.doctitle">
+            <term><command>dbdoclet -doctitle
+            <replaceable>title</replaceable></command> Property:
+            <varname>docbook.chapter.overview.title</varname></term>
+
+            <listitem>
+              <para>Specifies the title of the overview chapter.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nodeprecated</command> Property:
+            <varname>doclet.nodeprecated</varname></term>
+
+            <listitem>
+              <para>Not yet supported.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noindex</command> Property:
+            <varname>doclet.noindex</varname></term>
+
+            <listitem>
+              <para>Don't generate an index.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nosince</command> Property:
+            <varname>doclet.nosince</varname></term>
+
+            <listitem>
+              <para>Don't include @since tags.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -notree</command> Property:
+            <varname>doclet.notree</varname></term>
+
+            <listitem>
+              <para>Don't include the inheritance path section.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -docencoding</command> Property:
+            <varname>encoding.destination</varname></term>
+
+            <listitem>
+              <para>Specifies the encoding of the generated DocBook XML files.
+              Example: -docencoding ISO-8859-1</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect1>
+
+      <sect1>
+        <title>Options provided by the dbdoclet doclet</title>
+
+        <variablelist>
+          <?dbfo list-presentation="blocks"?>
+
+          <varlistentry xml:id="configuration.option.abstract">
+            <term><command>dbdoclet -abstract
+            <replaceable>text</replaceable></command>&gt; Property:
+            <varname>docbook.abstract</varname></term>
+
+            <listitem>
+              <para>Specifies the abstract for the generated document. If no
+              abstract is defined, the first sentence of the overview file is
+              used as abstract. If there is no overview file, no abstract is
+              created.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.author.email">
+            <term><command>dbdoclet -authoremail
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.author.email</varname></term>
+
+            <listitem>
+              <para>Specifies the email address of the author. The options
+              -authorfirstname and -authorsurname must be set, otherwise this
+              option will be ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.author.firstname">
+            <term><command>dbdoclet -authorfirstname
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.author.firstname</varname></term>
+
+            <listitem>
+              <para>Specifies the firstname of the author. The option
+              -authorsurname must be set, otherwise this option will be
+              ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.author.surname">
+            <term><command>dbdoclet -authorsurname
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.author.surname</varname></term>
+
+            <listitem>
+              <para>Specifies the surname of the author. The option
+              -authorfirstname must be set, otherwise this option will be
+              ignored.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -booktype
+            <replaceable>book|reference</replaceable></command> Property:
+            <varname>doclet.book.type</varname></term>
+
+            <listitem>
+              <para>Specifies the type of the book. The type "book" contains
+              chapter elements, while the type "reference" contains refentry
+              elements.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.codewidth">
+            <term><command>dbdoclet -codewidth
+            <replaceable>width</replaceable></command> Property:
+            <varname>docbook.code.width</varname></term>
+
+            <listitem>
+              <para>Specifies the width of program listings. The default is
+              75.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.copyright.holder">
+            <term><command>dbdoclet -copyrightholder
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.copyright.holder</varname></term>
+
+            <listitem>
+              <para>Specifies the holder of the copyright.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.copyright.year">
+            <term><command>dbdoclet -copyrightyear
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.copyright.year</varname></term>
+
+            <listitem>
+              <para>Specifies the copyright year(s). The option
+              -copyrightholder must be set for this option to become
+              active.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.corporation">
+            <term><command>dbdoclet -corporation
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.corporation</varname></term>
+
+            <listitem>
+              <para>Specifies the corporation name.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -dotfqn</command> Property:
+            <varname>program.dot.qualified-names</varname></term>
+
+            <listitem>
+              <para>Use qualified names in dot diagrams.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.emphasis.role">
+            <term><command>dbdoclet -emphasisrole
+            <replaceable>text</replaceable></command> Property:
+            <varname>docbook.emphasis.role</varname></term>
+
+            <listitem>
+              <para>Specifies the role for the emphasis tag. The default is
+              "bold".</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.f">
+            <term><command>dbdoclet -f
+            <replaceable>file</replaceable></command> Property:
+            <varname>doclet.destination.file</varname></term>
+
+            <listitem>
+              <para>Specifies the file name of the resulting document. If the
+              file name contains a path, it is appended to destination
+              directory. The default name for the file name is
+              Reference.xml.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.id">
+            <term><command>dbdoclet -id <replaceable>numbered |
+            java</replaceable></command> Property:
+            <varname>docbook.id.style</varname></term>
+
+            <listitem>
+              <para>This option controls the generation of reference ids. If
+              set to "numbered", the ids start with a type string followed by
+              a number. The number is generated by a counter. This is the
+              default behaviour. If set to "java" the id's are created in a
+              predictable way. This makes it possible to reference certain
+              elements in the generated docbook source from other parts of the
+              document. The id values start with a type string. The used type
+              strings are <literal>PACKAGE-</literal>,
+              <literal>CLASS-</literal>, <literal>CONSTRUCTOR-</literal>,
+              <literal>METHOD-</literal> and <literal>FIELD-</literal>. The
+              next part of the identifier is the full qualified name of the
+              java element, which is referenced. Because of limitations due to
+              the id attribute, certain characters are substituted: "(",
+              ")","[","]","_" and "," are replaced by "-" and " " is replaced
+              by "". I think the best thing to do, is to have a look at the
+              generated SGML code. Perhaps somebody can explain this feature
+              in correct english and sent the result to me.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.imagedata.formats">
+            <term><command>dbdoclet -imgfmts
+            <replaceable>gif,png,jpg,svg,ps</replaceable></command> Property:
+            <varname>docbook.imagedata.formats</varname></term>
+
+            <listitem>
+              <para>Specifies a comma separated list of the formats, that will
+              be used when creating imagedata tags. The default is
+              "svg".</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.imagepath">
+            <term><command>dbdoclet -imgpath
+            <replaceable>directory</replaceable></command> Property:
+            <varname>doclet.imagepath</varname></term>
+
+            <listitem>
+              <para>The path where images are stored. The default is
+              "figures".</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.include">
+            <term><command>dbdoclet -include
+            <replaceable>file1,file2,file3...</replaceable></command>
+            Property: <varname>docbook.include</varname></term>
+
+            <listitem>
+              <para>This option make it possible to write the introduction of
+              the resulting book in DocBook itself. You can define a comma
+              separated list of files, which are included as entities or via
+              xinclude at the top, directly after the bookinfo tag.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noexception</command> Property:
+            <varname>doclet.noexception</varname></term>
+
+            <listitem>
+              <para>Don't include @exception and @throws tags.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nofields</command> Property:
+            <varname>doclet.nofields</varname></term>
+
+            <listitem>
+              <para>Don't include the fields section.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noinheritedfrom</command> Property:
+            <varname>doclet.noinheritedfrom</varname></term>
+
+            <listitem>
+              <para>Don't include the "Methods inherited from"
+              sections.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nometa</command> Property:
+            <varname>doclet.nometa</varname></term>
+
+            <listitem>
+              <para>Only include @param, @return, @serialField and @throws
+              tags. This option overrides the options -author and
+              -version.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nomethods</command> Property:
+            <varname>doclet.nomethods</varname></term>
+
+            <listitem>
+              <para>Don't include the methods section.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noparam</command> Property:
+            <varname>doclet.noparam</varname></term>
+
+            <listitem>
+              <para>Don't include @param tags.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noprolog</command> Property:
+            <varname>doclet.noprolog</varname></term>
+
+            <listitem>
+              <para>Don't include a XML prolog. The XML file will start
+              directly with the root tag.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nosee</command> Property:
+            <varname>doclet.nosee</varname></term>
+
+            <listitem>
+              <para>Don't include @see tags.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noserialfield</command> Property:
+            <varname>doclet.noserialField</varname></term>
+
+            <listitem>
+              <para>Don't include @serialField tags.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nostatistics</command> Property:
+            <varname>doclet.nostatistics</varname></term>
+
+            <listitem>
+              <para>Set this argument to true, if you don't want to include
+              the statistics appendix.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -nosynopsis</command> Property:
+            <varname>doclet.nosynopsis</varname></term>
+
+            <listitem>
+              <para>Don't include synopsis sections.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -notable</command> Property:
+            <varname>doclet.notable</varname></term>
+
+            <listitem>
+              <para>Don't generate any DocBook tables. Any HTML tables found
+              are ignored and the contents of the table cells is added as
+              paragraphs in the order they are found.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -noxreflabel</command> Property:
+            <varname>doclet.noxreflabel</varname></term>
+
+            <listitem>
+              <para>Don't generate xreflabel attributes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -part</command> Property:
+            <varname>doclet.part</varname></term>
+
+            <listitem>
+              <para>If this flag is set, a part document is generated instead
+              of a book document. You can insert this part as a reference part
+              in a superior document.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -split</command> Property:
+            <varname>doclet.split-output</varname></term>
+
+            <listitem>
+              <para>If this flag is set, the output is splitted and the doclet
+              generates a modularized version of the documentation. A single
+              XML file is generated for every class in the
+              <filename>modules</filename> directory. These files are
+              referenced via xinclude from the main file
+              <filename>Reference.xml</filename>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry xml:id="configuration.option.properties">
+            <term><command>dbdoclet -properties <replaceable>path/properties
+            file</replaceable></command></term>
+
+            <listitem>
+              <para>Specifies the path and file name of a dbdoclet properties
+              file.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -tableframe</command> Property:
+            <varname>docbook.table.frame</varname></term>
+
+            <listitem>
+              <para>Defines the DocBook table style for the tables generated
+              by dbdoclet. Should be one of all, bottom, none, sides, top,
+              topbot. The default is set to "all".</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><command>dbdoclet -useappendix</command> Property:
+            <varname>doclet.use-appendix</varname></term>
+
+            <listitem>
+              <para>If this flag is set an appendices are created instead of
+              chapters for sections like "statistics" and "constant field
+              values".</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>herold</title>
+
+    <xi:include href="../../../org.dbdoclet.herold.package/doc/tutorial/tutorial.xml"/>
+  </part>
+</book>

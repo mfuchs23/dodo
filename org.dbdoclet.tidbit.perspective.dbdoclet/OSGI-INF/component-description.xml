@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="dbdocletPerspective">
+	<implementation
+		class="org.dbdoclet.tidbit.perspective.dbdoclet.DbdocletPerspective" />
+	<property name="category" value="javadoc" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.perspective.Perspective" />
+	</service>
+</component>

@@ -1,0 +1,558 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <meta name="generator" content="Website XSL Stylesheet V2.2"><link rel="home" href="http://www.dpawson.co.uk/docbook/index.html" title="Docbook Frequently Asked Questions"><link rel="up" href="http://www.dpawson.co.uk/docbook/index.html" title="Docbook Frequently Asked Questions"><link rel="previous" href="http://www.dpawson.co.uk/docbook/catalogs.html" title="Catalogs and Docbook"><link rel="next" href="http://www.dpawson.co.uk/docbook/styling/styling.html" title="Docbook  XSL Stylesheets"><link rel="first" href="http://www.dpawson.co.uk/docbook/reference.html" title="Docbook Basics and References"><link rel="last" href="http://www.dpawson.co.uk/docbook/tksnorm.html" title="Thanks"><link rel="stylesheet" href="Test3_files/xslfaq.css" type="text/css"><title>Docbook and Ant</title>
+
+
+  <meta name="keyword" content="docbook faq FAQ ant"></head><body class="website" bgcolor="white" text="black" link="#0000ff" vlink="#840084" alink="#0000ff"><div id="ant" class="webpage"><a name="ant"></a><div class="navhead"><a href="http://www.dpawson.co.uk/docbook/index.html"><img border="0" src="Test3_files/website-1.png" alt="Banner"></a> | ... | <a href="http://www.dpawson.co.uk/docbook/markup.html">Docbook Markup</a> | <a href="http://www.dpawson.co.uk/docbook/tools.html">Docbook tools</a> | <a href="http://www.dpawson.co.uk/docbook/catalogs.html">Catalogs and Docbook</a> | Docbook and Ant@ | <a href="http://www.dpawson.co.uk/docbook/styling/styling.html">Docbook  XSL Stylesheets</a> | <a href="http://www.dpawson.co.uk/docbook/dsssl/dsssl.html">Docbook DSSSL Stylesheets</a><br><hr></div><h1>Docbook and Ant</h1><div class="qandaset"><dl><dt>1. <a href="#d933e16">How to use ant with docbook</a></dt></dl><table border="0" summary="Q and A Set"><col align="left" width="1%"><tbody>
+   <tr class="question"><td align="left" valign="top"><a name="d933e16"></a><a name="d933e18"></a><b>1. </b></td><td align="left" valign="top"><p>How to use ant with docbook</p></td></tr>
+   <tr class="answer"><td align="left" valign="top"><b></b></td><td align="left" valign="top"><p class="author">DaveP (with lotsa help from Norm)</p><p>Ant
+is a piece of java software which acts like glue, to stick lots of bits
+of software together. If you've used make on a Unix box or under
+cygwin, then you'll get the idea. </p><p>What I've done is use at as a glorified script or batch file to make it easier to do a few things</p><div class="itemizedlist"><ul type="disc"><li>
+	    <p>To
+pull all the bits of docbook together (hence the glue analogy). This is
+XML based, so by all I mean the stylesheets and the DTD</p>
+	  </li><li>
+	    <p>To keep up to speed with the teams stylesheets, they are way too fast for me.</p>
+	  </li><li>
+	    <p>To reduce the amount of work needed to install and use a new update of the stylesheets.</p>
+	  </li><li>
+	    <p>Perhaps inspire others to benefit from ant?</p>
+	  </li></ul></div><p>Pre-requisites. Unlike some, I'm not fussed
+	where docbook is installed. Respecting others
+	decisions to do this, I've presumed that your
+	installation has some root location, for which I'm
+	using a directory called docbook. I'm assuming the
+	layout within that directory follows what I believe
+	to be Norm.s expectations for relative paths within
+	that. I'll describe that in a minute. I'm presuming
+	you are XML based. I'm sure ant can work with SGML
+	but I haven't tried it. I assume you have a java 1.3
+	or later installation. I assume you have a copy of
+	ant installed. As of today I'm using version
+	1.4.1. If you haven't, you can get it from <a href="http://jakarta.apache.org/site/binindex.html" target="_top">the
+	apache site. </a>
+I feel sure that this lot will 	work with later versions. You can read
+more about ant on the apache site, its one of their projects. I assume
+you have Norm Walsh's Sun catalog software installed. If not you can
+get it at the sun site. Search for resolver +++ Add url. </p><h2><a name="d933e68"></a>The main script / batch file</h2><p>This file is used simply to run ant</p><p>The purpose of this file is to launch ant. No more, no less. <a href="#runant" title="Example 1. The script or batch file">Example 1</a> shows the file.</p><div class="example"><a name="runant"></a><p class="title"><b>Example 1. The script or batch file</b></p>
+    
+    <pre class="programlisting">set JAVA_HOME=/jdk
+java -cp /apps/ant/lib/ant.jar org.apache.tools.ant.Main
+</pre>
+
+  
+
+   </div><p>This calls up java (I assume that's on your environment
+    variable path). giving it the ant class to run,
+    <tt>org.apache.tools.ant.Main</tt>. Since no
+    parameters are passed to ant (it takes quite a few), this makes
+    assumptions about the location of its input information. The main
+    file which controls ant is called <tt>build.xml</tt>,
+as described later. Without a command line parameter telling it    
+where to find this file, it looks for a file named build.xml in     the
+current directory. That means you must change to the directory holding
+the file build.xml, which sensibly is the same directory as the source
+file being processed. Once ant is running, the rest is all controlled
+by the build.xml file.</p><h2><a name="d933e97"></a>Build.xml, the ant build file.</h2><p>This is where the flexibility is, and where most things are
+   controlled from. <a href="#build.xml" title="Example 2. build.xml">Example 2</a> shows this
+   file.</p><p>Before
+looking at this file, a few points. One line in particular controls the
+sequence of operation within the build file. Another specifies the base
+location for a few files. Feel free totweak these as needed, they are
+pointed out in the callouts. </p><p>A little explanation, but the ant
+documentation is pretty good. Key things to watch out for are the
+properties and the target elements. For properties, read variables,
+used with a dollar and braces to obtain the value of the property, e.g.
+${propertyName}. For targets, read actions. From the documentation,
+this could be quite a bit, but I've only used the java command for the
+XSLT processing. For detail on the target element see the ant
+documentation. Also note that the project element has an attribute
+called default, which specifies the 'output-all' target, which in turn
+depends on the others. This is the key to the sequence of targets which
+are executed. </p><div class="example"><a name="build.xml"></a><p class="title"><b>Example 2. build.xml</b></p>
+    
+    <pre class="programlisting">&lt;?xml version="1.0"?&gt;
+ &lt;!-- 
+This is the ant build file for use with Norm Walsh website DTD and stylesheets
+for use with his resolver classes (found at sun site)
+Revision: 1.00
+Date    : 1 May 2002
+Author  : DaveP
+ --&gt;
+
+ &lt;!-- Set the base directory to the location of the xml files --&gt;
+&lt;project 
+     name="generate"   
+     basedir="/sgml/files/dbtests"                 <a name="basedir"></a><img src="Test3_files/1.html" alt="1" border="0">  
+     default="output-all"&gt;                         <a name="seq"></a><img src="Test3_files/2.html" alt="2" border="0">
+&lt;description&gt;Test for sun catalog resolver&lt;/description&gt;
+ 
+ &lt;!-- docbook location: Everything taken relative to this for docbook stuff --&gt;
+     &lt;property name="docbookHome" value="/usr/home/docbook"/&gt;                      <a name="dbHome"></a><img src="Test3_files/3.html" alt="3" border="0">
+ &lt;!-- Main stylesheets --&gt;
+     &lt;property name="sSheetHome" value="${docbookHome}/docbook-xsl-1.50.0"/&gt;       <a name="ssHome"></a><img src="Test3_files/4.html" alt="4" border="0">
+ &lt;!-- Website DTD and stylesheets --&gt;
+&lt;property name="websiteHome" value="${docbookHome}/website-2.1b1"/&gt;             <a name="wsHome"></a><img src="Test3_files/5.html" alt="5" border="0">
+
+ &lt;!-- Main Docbook stylesheet --&gt;
+&lt;property name="main.stylesheet" value="${sSheetHome}/html/docbook.xsl"/&gt;        <a name="m.ss"></a><img src="Test3_files/6.html" alt="6" border="0">
+ &lt;!-- Stylesheet to use for website processing --&gt;
+&lt;property name="website.stylesheet" value="${websiteHome}/xsl/chunk-website.xsl"/&gt; <a name="ws.ss"></a><img src="Test3_files/7.html" alt="7" border="0">
+ &lt;!-- Stylesheet to use for layout file --&gt;
+&lt;property name="autolayout.stylesheet" value="${websiteHome}/xsl/autolayout.xsl"/&gt;<a name="al.ss"></a><img src="Test3_files/8.html" alt="8" border="0">
+
+              &lt;!-- Input properties:  --&gt;                                      <a name="inps"></a><img src="Test3_files/9.html" alt="9" border="0">
+&lt;!-- all files should be in this directry--&gt;
+&lt;property name="in.dir" value="/sgml/files/dbtests"/&gt;                          <a name="in.dir"></a><img src="Test3_files/10.html" alt="10" border="0">
+&lt;!-- input file for any docbook valid document --&gt;
+&lt;property name="main.infile" value="doco.xml"/&gt;                                 <a name="in.fil"></a>(11)
+&lt;!-- source file for layout styling --&gt;
+&lt;property name="autolayout.infile" value="newlayout.xml"/&gt;                      <a name="in.al"></a>(12)
+&lt;!-- source file for website transform --&gt; 
+&lt;property name="website.infile" value="layout.xml"/&gt;                            <a name="in.lout"></a>(13)
+ 
+
+           &lt;!-- Output Properties: Output directory --&gt;                         <a name="outs"></a>(14)
+ &lt;property name="out.dir" value="${in.dir}" /&gt;  &lt;!-- all files --&gt;          <a name="o.dir"></a>(15)
+ &lt;!-- Main output file used for docbook transform --&gt;
+ &lt;property name="main.outfile" value="op.html"/&gt;                                <a name="om.fil"></a>(16)
+ &lt;!-- Null (dummy)output file for website transform --&gt;
+ &lt;property name="website.outfile" value="op.html"/&gt;                            <a name="ows.fil"></a>(17)     
+ &lt;!-- output file for layout styling --&gt;
+ &lt;property name="autolayout.outfile" value="layout.xml"/&gt;                     <a name="olo.fil"></a>(18)
+
+        &lt;!-- Post XSLT transform parameter. Leave as is for Saxon --&gt;
+ &lt;property name="param.args.post" value="saxon.extensions=1"/&gt;                <a name="p.param"></a>(19)
+
+
+
+    &lt;!-- XSLT engine class --&gt;
+ &lt;property name="xslt.processor.class" value="com.icl.saxon.StyleSheet" /&gt;    <a name="xslt.class"></a>(20)
+
+ &lt;!-- path for xslt processor. 
+         Includes resolver and extensions and catalogManager.properties file.  --&gt;
+ &lt;path id="xslt.processor.classpath"&gt;                                         <a name="xslt.cpath"></a>(21)
+  &lt;pathelement path="/myjava/saxon65.jar" /&gt;  &lt;!-- Saxon jar --&gt;
+  &lt;pathelement path="/myjava/cat/resolver.jar"/&gt; &lt;!-- resolver jar --&gt;
+  &lt;pathelement path="${websiteHome}/extensions/saxon64.jar"/&gt; &lt;!-- docbook extensions --&gt;
+  &lt;pathelement path=".."/&gt; &lt;!-- for catalogManager.properties --&gt;
+ &lt;/path&gt;
+
+ &lt;!-- Use javac 1.3 --&gt;
+  &lt;property name="build.compiler" value="modern"/&gt;                           <a name="jVsn"></a>(22)
+
+
+ &lt;!--  --&gt;
+ &lt;!--Initial processing: If any required.  --&gt;
+ &lt;!--  --&gt;
+ &lt;target name="init"&gt;
+	&lt;echo message="Do initialisational things" /&gt;                          <a name="pre.proc"></a>(23)
+  &lt;tstamp&gt;
+   &lt;format property="TODAY_UK" pattern="d-MMM-yyyy" locale="en"/&gt;
+  &lt;/tstamp&gt;
+ &lt;echo&gt;building on ${TODAY_UK}&lt;/echo&gt;
+ &lt;/target&gt;
+
+    &lt;!-- ================================================ --&gt;
+    &lt;!-Generate output (select as needed)                 --&gt;
+    &lt;!-- ================================================ --&gt;
+    &lt;target name="output-all" depends="init,doMain,run-j"&gt;                    <a name="Sel.pt"></a>(24)
+ &lt;!-- --&gt;
+    &lt;/target&gt;
+  
+ 
+    &lt;!-- ================================================ --&gt;
+    &lt;!--      Use layout to create layout.xml             --&gt;
+    &lt;!-- ================================================ --&gt;
+    &lt;target name="doLayout"&gt;                                                  <a name="ws.tgt1"></a>(25)
+	&lt;java classname="${xslt.processor.class}" 
+	      fork="yes" 
+	      dir="${in.dir}"
+	      failonerror="true"&gt;
+	    &lt;classpath refid="xslt.processor.classpath" /&gt;
+  
+     &lt;arg line="-o ${out.dir}/${autolayout.outfile}"/&gt;
+     &lt;arg line="-x com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-y com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-r com.sun.resolver.tools.CatalogResolver"/&gt;
+     &lt;arg line="${in.dir}/${autolayout.infile} ${autolayout.stylesheet} ${param.args.post}" /&gt; 
+   
+
+
+    	&lt;/java&gt;
+    &lt;/target&gt;
+    
+  
+    &lt;!-- ================================================ --&gt;
+    &lt;!-- Generic XSLT-processor call (main docbook transform) --&gt;
+    &lt;!-- ================================================ --&gt;
+    &lt;target name="doMain"&gt;                                                      <a name="main.tgt"></a>(26)
+	&lt;java classname="${xslt.processor.class}" 
+	      fork="yes" 
+	      dir="${in.dir}"
+	      failonerror="true"&gt;
+	    &lt;classpath refid="xslt.processor.classpath" /&gt;
+  
+     &lt;arg line="-o ${out.dir}/${main.outfile}"/&gt;
+     &lt;arg line="-l"/&gt;
+     &lt;arg line="-x com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-y com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-r com.sun.resolver.tools.CatalogResolver"/&gt;
+     &lt;arg line="${in.dir}/${main.infile} ${main.stylesheet} ${param.args.post}" /&gt; 
+    	&lt;/java&gt;
+    &lt;/target&gt;
+    
+
+
+
+
+    &lt;!-- ================================================ --&gt;
+    &lt;!-- Generic XSLT-processor call (website transform)  --&gt;
+    &lt;!-- ================================================ --&gt;
+    &lt;target name="doWebsite"&gt;                                                     <a name="ws.tgt2"></a>(27)
+	&lt;java classname="${xslt.processor.class}" 
+	      fork="yes" 
+	      dir="${in.dir}"
+	      failonerror="true"&gt;
+	    &lt;classpath refid="xslt.processor.classpath" /&gt;
+  
+     &lt;arg line="-o ${out.dir}/${website.outfile}"/&gt;
+     &lt;arg line="-x com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-y com.sun.resolver.tools.ResolvingXMLReader"/&gt;
+     &lt;arg line="-r com.sun.resolver.tools.CatalogResolver"/&gt;
+     &lt;arg line="${in.dir}/${website.infile} ${website.stylesheet} ${param.args.post}" /&gt; 
+       	&lt;/java&gt;
+    &lt;/target&gt;
+    
+  
+
+    &lt;!-- ================================================   --&gt;
+    &lt;!--                run                               --&gt;
+    &lt;!-- ================================================ --&gt;
+
+ &lt;!-- Fill these in if you want to view files post build --&gt;
+
+
+&lt;target name="run-j"&gt;                                                          <a name="post.tgt"></a>(28)
+
+  &lt;tstamp&gt;
+   &lt;format property="TODAY_UK" pattern="d-MMM-yyyy" locale="en"/&gt;
+  &lt;/tstamp&gt;
+
+
+  &lt;echo&gt;View ${out.dir}/${main.outfile} output file.&lt;/echo&gt;
+  &lt;echo&gt;Completed at ${TODAY_UK}&lt;/echo&gt;
+
+&lt;/target&gt;
+
+
+&lt;/project&gt;
+
+
+
+</pre>
+    <div class="calloutlist"><table border="0" summary="Callout list">
+   
+     <tbody><tr><td width="5%" valign="top" align="left"><a href="#dbHome"><img src="Test3_files/3.html" alt="3" border="0"></a> </td><td valign="top" align="left">
+      <p>The root directory where all the docbook DTD's and stylesheets are: Modify to suite you.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#ssHome"><img src="Test3_files/4.html" alt="4" border="0"></a> </td><td valign="top" align="left">
+      <p>The directory where all the stylesheets are: Change if you change version.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#wsHome"><img src="Test3_files/5.html" alt="5" border="0"></a> </td><td valign="top" align="left">
+      <p>The directory where the website DTD and stylesheets are: Modify if you change version</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#m.ss"><img src="Test3_files/6.html" alt="6" border="0"></a> </td><td valign="top" align="left">
+      <p>The main html stylesheet for docbook.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#ws.ss"><img src="Test3_files/7.html" alt="7" border="0"></a> </td><td valign="top" align="left">
+      <p>The website stylesheet </p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#al.ss"><img src="Test3_files/8.html" alt="8" border="0"></a> </td><td valign="top" align="left">
+      <p>The autolayout stylesheet </p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#inps"><img src="Test3_files/9.html" alt="9" border="0"></a> </td><td valign="top" align="left">
+      <p>The main input properties.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#in.dir"><img src="Test3_files/10.html" alt="10" border="0"></a> </td><td valign="top" align="left">
+      <p>The directory holding the input XML documents</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#in.fil">(11)</a> </td><td valign="top" align="left">
+      <p>The input file being processed by the main XSL stylesheet: Modify to use your input file</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#in.al">(12)</a> </td><td valign="top" align="left">
+      <p>Your layout file: Modify to use your input file for website layout</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#in.lout">(13)</a> </td><td valign="top" align="left">
+      <p>(Normally) the output of processing your layout file for website.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#outs">(14)</a> </td><td valign="top" align="left">
+      <p>The section specifying the output files produced (N/A for website)</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#o.dir">(15)</a> </td><td valign="top" align="left">
+      <p>The output directory to use</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#om.fil">(16)</a> </td><td valign="top" align="left">
+      <p>The output file for use with main docbook stylesheet processing.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#ows.fil">(17)</a> </td><td valign="top" align="left">
+      <p>Final website output file, not normally used.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#olo.fil">(18)</a> </td><td valign="top" align="left">
+      <p>Output of the layout file processing</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#p.param">(19)</a> </td><td valign="top" align="left">
+      <p>This is used to select Saxon as the processor, used by the stylesheets for extensions</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#xslt.class">(20)</a> </td><td valign="top" align="left">
+      <p>Selects the saxon processor class for XSLT processing</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#xslt.cpath">(21)</a> </td><td valign="top" align="left">
+      <p>These
+set up the classpath for the xslt processor. Includes the resolver,
+saxon extensions by Norm and the catalogManager.properties file for use
+by the resolver.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#jVsn">(22)</a> </td><td valign="top" align="left">
+      <p>Says to ant use the latest (nearly) java machine.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#pre.proc">(23)</a> </td><td valign="top" align="left">
+      <p>Unused, but you could use it to clean out old files or whatever. This is the first 'target' that is run by ant.</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#Sel.pt">(24)</a> </td><td valign="top" align="left">
+      <p>Critical
+main control point. This selects which 'targets' are run. The example
+selects an init target, a doMain target and a run-j target. Modify this
+to select which targets you want. (Or add more targets)</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#ws.tgt1">(25)</a> </td><td valign="top" align="left">
+      <p>This
+target runs the first stage of website processing. It creates a
+layout.xml file from your input file (newlayout.xml in the example)</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#main.tgt">(26)</a> </td><td valign="top" align="left">
+      <p>This target runs the main stylesheet against an input file to produce the required output file. </p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#ws.tgt2">(27)</a> </td><td valign="top" align="left">
+      <p>This target uses the output of the previous website processing, and produces all the seperate files specified in layout.xml</p>
+     </td></tr>
+     <tr><td width="5%" valign="top" align="left"><a href="#post.tgt">(28)</a> </td><td valign="top" align="left">
+      <p>As in the pre-processing, this is unused, perhaps you might want some post processing.</p>
+     </td></tr>
+  
+
+    </tbody></table></div>
+
+   </div><h2><a name="d933e335"></a>Moving docbook.cat to Oasis xml format</h2><p>Oh dear, that was a non-event. Two emacs macro's and its
+    done! I wonder if the xml catalog was built with this in mind?
+    There is a twist though. Since the team don't know where on your
+    machine it is going to reside, there is no base statement in
+    it. I've added one as can be seen in <a href="#db.cat.xml" title="Example 3. docbook.cat.xml">Example 3</a></p><div class="example"><a name="db.cat.xml"></a><p class="title"><b>Example 3. docbook.cat.xml</b></p>
+    
+
+    <pre class="programlisting">&lt;?xml version="1.0" ?&gt;
+&lt;catalog 
+	 xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+	 xml:base="/usr/home/docbook/"&gt;                                              [1]
+  &lt;!-- ......................................................................--&gt;
+  &lt;!-- Catalog data for DocBook XML V4.1.2 ....................................--&gt;
+  &lt;!-- File docbook.cat.xml .....................................................--&gt;
+ &lt;!-- Modified by DaveP, 2 May 2002 --&gt;
+  &lt;!-- Please direct all questions, bug reports, or suggestions for
+     changes to the docbook@lists.oasis-open.org mailing list. For more
+     information, see http://www.oasis-open.org/.
+ --&gt;
+
+  &lt;!-- This is the catalog data file for DocBook XML V4.1.2. It is provided as
+     a convenience in building your own catalog files. You need not use
+     the filenames listed here, and need not use the filename method of
+     identifying storage objects at all.  See the documentation for
+     detailed information on the files associated with the DocBook DTD.
+     See SGML Open Technical Resolution 9401 for detailed information
+     on supplying and using catalog data.
+ --&gt;
+
+  &lt;!-- ......................................................................--&gt;
+  &lt;!-- DocBook driver file ..................................................--&gt;
+
+&lt;public publicId="-//OASIS//DTD DocBook XML V4.1.2//EN"                           [2]
+   uri="docbookx.dtd"/&gt;
+
+  &lt;!-- ......................................................................--&gt;
+  &lt;!-- DocBook modules ......................................................--&gt;
+
+&lt;public publicId= "-//OASIS//DTD DocBook XML CALS Table Model V4.1.2//EN" 
+uri="calstblx.dtd"/&gt;
+&lt;public publicId= "-//OASIS//DTD XML Exchange Table Model 19990315//EN" 
+uri="soextblx.dtd"/&gt;
+&lt;public publicId= "-//OASIS//ELEMENTS DocBook XML Information Pool V4.1.2//EN" 
+uri="dbpoolx.mod"/&gt;
+&lt;public publicId= "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.1.2//EN"
+uri= "dbhierx.mod"/&gt;
+&lt;public publicId= "-//OASIS//ENTITIES DocBook XML Additional General Entities V4.1.2//EN"
+uri= "dbgenent.mod"/&gt;
+&lt;public publicId= "-//OASIS//ENTITIES DocBook XML Notations V4.1.2//EN"
+uri= "dbnotnx.mod"/&gt;
+&lt;public publicId= "-//OASIS//ENTITIES DocBook XML Character Entities V4.1.2//EN"
+uri= "dbcentx.mod"/&gt;
+
+  &lt;!-- ......................................................................--&gt;
+  &lt;!-- ISO entity sets ......................................................--&gt;
+
+&lt;public publicId= "ISO 8879:1986//ENTITIES Diacritical Marks//EN"
+uri= "ent/iso-dia.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN"
+uri= "ent/iso-num.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Publishing//EN"
+uri= "ent/iso-pub.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES General Technical//EN"
+uri= "ent/iso-tech.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Latin 1//EN"
+uri= "ent/iso-lat1.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Latin 2//EN"
+uri= "ent/iso-lat2.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Greek Letters//EN"
+uri= "ent/iso-grk1.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Monotoniko Greek//EN"
+uri= "ent/iso-grk2.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Greek Symbols//EN"
+uri= "ent/iso-grk3.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Alternative Greek Symbols//EN"
+uri= "ent/iso-grk4.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Arrow Relations//EN"
+uri= "ent/iso-amsa.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Binary Operators//EN"
+uri= "ent/iso-amsb.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Delimiters//EN"
+uri= "ent/iso-amsc.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Negated Relations//EN"
+uri= "ent/iso-amsn.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Ordinary//EN"
+uri= "ent/iso-amso.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Added Math Symbols: Relations//EN"
+uri= "ent/iso-amsr.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Box and Line Drawing//EN"
+uri= "ent/iso-box.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Russian Cyrillic//EN"
+uri= "ent/iso-cyr1.ent"/&gt;
+&lt;public publicId= "ISO 8879:1986//ENTITIES Non-Russian Cyrillic//EN"
+uri= "ent/iso-cyr2.ent"/&gt;
+
+  &lt;!-- End of catalog data for DocBook XML V4.1.2 .............................--&gt;
+  &lt;!-- ......................................................................--&gt;
+
+&lt;/catalog&gt;
+</pre>
+    <p>I'd explain it, but I think the comments tell much of the
+story. This catalog tells the resolver classes where to find all the
+actual docbook DTD and its ancialliary bits. [1] is the major change
+I've made, simply to tell docbook that this location is where all the
+docbook DTD stuff hangs out. [2] is the root of the docbook DTD.</p>
+    <p>I'd suggest this file is not modified.</p>
+
+
+   </div><h2><a name="d933e357"></a>CatalogManager.properties file</h2><p>Moving on to the properties file. </p><p>The prime purpose of this file is to point to the catalog (the first one) to use. <a href="#catMan.prop" title="Example 4. catalogManager.properties">Example 4</a> shows an example. </p><div class="example"><a name="catMan.prop"></a><p class="title"><b>Example 4. catalogManager.properties</b></p>
+    
+    <pre class="programlisting">#CatalogManager.properties
+
+# 1 ..4
+verbosity=2                                                              [1]
+
+#If relative-catalogs is yes, relative catalogs in the catalogs property will be left relative; 
+#otherwise they will be made absolute with respect to the base URI of this file. 
+relative-catalogs=yes
+
+# Always use semicolons in this list
+catalogs=/sgml/catalog.xml                                               [2]
+
+# either public or system
+prefer=public
+
+#this option controls whether or not a new instance of the resolver is constructed for each parse.
+static-catalog=yes
+
+#toggle whether or not the resolver classes obey the 
+# &lt;?oasis-xml-catalog?&gt; processing instruction.
+allow-oasis-xml-catalog-pi=yes
+
+catalog-class-name=com.sun.resolver.Resolver
+</pre>
+
+    <p>[1] This controls the screen printout as catalogs are
+    processed. Keep it as low as you need until something goes
+    wrong. [2] This is the pointer to the catalog to use. </p>
+
+   </div><p>Next the docbook higher level catalog,
+   <tt>catalog.xml</tt>. This file controls the operation
+   of the resolver software, mapping one thing to another, primarily
+   as used here it is resolving remote (across the internet)
+   addresses, to your local installed copy of those files. <a href="#cat.xml" title="Example 5. Catalog.xml">Example 5</a> shows this file, with comments.</p><div class="example"><a name="cat.xml"></a><p class="title"><b>Example 5. Catalog.xml</b></p>
+    
+    <pre class="programlisting">&lt;?xml version="1.0" ?&gt; 
+
+ &lt;!-- set the base to the location of your docbook installtion
+presumes a directory layout similar to Norms:
+  docbook
+    file docbookx.dtd
+  docbook-xsl-x.xx  (stylesheets directory, x.xx is the version)
+  website-x.xxx     (website stuff)
+ --&gt;
+&lt;catalog 
+	 xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+	 xml:base="/usr/home/docbook/"&gt;                                      [1]
+
+ &lt;!--This group handles all docbook items.  --&gt;
+ &lt;!-- Use formal public identifiers in preference to SYSTEM identifiers --&gt;
+ &lt;group prefer="public" &gt;
+
+ &lt;!-- Main docbook DTD --&gt;
+ 
+
+&lt;nextCatalog catalog="docbook.cat.xml"/&gt;                                  [2]
+
+
+
+ &lt;!-- Main Website DTD (change uri for -custom and -full )--&gt;
+  &lt;public publicId="-//Norman Walsh//DTD Website V2.1b1//EN"              [3]
+	  uri="website-2.1b1/website.dtd"/&gt;
+
+ &lt;!-- Autolayout dtd (for website) --&gt;
+&lt;public publicId="-//Norman Walsh//DTD Website Auto Layout V1.0//EN"      [4]
+	uri="website-2.1b1/autolayout.dtd"/&gt;
+
+
+ &lt;!-- Entry for jrefentry --&gt;
+&lt;public publicId="  -//Norman Walsh//DTD JRefEntry V1.0//EN"              [5]
+	uri="jrefentry-1.1/jrefentry.dtd"/&gt;
+
+ &lt;!-- Chunk-website stylesheet --&gt;
+  &lt;uri  
+   name="http://docbook.sourceforge.net/release/xsl/current/html/chunker.xsl" [6]
+   uri="docbook-xsl-1.50.0/html/chunker.xsl"/&gt;
+
+ &lt;!-- main docbook stylesheet --&gt;
+&lt;uri
+     name="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" [7]
+   uri ="docbook-xsl-1.50.0/html/docbook.xsl"/&gt;
+ &lt;/group&gt;
+
+&lt;/catalog&gt;
+
+
+</pre>
+    <p>[1] All uri attributes use this as the base from which other files are found</p>
+    <p>[2] Next catalog in the chain, the docbook DTD catalog</p>
+    <p>[3] The website DTD</p>
+    <p>[4] The layout DTD, for setting file relationships in website.</p>
+    <p>[5] The jrefentry DTD</p>
+    <p>[6] The chunker stylesheets, for producing multiple html output files</p>
+    <p>[7] The main docbook stylesheet.</p>
+   </div><h2><a name="d933e418"></a>Conclusion.</h2><p>For
+now, that's the main options (xsl-fo excepted). It wouldn't take much
+to repeat for fo, for plain single html output, etc. If needed, I'll
+add that. </p><p>Hope that's enough to get it working for you. If its unclear, please let me know.</p></td></tr>
+
+
+
+ </tbody></table></div><div class="navfoot"><hr><table width="100%" border="0" summary="Footer navigation"><tbody><tr><td width="33%" align="left"><span class="footdate"></span></td><td width="34%" align="center"><span class="foothome"><a href="http://www.dpawson.co.uk/docbook/index.html">Home</a></span></td><td width="33%" align="right"><span class="footfeed"><a href="mailto:DaveP@dpawsonNOSPAM.co.uk">Feedback</a></span></td></tr><tr><td colspan="3" align="right"><span class="footcopy"><span class="copyright">Copyright © 2001 Dave Pawson. </span></span></td></tr></tbody></table></div></div></body></html>

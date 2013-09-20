@@ -1,0 +1,17 @@
+Main-Class: org.dbdoclet.runner.AntRunner
+Class-Path: ../conf/ 
+  ant.jar
+  ant-launcher.jar
+  resolver.jar
+  saxon.jar
+  xslthl.jar
+  xalan.jar
+  xercesImpl.jar
+  ../docbook/xsl/extensions/xalan27.jar
+  ../docbook/xsl/extensions/saxon65.jar
+  org.apache.commons.logging.jar
+  org.apache.log4j.jar
+  org.dbdoclet.antol.jar 
+  org.dbdoclet.getopts.jar
+  org.dbdoclet.commons.jar
+  

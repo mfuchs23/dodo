@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="dbdoclet.test" default="all">
+
+  <taskdef name="config" classname="org.dbdoclet.antol.task.Config"/>
+  <taskdef name="env" classname="org.dbdoclet.antol.task.Env"/>
+
+  <config/>
+
+  <property file="../build.properties"/>
+  <property file="../../../build.properties"/>
+
+  <property name="build.dbdoclet" value="${build}/${install.dir}"/>
+  <property name="build.reports" value="build/reports" />
+
+  <path id="cp.test">
+    <pathelement location="build/classes" />
+    <pathelement location="./conf"/>
+    <pathelement location="${dbdoclet-jdk1_4.jar}"/>
+    <pathelement location="${resolver.jar}" />
+    <pathelement location="${junit.jar}" />
+    <pathelement location="${regexp.jar}" />
+    <pathelement location="${log4j.jar}" />
+    <pathelement location="${tools.jar}" />
+  </path>
+
+  <!-- ========================================== -->
+  <!-- PREPARE                                    -->
+  <!-- ========================================== -->
+  <target name="prepare">
+    <mkdir dir="build/classes" />
+    <mkdir dir="build/xml" />
+  </target>
+
+  <!-- ========================================== -->
+  <!-- CLEAN                                      -->
+  <!-- ========================================== -->
+  <target name="clean">
+
+    <delete dir="build"/>
+    <delete dir="sample/figures"/>
+    <delete dir="sample/standard"/>
+
+    <delete includeEmptyDirs="yes">
+      <fileset dir=".">
+        <include name="**/*.pdf" />
+        <include name="**/*.fo" />
+      </fileset>
+      <fileset dir="sample/docbook">
+        <include name="Reference*" />
+        <include name="figures/**" />
+      </fileset>
+    </delete>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- BUILD                                      -->
+  <!-- ========================================== -->
+  <target name="build" depends="prepare">
+
+    <xslt
+      in="xml/HtmlTags.xml"
+      style="xsl/CrossOverParse.xsl"
+      out="build/CrossOverParse.log">
+    </xslt>      
+
+    <xslt
+      in="xml/HtmlTags.xml"
+      style="xsl/CrossOverParseAnt.xsl"
+      out="build/xml/crossover-parser.xml">
+    </xslt>      
+
+    <xslt
+      in="xml/Files.xml"
+      style="xsl/ParserFileTests.xsl"
+      out="java/org/dbdoclet/test/parser/FileTests.java">
+    </xslt>      
+
+    <xslt
+      in="xml/HtmlTags.xml"
+      style="xsl/CrossOverTransform.xsl"
+      out="build/CrossOverTransform.log">
+    </xslt>      
+
+    <xslt
+      in="xml/HtmlTags.xml"
+      style="xsl/CrossOverTransformAnt.xsl"
+      out="build/xml/crossover-transform.xml">
+    </xslt>      
+
+    <xslt
+      in="xml/Files.xml"
+      style="xsl/TransformFileTests.xsl"
+      out="java/org/dbdoclet/test/transform/FileTests.java">
+    </xslt>      
+
+    <javac 
+      destdir="build/classes"
+      debug="${javac.debug}">
+
+      <src path="dbdoclet/java"/>
+      <src path="build/java"/>
+      <classpath refid="cp.test"/>
+
+    </javac>
+
+    <javac 
+      destdir="build/classes"
+      debug="${javac.debug}"
+      >
+      <src path="herold/java"/>
+      <classpath refid="cp.test"/>
+    </javac>
+
+  </target>
+
+  <!-- ========================================== -->
+  <!-- TEST                                       -->
+  <!-- ========================================== -->
+  <target name="test" depends="test.prepare"> 
+
+    <antcall target="test.tokenizer"/>
+    <antcall target="test.parser"/>
+    <antcall target="test.transform"/>
+
+  </target>
+
+  <target name="test.prepare"> 
+
+    <delete dir="${build.reports}" />
+
+    <mkdir dir="${build.reports}/logs" />
+    <mkdir dir="${build.reports}/html" />
+    <mkdir dir="${build.reports}/data/parser" />
+    <mkdir dir="${build.reports}/data/transform" />
+
+  </target>
+
+  <target name="test.tokenizer">
+    <junit 
+      printsummary="yes"
+      fork="yes">
+
+      <classpath refid="cp.test"/>
+
+      <test name="org.dbdoclet.test.tokenizer.TagTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.tokenizer.EntityTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.tokenizer.TokenizerTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <target name="test.parser">
+    <antcall target="test.parser.crossover"/>
+    <antcall target="test.parser.manual"/>
+    <antcall target="test.parser.file"/>
+  </target>
+
+  <target name="test.parser.manual">
+    <junit 
+      printsummary="yes"
+      fork="yes">
+
+      <sysproperty key="junit.html.dir" value="${build.reports}/data/parser"/>
+
+      <classpath refid="cp.test"/>
+
+      <test name="org.dbdoclet.test.parser.ATests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.AbbrTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.AcronymTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.AddressTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.BTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.BigTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.BrTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.CommentTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.DivTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.EntitiesTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.FontTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.HeaderTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.HrTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.ImgTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.ListTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.MiscTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.PTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.SmallTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.StrikeTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.parser.TableTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <target name="test.parser.file">
+    <junit 
+      printsummary="yes"
+      fork="yes"
+      showoutput="yes">
+
+      <sysproperty key="junit.data.dir" value="html"/>
+      <sysproperty key="junit.html.dir" value="${build.reports}/data/parser"/>
+
+      <classpath refid="cp.test"/>
+      
+      <test name="org.dbdoclet.test.parser.FileTests" todir="${build.reports}/logs">
+	<formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <target name="test.parser.crossover">
+    <ant 
+      antfile="build/xml/crossover-parser.xml"
+      inheritAll="true"
+      inheritRefs="true">
+      <property name="junit.html.dir" value="${build.reports}/data/parser"/>
+    </ant>
+  </target>
+
+  <target name="test.transform">
+    <antcall target="test.transform.crossover"/>
+    <antcall target="test.transform.manual"/>
+    <antcall target="test.transform.file"/>
+  </target>
+
+  <target name="test.transform.manual">
+    <junit 
+      printsummary="yes"
+      fork="yes">
+
+      <sysproperty key="junit.docbook.dir" value="${build.reports}/data/transform"/>
+
+      <classpath refid="cp.test"/>
+
+      <test name="org.dbdoclet.test.transform.ATests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.AbbrTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.AcronymTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.AddressTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.AdmonitionsTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.BTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.BigTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.BrTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.CodeTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.DivTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.EntitiesTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.HeaderTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.ITests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.ImgTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.ListTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.MiscTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.SerialTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.SmallTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.StrikeTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.StrongTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+      <test name="org.dbdoclet.test.transform.TableTests" todir="${build.reports}/logs">
+        <formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <target name="test.transform.crossover">
+    <ant 
+      antfile="build/xml/crossover-transform.xml"
+      inheritAll="true"
+      inheritRefs="true">
+      <property name="junit.docbook.dir" value="${build.reports}/data/transform"/>
+    </ant>
+  </target>
+
+  <target name="test.transform.file">
+    <junit 
+      printsummary="yes"
+      fork="yes">
+
+      <sysproperty key="junit.data.dir" value="html"/>
+      <sysproperty key="junit.docbook.dir" value="${build.reports}/data/transform"/>
+
+      <classpath refid="cp.test"/>
+      
+      <test name="org.dbdoclet.test.transform.FileTests" todir="${build.reports}/logs">
+	<formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <target name="test.format" depends="test.prepare">
+    <echo>${tools.jar}</echo>
+    <junit 
+      printsummary="yes"
+      fork="yes"
+      showoutput="yes">
+      <classpath refid="cp.test"/>
+      <test name="org.dbdoclet.test.format.ListingFormatTests" todir="${build.reports}/logs">
+	<formatter type="xml"/>
+      </test>
+    </junit>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- REPORT                                     -->
+  <!-- ========================================== -->
+  <target name="report">
+    <junitreport todir="${build.reports}">
+      <fileset dir="${build.reports}/logs">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report 
+	format="frames" 
+	todir="${build.reports}/html" />
+    </junitreport>
+  </target>
+
+  <!-- ========================================== -->
+  <!-- ALL                                        -->
+  <!-- ========================================== -->
+  <target name="all">
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="test"/>
+    <antcall target="report"/>
+  </target>
+
+</project>

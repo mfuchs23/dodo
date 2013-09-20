@@ -1,0 +1,11 @@
+transformation html2docbook;
+
+section HTML {
+	encoding = "winword-1252";
+	exclude = [ "//p[starts-with(@class, 'MsoToc')]" ];
+	section-numbering-pattern = "(?s)((\d+\.)+)?\d*\.?\p{Z}*";
+}
+
+section DocBook {
+	destination-encoding = "UTF-8";
+}

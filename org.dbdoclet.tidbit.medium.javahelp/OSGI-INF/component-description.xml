@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="javaHelpComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.javahelp.JavaHelpComponent" />
+	<property name="category" value="docbook-javahelp" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

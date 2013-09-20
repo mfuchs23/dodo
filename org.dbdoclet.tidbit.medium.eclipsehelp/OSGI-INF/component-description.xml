@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="eclipseHelpComponent">
+	<implementation
+		class="org.dbdoclet.tidbit.medium.eclipsehelp.EclipseHelpComponent" />
+	<property name="category" value="docbook-eclipse" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

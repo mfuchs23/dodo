@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Service-Component: OSGI-INF/component-description.xml
+Bundle-ManifestVersion: 2
+Bundle-Name: Herold Perspective
+Bundle-SymbolicName: org.dbdoclet.tidbit.perspective.herold
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.antlr.runtime;version="3.4.0",
+ org.dbdoclet,
+ org.dbdoclet.jive,
+ org.dbdoclet.jive.dialog,
+ org.dbdoclet.jive.filter,
+ org.dbdoclet.jive.text,
+ org.dbdoclet.jive.widget,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit.application,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.common.panel,
+ org.dbdoclet.tidbit.medium,
+ org.dbdoclet.tidbit.medium.herold,
+ org.dbdoclet.tidbit.perspective,
+ org.dbdoclet.tidbit.perspective.panel,
+ org.dbdoclet.tidbit.project,
+ org.dbdoclet.trafo,
+ org.dbdoclet.trafo.script,
+ org.osgi.service.component;version="1.0.0"
+Export-Package: org.dbdoclet.tidbit.perspective.herold

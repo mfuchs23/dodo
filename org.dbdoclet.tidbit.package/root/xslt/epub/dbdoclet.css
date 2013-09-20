@@ -1,0 +1,52 @@
+
+div.informaltable table,
+div.table table { 
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  font-size: 80%;
+}
+
+h5, h6 
+{ 
+  font-size: 100%;
+  }
+
+img 
+{
+  border: 0 none;
+  }	
+
+p 
+{ 
+  margin: 0;
+  }
+
+p + p 
+{ 
+  text-indent: 1.5em;
+  }
+
+pre
+{ 
+  margin-left: 3%;
+  margin-right: 3%;
+  padding: 1em;
+  border: 1px solid #333;
+  color: black;
+  background-color: #eee;
+  font-family: "Courier New", monospaced;
+  font-size: 0.7em;
+  }
+
+td, th 
+{  
+  padding: 0.5em;
+  }
+
+thead
+{ 
+  background: #ccc;
+  }

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tidbit Import Service
+Bundle-SymbolicName: org.dbdoclet.tidbit.import
+Bundle-Version: 5.1.21
+Bundle-Vendor: Michael Fuchs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.dbdoclet.tidbit.importer
+Import-Package: org.dbdoclet.tidbit.common,
+ org.dbdoclet.tidbit.project

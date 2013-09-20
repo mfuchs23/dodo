@@ -1,0 +1,23 @@
+    <div id="container">
+      <div id="header">
+	<img alt="Handschrift" src="../../images/handschrift.png" style="margin: 0px; padding 0px; display: inline;" align="left">
+	<img alt="head" src="../../images/head.gif" style="margin: 0px; padding 0px; display: inline;" align="right">
+      </div>
+      <div id="wrapper">
+	<div id="navigation">
+	  <a class="menu" href="../../index.html">Home</a>
+	  <b class="menu">DocBook Doclet</b>
+	  <a class="menu" href="index.html" target="_top" class="menu">Tutorial</a>
+	  <a class="menu" href="../../MailingList.html" target="_top" class="menu">Mailing list</a>
+	  <b class="menu">Herold</b>
+	  <a class="menu" href="../../projects/herold/index.html" target="_top" class="menu">Tutorial</a>
+	  <b class="menu">Michael Fuchs (de)</b>
+	  <a class="menu" href="../../Contact.html" target="_top" class="menu">Kontakt</a>
+	  <a class="menu" href="../../Profil.html" target="_top" class="menu">Profil</a>
+	  <b class="menu">Links</b>
+	  <a class="menu" href="http://docbook.sourceforge.net" target="_top" class="menu">DocBook</a>
+	  <a class="menu" href="http://java.sun.com/j2se/javadoc/faq#docbook" target="_top" class="menu">Javadoc FAQ</a>
+	  <a class="menu" href="http://www.doclet.com" target="_top" class="menu">Doclet.com</a>
+	  <a class="menu" href="http://www.unico-group.com" target="_top" class="menu">UNICO Media GmbH</a>
+	</div>
+	<div id="content">

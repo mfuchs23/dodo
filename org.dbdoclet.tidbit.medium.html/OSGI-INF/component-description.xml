@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="htmlComponent">
+	<implementation class="org.dbdoclet.tidbit.medium.html.HtmlComponent" />
+	<property name="category" value="docbook-html" />
+	<service>
+		<provide interface="org.dbdoclet.tidbit.medium.MediumService" />
+	</service>
+</component>

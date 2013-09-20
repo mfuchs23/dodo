@@ -1,0 +1,16 @@
+version=6.1.0
+Bundle-Name=org.dbdoclet.tidbit
+Bundle-SymbolicName=org.dbdoclet.tidbit
+Bundle-Version=${version}
+Bundle-ClassPath: ., lib/tidbit-help-de.jar, lib/tidbit-help.jar, lib/jh-dbref.jar
+Export-Package: org.dbdoclet.tidbit.*;version=${version}
+Service-Component: OSGI-INF/component-description.xml
+
+Include-Resource: \
+  OSGI-INF/component-description.xml=OSGI-INF/component-description.xml, \
+  images=src/main/resources/images/, \
+  text=src/main/resources/text/, \
+  lib/jh-dbref.jar=javahelp/jh-dbref.jar, \
+  lib/tidbit-help.jar=javahelp/tidbit-help.jar, \
+  lib/tidbit-help-de.jar=javahelp/tidbit-help-de.jar, \
+  @lib/dbdopts.jar

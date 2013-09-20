@@ -1,0 +1,59 @@
+<?xml version='1.0'?>
+<changes>
+  <change>
+    <version>1.8</version>
+    <date>2007-04-20</date>
+    <title>Release 1.8</title>
+    <entries>
+      <entry>Fixed invalid java style ids of parameterized class types.</entry>
+      <entry>Fixed forgotten full qualified names when disabling the "fully qualified name" option.</entry>
+      <entry>Fixed usage of element code, when element initializer is needed with DocBook DTD 4.5.</entry>
+    </entries>
+  </change>
+  <change>
+    <version>1.7</version>
+    <date>2007-03-15</date>
+    <title>Release 1.7</title>
+    <entries>
+      <entry>Fixed the exception which was thrown, when using an overview file.</entry>
+      <entry>Added an emacs minor mode (herold-mode) for the herold.jar application. This mode comes
+      with a command named herold-html2db (\C-xnc) which converts the contents
+      of an HTML buffer into a new DocBook buffer.</entry>
+    </entries>
+  </change>
+  <change>
+    <version>1.6</version>
+    <date>2007-01-17</date>
+    <title>Release 1.6</title>
+    <entries>
+      <entry>Support jdk 1.6</entry>
+      <entry>Upgraded from fop 0.20.5 to fop 0.93</entry>
+      <entry>New command line parameter -split. If this parameter is set, a
+      new XML file is created for every class. This module files are
+      referenced via xinclude from them main XML file.</entry>
+      <entry>Fixed debian package.</entry>
+    </entries>
+  </change>
+  <change>
+    <version>1.5</version>
+    <date>2006-11-24</date>
+    <title>Release 1.5</title>
+    <entries>
+      <entry>Upgrade to DocBook 4.5</entry>
+      <entry>Upgrade to docbook-xsl 1.71.1</entry>
+      <entry>Syntax highlightning.</entry>
+      <entry>New titlepage with user defined logo.</entry>
+      <entry>Better support for fully qualified names.</entry>
+    </entries>
+  </change>
+  <change>
+    <version>1.4</version>
+    <date>2006-09-18</date>
+    <title>Release 1.4</title>
+    <entries>
+      <entry>Support for HTML entities.</entry>
+      <entry>New configuration parameter for setting the maximum jvm memory.</entry>
+      <entry>Major bug fixes.</entry>
+    </entries>
+  </change>
+</changes>

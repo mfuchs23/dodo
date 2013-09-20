@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Plug-in
+Bundle-SymbolicName: org.dbdoclet.tidbit.test
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.dbdoclet.tidbit;bundle-version="5.1.0",
+ org.junit;bundle-version="4.11.0"
+Import-Package: org.dbdoclet.jive.dialog,
+ org.dbdoclet.progress,
+ org.dbdoclet.service,
+ org.dbdoclet.tidbit.common,
+ org.dbdoclet.xiphias
