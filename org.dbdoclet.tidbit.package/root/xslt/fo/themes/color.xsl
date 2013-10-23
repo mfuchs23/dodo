@@ -4,50 +4,6 @@
 
   <xsl:output method="xml"/>
 
-  <xsl:attribute-set name="classsynopsis.properties">
-    <xsl:attribute name="font-family">
-      <xsl:value-of select="$monospace.font.family"/>
-    </xsl:attribute>
-    <xsl:attribute name="font-size">
-      <xsl:value-of select="$body.font.master * 0.9"/>
-      <xsl:text>pt</xsl:text>
-    </xsl:attribute>  
-    <!--
-    <xsl:attribute name="border-style">solid</xsl:attribute>
-    <xsl:attribute name="border-width">1mm</xsl:attribute>
-    -->
-    <xsl:attribute name="space-before.minimum">1.0em</xsl:attribute>
-    <xsl:attribute name="space-before.optimum">1.0em</xsl:attribute>
-    <xsl:attribute name="space-before.maximum">1.0em</xsl:attribute>
-    <!--
-    <xsl:attribute name="space-after.minimum">0.0em</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">0.0em</xsl:attribute>
-    <xsl:attribute name="space-after.maximum">0.0em</xsl:attribute>
-    -->
-  </xsl:attribute-set> 
-
-  <xsl:attribute-set name="synopsis.properties">
-    <xsl:attribute name="font-family">
-      <xsl:value-of select="$monospace.font.family"/>
-    </xsl:attribute>
-    <xsl:attribute name="font-size">
-      <xsl:value-of select="$body.font.master * 0.9"/>
-      <xsl:text>pt</xsl:text>
-    </xsl:attribute>  
-    <!--
-    <xsl:attribute name="border-style">solid</xsl:attribute>
-    <xsl:attribute name="border-width">1mm</xsl:attribute>
-    -->
-    <xsl:attribute name="space-before.minimum">0.33em</xsl:attribute>
-    <xsl:attribute name="space-before.optimum">0.33em</xsl:attribute>
-    <xsl:attribute name="space-before.maximum">0.33em</xsl:attribute>
-    <!--
-    <xsl:attribute name="space-after.minimum">0.0em</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">0.0em</xsl:attribute>
-    <xsl:attribute name="space-after.maximum">0.0em</xsl:attribute>
-    -->
-  </xsl:attribute-set> 
-
   <xsl:attribute-set name="synopsis.name">
     <xsl:attribute name="font-family">
       <xsl:value-of select="$monospace.font.family"/>

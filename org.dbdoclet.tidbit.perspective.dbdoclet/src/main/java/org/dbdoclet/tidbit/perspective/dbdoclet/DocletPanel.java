@@ -237,7 +237,7 @@ public class DocletPanel extends GridPanel {
 		script.setCreateFullyQualifiedNamesEnabled(qualifiedNamesCheckBox
 				.isSelected());
 		script.setChunkDocBookEnabled(splitOutputCheckBox.isSelected());
-		script.setCreateIndexEnabled(indexCheckBox.isSelected());
+		script.setAddIndexEnabled(indexCheckBox.isSelected());
 		script.setForceAnnotationDocumentationEnabled(ignoreAnnotationDocumentedCheckBox
 				.isSelected());
 	}

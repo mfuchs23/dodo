@@ -4,7 +4,7 @@ Service-Component: OSGI-INF/component-description.xml
 Bundle-ManifestVersion: 2
 Bundle-Name: org.dbdoclet.tidbit
 Bundle-SymbolicName: org.dbdoclet.tidbit
-Bundle-Version: 6.1.0
+Bundle-Version: 7.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.help,
  javax.swing,

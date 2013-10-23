@@ -38,6 +38,16 @@ div.navfooter table tr td a:hover
   text-decoration: underline;
   }
 
+dt 
+{ 
+  font-weight: bold;
+  }
+
+dd
+{ 
+  margin-bottom: 0.7em;
+  }
+
 h5, h6 
 { 
   font-size: 100%;

@@ -197,7 +197,7 @@ public abstract class AbstractPanel extends GridPanel {
 
 		aset.setWrapOption(driver.getAttribute(attributeSetName, "wrap-option"));
 		aset.setTextAlign(driver.getAttribute(attributeSetName, "text-align"));
-		aset.setFoWidth(driver.getAttribute(attributeSetName, "width"));
+		aset.setLineWidth(driver.getAttribute(attributeSetName, "width"));
 		aset.setLineHeight(driver.getAttribute(attributeSetName, "line-height"));
 	}
 

@@ -9,6 +9,7 @@
 package org.dbdoclet.tidbit.action;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.MessageFormat;
 
@@ -67,6 +68,9 @@ public class ActionGenerate extends AbstractTidbitAction implements
 
 		this.console = console;
 		this.service = service;
+		
+		putValue(SHORT_DESCRIPTION, "Generate " + service.getName());
+		putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_F5));
 	}
 
 	@Override

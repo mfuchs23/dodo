@@ -32,7 +32,7 @@
     <fo:block wrap-option="wrap"
       white-space-collapse="false"
       linefeed-treatment="preserve"
-      xsl:use-attribute-sets="classsynopsis.properties">
+      xsl:use-attribute-sets="monospace.verbatim.properties">
 
       <xsl:apply-templates select="ooclass[1]" mode="java"/>
 
@@ -74,7 +74,7 @@
     <fo:block wrap-option='wrap'
       white-space-collapse='false'
       linefeed-treatment="preserve"
-      xsl:use-attribute-sets="synopsis.properties">
+      xsl:use-attribute-sets="monospace.verbatim.properties">
       <xsl:text>&nbsp;&nbsp;</xsl:text>
       <xsl:apply-templates mode="java"/>
       <xsl:text>;</xsl:text>
@@ -99,7 +99,7 @@
     <fo:block wrap-option='wrap'
       white-space-collapse='false'
       linefeed-treatment="preserve"
-      xsl:use-attribute-sets="synopsis.properties">
+      xsl:use-attribute-sets="monospace.verbatim.properties">
       <xsl:copy-of select="$decl"/>
       <xsl:text>(</xsl:text>
       <xsl:variable name="decl-length">

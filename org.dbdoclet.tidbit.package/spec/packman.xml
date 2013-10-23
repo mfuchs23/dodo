@@ -4,13 +4,13 @@
 
   <name>tidbit</name>
 
-  <version>6.1.0</version>
-  <release>655</release>
+  <version>7.0.0</version>
+  <release>667</release>
 
   <archives>
     <archive>
-      <archive-file>tidbit-6.1.0.tar.gz</archive-file>
-      <archive-dir>tidbit-6.1.0</archive-dir>
+      <archive-file>tidbit-7.0.0.tar.gz</archive-file>
+      <archive-dir>tidbit-7.0.0</archive-dir>
     </archive>
   </archives>
 
@@ -29,7 +29,7 @@ API. It can also be used as standalone application to convert HTML to DocBook.
   </architectures>
 
   <menu>
-    <title>DocBook Doclet 6.1.0</title>
+    <title>DocBook Doclet 7.0.0</title>
     <comment>Generate DocBook from javadoc comments or HTML</comment>
     <section>Apps/Text</section>
     <categories>Application;Development;</categories>

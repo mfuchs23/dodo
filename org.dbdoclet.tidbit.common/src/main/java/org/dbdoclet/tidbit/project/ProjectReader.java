@@ -95,8 +95,7 @@ public class ProjectReader extends AbstractProjectStream {
 		Target target = buildFile.findTarget("dbdoclet.docbook");
 
 		if (target == null) {
-			throw new IllegalStateException(
-					"The target 'dbdoclet.docbook' must not be null!");
+			return list;
 		}
 
 		Path classpath = buildFile.findPath("dbdoclet.classpath");
@@ -149,8 +148,7 @@ public class ProjectReader extends AbstractProjectStream {
 		Target target = buildFile.findTarget("dbdoclet.docbook");
 
 		if (target == null) {
-			throw new IllegalStateException(
-					"The target 'dbdoclet.docbook' must not be null!");
+			return list;
 		}
 
 		Javadoc javadoc = (Javadoc) buildFile.getTask(target, Javadoc.class);

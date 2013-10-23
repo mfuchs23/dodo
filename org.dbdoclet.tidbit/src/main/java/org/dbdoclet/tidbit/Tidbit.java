@@ -932,6 +932,10 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 
 	private boolean isReady() {
 
+		if (System.getProperty("org.dbdoclet.doclet.debug", "false").equals("true")) {
+			return true;
+		}
+		
 		if (serviceComponent.getPerspective("project") != null
 				&& serviceComponent.getPerspective("Herold") != null
 				&& serviceComponent.getPerspective("dbdoclet") != null

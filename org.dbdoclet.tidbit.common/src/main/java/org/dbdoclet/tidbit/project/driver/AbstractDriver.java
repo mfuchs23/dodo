@@ -1123,7 +1123,7 @@ public abstract class AbstractDriver {
 	public void setLineAttributes(String attributeSetName, FoAttributeSet aset) {
 		setAttribute(attributeSetName, "wrap-option", aset.getWrapOption());
 		setAttribute(attributeSetName, "text-align", aset.getTextAlign());
-		setAttribute(attributeSetName, "width", aset.getFoWidth());
+		setAttribute(attributeSetName, "width", aset.getLineWidth());
 		setAttribute(attributeSetName, "line-height", aset.getLineHeight());
 	}
 
