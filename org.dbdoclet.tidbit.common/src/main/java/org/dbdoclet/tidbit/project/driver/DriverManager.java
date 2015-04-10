@@ -24,7 +24,7 @@ public class DriverManager {
 		if (homeDir == null || homeDir.exists() == false
 				|| homeDir.isDirectory() == false) {
 			throw new IllegalArgumentException(String.format(
-					"Invalid driver directory %s !", driverDirectory));
+					"Invalid home directory %s !", homeDir));
 		}
 
 		if (driverDirectory == null) {

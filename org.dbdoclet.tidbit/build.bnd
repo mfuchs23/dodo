@@ -1,4 +1,4 @@
-version=7.0.0
+version=8.0.0
 Bundle-Name=org.dbdoclet.tidbit
 Bundle-SymbolicName=org.dbdoclet.tidbit
 Bundle-Version=${version}
@@ -12,5 +12,4 @@ Include-Resource: \
   text=src/main/resources/text/, \
   lib/jh-dbref.jar=javahelp/jh-dbref.jar, \
   lib/tidbit-help.jar=javahelp/tidbit-help.jar, \
-  lib/tidbit-help-de.jar=javahelp/tidbit-help-de.jar, \
-  @lib/dbdopts.jar
+  lib/tidbit-help-de.jar=javahelp/tidbit-help-de.jar

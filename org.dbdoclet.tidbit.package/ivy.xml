@@ -6,8 +6,8 @@
 	status="integration" revision="${module.version}">
   </info>
   <publications>
-  	<artifact name="arun" />
-  	<artifact name="jhrun" />
+    <artifact name="arun" />
+    <artifact name="jhrun" />
   </publications>
   <dependencies>
     <dependency org="org.apache" name="org.apache.felix"
@@ -25,7 +25,7 @@
     <dependency org="org.docbook" name="docbook-grammar"
 		rev="latest.integration" />
     <dependency org="org.apache" name="org.apache.fop"
-		rev="20120217" />
+		rev="20131122" />
     <dependency org="org.apache" name="org.apache.xml.resolver"
 		rev="latest.integration" />
     <dependency org="com.icl" name="com.icl.saxon"
@@ -34,77 +34,75 @@
 		rev="latest.integration" conf="default -> lib"/>
     <dependency org="net.sf" name="net.sf.xslthl"
 		rev="latest.integration" />
-    <dependency org="org.dbdoclet" name="org.dbdoclet.doclet.docbook"
-		rev="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.application"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.common"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.importer"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.importer.eclipse"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.docbook"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.eclipsehelp"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.epub"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.herold"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.html"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.htmlhelp"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.javahelp"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.manpage"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.pdf"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.rtf"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.standard"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.webhelp"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.medium.wordml"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.dbdoclet"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.eclipse" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.eclipse" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.epub" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.epub" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.fo" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.fo" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.html" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.html" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.htmlhelp" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.htmlhelp" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.javahelp" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.javahelp" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.manpage" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.manpage" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.pdf" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.pdf" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.rtf" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.rtf" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.webhelp" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.webhelp" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet"
-		name="org.dbdoclet.tidbit.perspective.docbook.wordml" rev="latest.integration" />
+		name="org.dbdoclet.tidbit.perspective.docbook.wordml" rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.herold"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.project"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
     <dependency org="org.dbdoclet" name="org.dbdoclet.trafo.html.docbook"
-		rev="latest.integration" />
+		rev="8.0.0" revConstraint="latest.integration" />
   </dependencies>
 </ivy-module>

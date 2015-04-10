@@ -12,6 +12,9 @@ package org.dbdoclet.tidbit.medium.epub;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
@@ -54,13 +57,13 @@ public class EpubGenerator extends Generator {
 		try {
 
 			String path = project.getFileManager().getDocBookFileName();
-			File file = new File(path);
+			Path file = Paths.get(path);
 
-			if (file.exists() == false) {
+			if (Files.exists(file) == false) {
 
 				String msg = MessageFormat.format(ResourceServices.getString(
 						res, "C_ERROR_FILE_DOESNT_EXIST"), file
-						.getAbsolutePath());
+						.toAbsolutePath());
 				ErrorBox.show(StaticContext.getDialogOwner(),
 						ResourceServices.getString(res, "C_ERROR"), msg);
 				return;
@@ -75,19 +78,21 @@ public class EpubGenerator extends Generator {
 			}
 
 			File baseDir = getBaseDir(project.getDriver(Output.epub));
-			String imgDirName = FileServices.appendPath(baseDir, "images");
-			File imgDir = new File(imgDirName);
-			FileServices.createPath(imgDir);
+			Path basePath = baseDir.toPath();
+			Path imgPath = basePath.resolve("images");
+			Files.createDirectories(imgPath);
 
-			String contentFileName = FileServices.appendFileName(baseDir,
-					"content.opf");
-			File contentFile = new File(contentFileName);
+			Path contentFile = basePath.resolve("content.opf");
 
-			if (contentFile.exists() == false) {
+			if (Files.exists(contentFile) == false) {
 				return;
 			}
 
-			Document contentDoc = XmlServices.loadDocument(contentFile);
+			Path mimetypeFile = basePath.resolve("../mimetype");
+			Files.write(mimetypeFile, "application/epub+zip".getBytes());
+			
+			Document contentDoc = XmlServices
+					.loadDocument(contentFile.toFile());
 			Element manifest = (Element) XPathServices.getNode(contentDoc,
 					"opf", Sfv.NS_OPF, "//opf:manifest");
 
@@ -97,14 +102,14 @@ public class EpubGenerator extends Generator {
 				try {
 					messageListener.info("Relocating " + htmlFile.getPath()
 							+ "...");
-					relocateImages(manifest, htmlFile, imgDir);
+					relocateImages(manifest, htmlFile, imgPath.toFile());
 				} catch (Exception oops) {
 					oops.printStackTrace();
 				}
 			}
 
 			NodeSerializer serializer = new NodeSerializer();
-			serializer.write(contentDoc, contentFile);
+			serializer.write(contentDoc, contentFile.toFile());
 
 			messageListener.info("Relocation of images finished.");
 

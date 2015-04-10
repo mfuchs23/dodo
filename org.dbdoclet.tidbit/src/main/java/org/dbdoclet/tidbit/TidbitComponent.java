@@ -1,10 +1,13 @@
 package org.dbdoclet.tidbit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.jive.dialog.ErrorBox;
 import org.dbdoclet.jive.dialog.ExceptionBox;
 import org.dbdoclet.tidbit.common.Context;
@@ -16,15 +19,13 @@ import org.osgi.service.component.ComponentContext;
 
 public class TidbitComponent {
 
-	// private Logger logger = getLogger(TidbitComponent.class, INFO);
+	private Log logger = LogFactory.getLog(TidbitComponent.class);
 
 	private HashMap<String, ArrayList<TrafoService>> trafoServiceMap;
 	private HashMap<String, ArrayList<MediumService>> mediumServiceMap;
 	private List<Perspective> perspectiveList;
 	private List<ImportService> importServiceList;
-
 	private Tidbit tidbit;
-
 	private Context tidbitContext;
 
 	public TidbitComponent() {
@@ -161,34 +162,44 @@ public class TidbitComponent {
 
 	public void removeImportService(ImportService importService) {
 
-		importServiceList.remove(importService);
+		try {
+			importServiceList.remove(importService);
 
-		if (tidbit != null) {
-			tidbit.removeImportService(importService);
+			if (tidbit != null) {
+				tidbit.removeImportService(importService);
+			}
+		} catch (IOException oops) {
+			logger.fatal("removeImportService", oops);
 		}
 	}
 
 	public void removeMediumService(MediumService mediumService) {
 
-		String category = mediumService.getCategory();
+		try {
+			
+			String category = mediumService.getCategory();
 
-		if (category == null) {
-			category = "";
-		}
-
-		ArrayList<MediumService> mediumServiceList = mediumServiceMap
-				.get(category);
-
-		if (mediumServiceList != null) {
-
-			mediumServiceList.remove(mediumService);
-
-			info("Entferne MediumService " + mediumService.getName()
-					+ ". Insgesamt: " + mediumServiceList.size());
-
-			if (tidbit != null) {
-				tidbit.removeMediumService(mediumService);
+			if (category == null) {
+				category = "";
 			}
+
+			ArrayList<MediumService> mediumServiceList = mediumServiceMap
+					.get(category);
+
+			if (mediumServiceList != null) {
+
+				mediumServiceList.remove(mediumService);
+
+				info("Entferne MediumService " + mediumService.getName()
+						+ ". Insgesamt: " + mediumServiceList.size());
+
+				if (tidbit != null) {
+					tidbit.removeMediumService(mediumService);
+				}
+			}
+			
+		} catch (IOException oops) {
+			logger.fatal("removeMediumService", oops);
 		}
 	}
 

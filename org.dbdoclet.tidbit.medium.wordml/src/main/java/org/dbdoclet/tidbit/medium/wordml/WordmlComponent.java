@@ -67,10 +67,9 @@ public class WordmlComponent extends AbstractMediumService implements
 				"${dbdoclet.docbook.file.base}-WordML.xml");
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void activate(ComponentContext context) {
 
-		Dictionary<String, String> dictionary = context.getProperties();
+		Dictionary<String, Object> dictionary = context.getProperties();
 		setCategory(dictionary.get("category"));
 	}
 }

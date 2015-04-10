@@ -36,10 +36,13 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -120,10 +123,14 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 	private Tidbit(TidbitComponent serviceComponent, Context context) {
 
 		super();
+
 		this.serviceComponent = serviceComponent;
 		this.context = context;
 
 		generatorList = new ArrayList<Generator>();
+
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("F5"), "generate");
 
 		StaticContext.setDialogOwner(this);
 		updatePerspectives();
@@ -534,8 +541,29 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 
 	@Override
 	public AbstractAction newGenerateAction(IConsole console,
-			MediumService service) {
-		return new ActionGenerate(this, console, service);
+			MediumService service, Perspective perspective) throws IOException {
+
+		ResourceBundle res = StaticContext.getResourceBundle();
+		ActionGenerate action = new ActionGenerate(this, console, service);
+		
+		JPanel panel = perspective.getPanel();
+		
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F5"), "generate");
+		panel.getActionMap().put("generate", action);
+				
+		application.addToolBarButton(
+						perspective.getId() + ".generate." + service.getId(), action);
+
+		JMenu menu = new JMenu(ResourceServices.getString(res, "C_BUILD"));
+		menu.setName(perspective.getId() + ".menu");
+		JMenuItem menuItem = new JMenuItem();
+		menuItem.setAction(action);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke("F5"));
+		menu.add(menuItem);
+	
+		addMenu(perspective.getId() + ".menu", menu);
+
+		return action;
 	}
 
 	public void openPerspective(Perspective next) throws IOException {
@@ -559,7 +587,7 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 		perspectivePanel.revalidate();
 		perspectivePanel.repaint();
 		nextPanel.revalidate();
-
+		
 		perspective = next;
 	}
 
@@ -575,14 +603,14 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 		}
 	}
 
-	public void removeImportService(ImportService importer) {
+	public void removeImportService(ImportService importer) throws IOException {
 
 		for (Perspective perspective : serviceComponent.getPerspectiveList()) {
 			perspective.refresh();
 		}
 	}
 
-	public void removeMediumService(MediumService service) {
+	public void removeMediumService(MediumService service) throws IOException {
 
 		for (Perspective perspective : serviceComponent.getPerspectiveList()) {
 			perspective.refresh();
@@ -768,7 +796,7 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 
 		try {
 
-			logger.info("Starting TiDBiT GUI...");
+			logger.info("Starting Dodo...");
 
 			final Tidbit app = this;
 
@@ -932,10 +960,11 @@ public class Tidbit extends JFrame implements Application, ChangeListener,
 
 	private boolean isReady() {
 
-		if (System.getProperty("org.dbdoclet.doclet.debug", "false").equals("true")) {
+		if (System.getProperty("org.dbdoclet.doclet.debug", "false").equals(
+				"true")) {
 			return true;
 		}
-		
+
 		if (serviceComponent.getPerspective("project") != null
 				&& serviceComponent.getPerspective("Herold") != null
 				&& serviceComponent.getPerspective("dbdoclet") != null

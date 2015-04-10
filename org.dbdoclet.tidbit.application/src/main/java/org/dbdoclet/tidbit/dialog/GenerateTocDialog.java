@@ -43,7 +43,7 @@ public class GenerateTocDialog extends DataDialog implements ActionListener,
 			"sect3", "sect4", "sect5", "section", "set" };
 
 	private TreeMap<String, ArrayList<String>> map = new TreeMap<String, ArrayList<String>>();
-	private JList pathList;
+	private JList<String> pathList;
 	private HashMap<String, JCheckBox> checkBoxMap = new HashMap<String, JCheckBox>();
 	private ButtonPanel buttonPanel;
 	private JButton selectAll;
@@ -64,7 +64,7 @@ public class GenerateTocDialog extends DataDialog implements ActionListener,
 
 		GridPanel panel = getGridPanel();
 
-		pathList = new JList(map.keySet().toArray());
+		pathList = new JList<String>(map.keySet().toArray(new String[map.size()]));
 		pathList.addListSelectionListener(this);
 
 		panel.addComponent(jive.createScrollPane(pathList), Anchor.NORTHWEST,

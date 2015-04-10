@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -225,7 +222,7 @@ public class DbdocletPerspective extends AbstractPerspective implements
 		}
 	}
 
-	public void onEnter() {
+	public void onEnter() throws IOException {
 		refresh();
 	}
 
@@ -240,7 +237,7 @@ public class DbdocletPerspective extends AbstractPerspective implements
 		}
 	}
 
-	public void refresh() {
+	public void refresh() throws IOException {
 
 		if (registerPanel == null) {
 			getPanel();
@@ -248,26 +245,11 @@ public class DbdocletPerspective extends AbstractPerspective implements
 
 		if (registerPanel != null && tabbedPane != null && isActive()) {
 
-			ResourceBundle res = StaticContext.getResourceBundle();
-
-			JMenu menu = new JMenu(ResourceServices.getString(res, "C_BUILD"));
-			menu.setName(getId() + ".menu");
-
 			for (MediumService mediumService : application
 					.getMediumServiceList("doclet")) {
 
-				AbstractAction action = application.newGenerateAction(
-						getConsole(), mediumService);
-
-				application.addToolBarButton(getId() + ".generate."
-						+ mediumService.getId(), action);
-
-				JMenuItem menuItem = new JMenuItem();
-				menuItem.setAction(action);
-				// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
-				// ActionEvent.ALT_MASK));
-				menu.add(menuItem);
-				application.addMenu(getId() + ".menu", menu);
+				application.newGenerateAction(
+						getConsole(), mediumService, this);
 			}
 		}
 	}

@@ -189,8 +189,12 @@ public abstract class AbstractMediumService implements MediumService {
 
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategory(Object categoryObj) {
+		if (categoryObj == null) {
+			this.category = null;
+		} else {
+			this.category = categoryObj.toString();
+		}
 	}
 
 	public String getCategory() {

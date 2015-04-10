@@ -133,12 +133,9 @@ public abstract class AbstractPanel extends GridPanel {
 			String attributeSetName) {
 
 		if (driver == null || driver.getAttributeSet(attributeSetName) == null) {
-			aset.setActivated(false);
 			aset.reset();
 			return;
 		}
-
-		aset.setActivated(true);
 
 		aset.setFont(driver.getFontAttributes(attributeSetName));
 		aset.setForeground(driver.getColorAttribute(attributeSetName));
@@ -168,7 +165,6 @@ public abstract class AbstractPanel extends GridPanel {
 		fillLineProperties(driver, aset, attributeSetName);
 
 		aset.autoEnable();
-		aset.refresh();
 	}
 
 	private void fillFrameProperties(AbstractDriver driver,
@@ -322,7 +318,6 @@ public abstract class AbstractPanel extends GridPanel {
 		int index = 0;
 		for (String props : foPropertiesList) {
 			fillFoProperties(driver, attributeSets[index], props);
-			attributeSets[index].refresh();
 			index++;
 		}
 	}

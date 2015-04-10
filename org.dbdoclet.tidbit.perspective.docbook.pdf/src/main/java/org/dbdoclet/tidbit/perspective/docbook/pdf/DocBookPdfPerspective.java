@@ -2,18 +2,19 @@ package org.dbdoclet.tidbit.perspective.docbook.pdf;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dbdoclet.jive.Anchor;
 import org.dbdoclet.jive.Fill;
 import org.dbdoclet.jive.JiveFactory;
@@ -60,8 +61,11 @@ import org.osgi.service.component.ComponentContext;
 public class DocBookPdfPerspective extends AbstractPerspective implements
 		Perspective {
 
+	private static Log logger = LogFactory.getLog(DocBookPdfPerspective.class);
+	
 	private GridPanel registerPanel;
 	private JTabbedPane tabbedPane;
+
 	public DocBookPdfPerspective() {
 		super();
 		createPanel();
@@ -249,28 +253,17 @@ public class DocBookPdfPerspective extends AbstractPerspective implements
 
 		if (registerPanel != null && tabbedPane != null && isActive()) {
 
-			ResourceBundle res = StaticContext.getResourceBundle();
-
-			JMenu menu = new JMenu(ResourceServices.getString(res, "C_BUILD"));
-			menu.setName(getId() + ".menu");
-
 			for (MediumService service : application
 					.getMediumServiceList("docbook-pdf")) {
 
-				AbstractAction action = application.newGenerateAction(getConsole(),
-						service);
-
-				application.addToolBarButton(
-						getId() + ".generate." + service.getId(), action);
-
-				JMenuItem menuItem = new JMenuItem();
-				menuItem.setAction(action);
-				// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
-				// ActionEvent.ALT_MASK));
-				menu.add(menuItem);
+				try {
+					application.newGenerateAction(getConsole(),
+							service, this);
+					break;
+				} catch (IOException e) {
+					logger.fatal("", e);
+				}
 			}
-
-			application.addMenu(getId() + ".menu", menu);
 		}
 	}
 

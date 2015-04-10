@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+### Copyright (C) 2001-2012 Michael Fuchs ###
+-->
+<project name="common" default="build">
+
+  <property name="resolveMode" value="default"/>
+
+  <property file="workspace.properties" />
+  <import file="../build/build.config/defaultBuild.xml"/>  
+
+  <macrodef name="iterate">
+    <attribute name="target"/>
+    <sequential>
+      <subant target="@{target}" failonerror="false"> 
+	<fileset dir=".">
+	  <exclude name="org.dbdoclet.test.*/build.xml"/>
+	  <include name="*/build.xml"/>
+	</fileset>
+      </subant>
+    </sequential>
+  </macrodef>
+
+  <target name="build">
+    <iterate target="build"/>
+  </target>
+
+  <target name="scratch">
+    <ant dir="../common8" target="scratch"/>
+    <ant dir="../markup8" target="scratch"/>
+    <ant dir="../trafo8" target="scratch"/>
+    <iterate target="distclean"/>
+    <ant dir="org.dbdoclet.tidbit.package" target="build.all"/>
+    <delete>
+      <fileset dir="/usr/share/dodo">
+	<include name="**/*"/>
+      </fileset>
+    </delete>
+    <ant dir="org.dbdoclet.tidbit.package" target="install"/>
+    <ant dir="org.dbdoclet.tidbit.package" target="dist"/>
+  </target>
+
+</project>

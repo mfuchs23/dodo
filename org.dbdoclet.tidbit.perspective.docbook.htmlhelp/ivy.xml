@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-  <info organisation="org.dbdoclet" module="org.dbdoclet.tidbit.perspective.docbook.htmlhelp" revision="6.1.0" status="integration" publication="20131022135003">
+  <info organisation="org.dbdoclet" module="org.dbdoclet.tidbit.perspective.docbook.htmlhelp" revision="8.0.0" status="integration" publication="20131022135003">
   </info>
   <dependencies>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit" rev="7.0.0" revConstraint="latest.integration"/>
-    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.docbook.html" rev="6.1.0" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit" rev="8.0.0" revConstraint="latest.integration"/>
+    <dependency org="org.dbdoclet" name="org.dbdoclet.tidbit.perspective.docbook.html" rev="8.0.0" revConstraint="latest.integration"/>
   </dependencies>
 </ivy-module>

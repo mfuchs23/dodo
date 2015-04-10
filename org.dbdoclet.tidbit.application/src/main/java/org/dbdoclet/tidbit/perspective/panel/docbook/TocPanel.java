@@ -32,17 +32,35 @@ public class TocPanel extends AbstractPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private JTextField autotocLabelSeparator;
 	private JCheckBox bridgeHeadInTocCheckBox;
-	private JCheckBox simpleSectInTocCheckBox;
-	private JSpinner tocSectionDepth;
 	private JSpinner generateSectionTocLevel;
 	private JButton generateToc;
+	private String generateTocParam;
 	private JCheckBox processEmptySourceToc;
 	private JCheckBox processSourceToc;
-	private JSpinner tocMaxDepth;
+	private JCheckBox simpleSectInTocCheckBox;
 	private JSpinner tocIndentWidth;
-	private JTextField autotocLabelSeparator;
-	private String generateTocParam;
+	private JSpinner tocMaxDepth;
+	private JSpinner tocSectionDepth;
+
+	public void actionPerformed(ActionEvent event) {
+
+		String cmd = event.getActionCommand();
+
+		if (cmd == null) {
+			return;
+		}
+		
+		if (cmd.equals(Constants.PARAM_GENERATE_TOC)) {
+			GenerateTocDialog dlg = new GenerateTocDialog(StaticContext.getDialogOwner(), Constants.PARAM_GENERATE_TOC, generateTocParam);
+			dlg.setVisible(true);
+			
+			if (dlg.isCanceled() == false) {
+				generateTocParam = dlg.getGenerateTocParam();
+			}
+		}
+	}
 
 	@Override
 	protected void createGui() {
@@ -121,29 +139,10 @@ public class TocPanel extends AbstractPanel implements ActionListener {
 		return tocPanel;
 	}
 
-	@Override
-	public void syncView(Project project, AbstractDriver driver) {
-
-		generateTocParam = driver.getParameter(Constants.PARAM_GENERATE_TOC);
-				
-		processEmptySourceToc.setSelected(driver.isParameterEnabled(
-				Constants.PARAM_PROCESS_EMPTY_SOURCE_TOC, false));
-		processSourceToc.setSelected(driver.isParameterEnabled(
-				Constants.PARAM_PROCESS_SOURCE_TOC, false));
-		tocSectionDepth.setValue(driver.getNumberParameter(
-				Constants.PARAM_TOC_SECTION_DEPTH, 2));
-		tocMaxDepth.setValue(driver.getNumberParameter(
-				Constants.PARAM_TOC_MAX_DEPTH, 2));
-		tocIndentWidth.setValue(driver.getNumberParameter(
-				Constants.PARAM_TOC_INDENT_WIDTH, 2));
-		bridgeHeadInTocCheckBox.setSelected(driver.isParameterEnabled(
-				Constants.PARAM_BRIDGEHEAD_IN_TOC, false));
-		simpleSectInTocCheckBox.setSelected(driver.isParameterEnabled(
-				Constants.PARAM_SIMPLESECT_IN_TOC, false));
-		generateSectionTocLevel.setValue(driver.getNumberParameter(
-				Constants.PARAM_GENERATE_SECTION_TOC_LEVEL, 2));
-		autotocLabelSeparator.setText(driver
-				.getParameter(Constants.PARAM_AUTOTOC_LABEL_SEPARATOR));
+	protected String hardenAutoTocLabelSeparator(String autoTocLabelSeparator) {
+		
+		autoTocLabelSeparator = autoTocLabelSeparator.replaceAll("[\n\r]+", "");
+		return autoTocLabelSeparator;
 	}
 
 	@Override
@@ -168,24 +167,31 @@ public class TocPanel extends AbstractPanel implements ActionListener {
 		driver.setParameter(Constants.PARAM_GENERATE_SECTION_TOC_LEVEL,
 				generateSectionTocLevel.getValue());
 		driver.setParameter(Constants.PARAM_AUTOTOC_LABEL_SEPARATOR,
-				autotocLabelSeparator.getText());
+				hardenAutoTocLabelSeparator(autotocLabelSeparator.getText()));
 	}
 
-	public void actionPerformed(ActionEvent event) {
+	@Override
+	public void syncView(Project project, AbstractDriver driver) {
 
-		String cmd = event.getActionCommand();
-
-		if (cmd == null) {
-			return;
-		}
-		
-		if (cmd.equals(Constants.PARAM_GENERATE_TOC)) {
-			GenerateTocDialog dlg = new GenerateTocDialog(StaticContext.getDialogOwner(), Constants.PARAM_GENERATE_TOC, generateTocParam);
-			dlg.setVisible(true);
-			
-			if (dlg.isCanceled() == false) {
-				generateTocParam = dlg.getGenerateTocParam();
-			}
-		}
+		generateTocParam = driver.getParameter(Constants.PARAM_GENERATE_TOC);
+				
+		processEmptySourceToc.setSelected(driver.isParameterEnabled(
+				Constants.PARAM_PROCESS_EMPTY_SOURCE_TOC, false));
+		processSourceToc.setSelected(driver.isParameterEnabled(
+				Constants.PARAM_PROCESS_SOURCE_TOC, false));
+		tocSectionDepth.setValue(driver.getNumberParameter(
+				Constants.PARAM_TOC_SECTION_DEPTH, 2));
+		tocMaxDepth.setValue(driver.getNumberParameter(
+				Constants.PARAM_TOC_MAX_DEPTH, 2));
+		tocIndentWidth.setValue(driver.getNumberParameter(
+				Constants.PARAM_TOC_INDENT_WIDTH, 2));
+		bridgeHeadInTocCheckBox.setSelected(driver.isParameterEnabled(
+				Constants.PARAM_BRIDGEHEAD_IN_TOC, false));
+		simpleSectInTocCheckBox.setSelected(driver.isParameterEnabled(
+				Constants.PARAM_SIMPLESECT_IN_TOC, false));
+		generateSectionTocLevel.setValue(driver.getNumberParameter(
+				Constants.PARAM_GENERATE_SECTION_TOC_LEVEL, 2));
+		autotocLabelSeparator.setText(hardenAutoTocLabelSeparator(driver
+				.getParameter(Constants.PARAM_AUTOTOC_LABEL_SEPARATOR)));
 	}
 }

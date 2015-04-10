@@ -22,9 +22,9 @@ public interface Perspective extends Comparable<Perspective> {
     public Float getWeight();
     public boolean isAbstract();
     public boolean isReadyForUse();
-    public void onEnter();
+    public void onEnter() throws IOException;
     public void onLeave();
-    public void refresh();
+    public void refresh() throws IOException;
     public void reset();
     public void setActive(boolean b);
     public void setApplication(Application application);

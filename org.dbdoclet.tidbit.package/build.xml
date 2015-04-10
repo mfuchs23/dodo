@@ -52,7 +52,7 @@
     <!-- Installation of fop -->
     <unzip src="lib/fop_${fop.version}.zip" dest="distrib">
       <filtermapper>
-	<replacestring from="fop-svn-trunk/" to="fop/" />
+	<replacestring from="fop-${fop.version}/" to="fop/" />
       </filtermapper>
     </unzip>
 
@@ -99,19 +99,20 @@
       <fileset dir="root" />
     </copy>
 
-    <replaceregexp file="distrib/bin/tidbit" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${module.version}.jar" byline="true" />
+    <replaceregexp file="distrib/bin/dodo" match="org.dbdoclet.tidbit_[0-9\.]+\.jar" replace="org.dbdoclet.tidbit_${module.version}.jar" byline="true" />
 
   </target>
 
   <target name="install" depends="build">
     <antcall target="doc" />
-    <copy todir="/usr/share/tidbit">
+    <property name="install.dir" value="/${project.prefix}/${project.name}"/>
+    <copy todir="${install.dir}">
       <fileset dir="distrib">
 	<include name="**/*" />
       </fileset>
     </copy>
     <chmod perm="775">
-      <fileset dir="/usr/share/tidbit/bin">
+      <fileset dir="${install.dir}/bin">
 	<include name="*" />
       </fileset>
     </chmod>
@@ -120,12 +121,12 @@
   <!-- ========================================== -->
   <!-- DIST                                       -->
   <!-- ========================================== -->
-  <target name="dist">
+  <target name="dist" depends="clean.cache, distclean.all, build.all, install">
 
     <echo>Starte Auslieferung...</echo>
     <buildnumber />
 
-    <copy file="spec/tidbit.xml" tofile="spec/packman.xml" overwrite="yes">
+    <copy file="spec/dodo.xml" tofile="spec/packman.xml" overwrite="yes">
       <filterset>
 	<filter token="BUILDNUMBER" value="${build.number}" />
 	<filter token="VERSION" value="${module.version}" />

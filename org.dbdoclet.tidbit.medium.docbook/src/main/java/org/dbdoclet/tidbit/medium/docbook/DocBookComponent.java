@@ -22,10 +22,9 @@ import org.w3c.dom.Element;
 
 public class DocBookComponent extends AbstractMediumService implements MediumService {
 
-    @SuppressWarnings("unchecked")
     protected void activate(ComponentContext context) {
 
-        Dictionary<String, String> dictionary = context.getProperties();
+        Dictionary<String, Object> dictionary = context.getProperties();
         setCategory(dictionary.get("category"));
     }
 

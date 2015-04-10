@@ -178,7 +178,7 @@ public final class Constants {
     // public static final String TABBED_PANE = "maintab"; //$NON-NLS-1$
     public static final int TOC_SECTION_DEPTH = 2;
 	public static final String WND_NEW_PROJECT_TITLE = "***"; //$NON-NLS-1$
-	public static final String WND_PROJECT_TITLE = "dbdoclet.TiDBiT - "; //$NON-NLS-1$
+	public static final String WND_PROJECT_TITLE = "Dodo - "; //$NON-NLS-1$
 	public static final String PDF_USER_PASSWORD = "pdf.userpassword";
 	public static final int FO_ATTRIBUTE_LIST_WIDTH = 230;
 	public static final int FO_ATTRIBUTE_LIST_HEIGHT = 290;
