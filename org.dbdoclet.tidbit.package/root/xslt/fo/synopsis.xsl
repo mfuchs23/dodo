@@ -241,15 +241,9 @@
 	</xsl:template>
 
 	<xsl:template match="methodparam" mode="java">
-		<xsl:param name="indent">
-			0
-		</xsl:param>
-		<xsl:param name="decl-length">
-			0
-		</xsl:param>
-		<xsl:param name="decl-first-param-length">
-			0
-		</xsl:param>
+		<xsl:param name="indent" select="0"/>
+		<xsl:param name="decl-length" select="0" />
+		<xsl:param name="decl-first-param-length" select="0" />
 		<xsl:if
 			test="not(preceding-sibling::methodparam) and $decl-first-param-length &gt; $line-length">
 			<xsl:text>&RE;</xsl:text>
@@ -267,8 +261,7 @@
 					<xsl:text>,&RE;</xsl:text>
 					<xsl:if test="$indent &gt; 0">
 						<xsl:call-template name="copy-string">
-							<xsl:with-param name="string">&nbsp;
-							</xsl:with-param>
+							<xsl:with-param name="string" select="' '" />
 							<xsl:with-param name="count" select="$indent" />
 						</xsl:call-template>
 					</xsl:if>
