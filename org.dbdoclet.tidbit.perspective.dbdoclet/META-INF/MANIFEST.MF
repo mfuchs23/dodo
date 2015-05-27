@@ -4,9 +4,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: dbdoclet Perspective
 Bundle-SymbolicName: org.dbdoclet.tidbit.perspective.dbdoclet
 Bundle-Version: 1.0.0
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.antlr.runtime;version="3.4.0",
- org.apache.commons.logging,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.apache.commons.logging,
  org.dbdoclet.doclet.docbook,
  org.dbdoclet.jive,
  org.dbdoclet.jive.dialog,
@@ -14,10 +13,7 @@ Import-Package: org.antlr.runtime;version="3.4.0",
  org.dbdoclet.jive.text,
  org.dbdoclet.jive.widget,
  org.dbdoclet.service,
- org.dbdoclet.tidbit.application,
  org.dbdoclet.tidbit.common,
- org.dbdoclet.tidbit.common.panel,
- org.dbdoclet.tidbit.importer,
  org.dbdoclet.tidbit.medium,
  org.dbdoclet.tidbit.perspective,
  org.dbdoclet.tidbit.perspective.panel,
