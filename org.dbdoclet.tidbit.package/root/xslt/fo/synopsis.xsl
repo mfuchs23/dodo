@@ -249,8 +249,7 @@
 			<xsl:text>&RE;</xsl:text>
 			<xsl:if test="$indent &gt; 0">
 				<xsl:call-template name="copy-string">
-					<xsl:with-param name="string">&nbsp;
-					</xsl:with-param>
+					<xsl:with-param name="string" select="' '" />
 					<xsl:with-param name="count" select="$indent" />
 				</xsl:call-template>
 			</xsl:if>
