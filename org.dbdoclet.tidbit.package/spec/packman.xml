@@ -4,13 +4,13 @@
 
   <name>dodo</name>
 
-  <version>8.0.0</version>
-  <release>685</release>
+  <version>8.0.1</version>
+  <release>686</release>
 
   <archives>
     <archive>
-      <archive-file>dodo-8.0.0.tar.gz</archive-file>
-      <archive-dir>dodo-8.0.0</archive-dir>
+      <archive-file>dodo-8.0.1.tar.gz</archive-file>
+      <archive-dir>dodo-8.0.1</archive-dir>
     </archive>
   </archives>
 
@@ -29,7 +29,7 @@ API. It can also be used as standalone application to convert HTML to DocBook.
   </architectures>
 
   <menu>
-    <title>DocBook Doclet 8.0.0</title>
+    <title>DocBook Doclet 8.0.1</title>
     <comment>Generate DocBook from javadoc comments or HTML</comment>
     <section>Apps/Text</section>
     <categories>Application;Development;</categories>
